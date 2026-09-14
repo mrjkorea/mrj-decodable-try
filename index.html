@@ -31,7 +31,8 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .g-lbl{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-top:10px}
 .g-en{font-size:clamp(1.5rem,6vw,2.1rem);font-weight:900;line-height:1.28;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);margin:6px 0}
 .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(7,13,24,.94);padding:8px 12px calc(8px + env(safe-area-inset-bottom))}
-.bar-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:520px;margin:0 auto}
+.bar-row{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:520px;margin:0 auto}
+.bar-row button{font-size:.78rem;padding:10px 4px}
 .hidden{display:none!important}
 .panel{padding:14px}
 .onelet{min-height:58vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
@@ -126,13 +127,18 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
     <button id="mListen">Listen</button>
     <button id="mSong">Song</button>
     <button id="mRead">Read</button>
+    <button id="mDict">Dictation</button>
     <button id="mSay">Say</button>
   </div>
 </div>
+<script src="pronounce/ort/ort.all.min.js"></script>
+<script src="pronounce/engine.js"></script>
+<script src="pronounce/audio.js"></script>
+<script src="pronounce/grade-browser.js"></script>
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260914v2';
+const ASSET_V='dec20260914v3';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -222,7 +228,14 @@ async function boot(){
   $('mListen').onclick=()=>setMode('listen');
   $('mSong').onclick=()=>setMode('song');
   $('mRead').onclick=()=>setMode('read');
+  $('mDict').onclick=()=>setMode('dictation');
   $('mSay').onclick=()=>setMode('speak');
+  try{
+    if(window.MRJPronounce){
+      MRJPronounce.setBase(BASE+'pronounce/');
+      MRJPronounce.load().catch(()=>{});
+    }
+  }catch(e){}
   $('prev').onclick=()=>go(-1);
   $('next').onclick=()=>go(1);
   $('play').onclick=()=>playPage(true);
@@ -366,8 +379,11 @@ function introAdvance(){
 
 function canEnter(m){
   if(!pack) return false;
-  if(TEST) return true;
   const bp=bookProg(pack.book_id);
+  if(TEST){
+    if(m==='speak') return !!bp.dictation;
+    return true;
+  }
   if(m==='listen') return true;
   if(m==='song') return bp.listen || mode==='song' || mode==='listen-end';
   if(m==='read') return bp.song || mode==='read';
@@ -393,6 +409,7 @@ function setMode(m){
   $('mListen').classList.toggle('active', m==='listen');
   $('mSong').classList.toggle('active', m==='song');
   $('mRead').classList.toggle('active', m==='read');
+  $('mDict').classList.toggle('active', m==='dictation');
   $('mSay').classList.toggle('active', m==='speak');
   if(m==='listen-end'){ $('workStage').classList.remove('hidden'); renderListenEnd(); }
   else if(m==='dictation'){ $('workStage').classList.remove('hidden'); startDictation(); }
@@ -452,11 +469,11 @@ function renderPage(){
   $('langLine').textContent = showLang ? pageTr() : '';
   $('langLine').classList.toggle('hidden', !showLang || !pageTr());
   let need='';
-  if(mode==='read') need=allTapped()?'All words tapped.':'Tap every word, then Next.';
+  if(mode==='read') need=allTapped()?'All words tapped.':'Tap every word.';
   if(mode==='listen'||mode==='song') need=(clipDone|| (mode==='listen'?heardListen:heardSong).has(pageIndex))?'Page heard.':'Play to the end.';
   $('status').textContent=`${pageIndex+1} / ${pack.pages.length}`+(need?' · '+need:'');
-  if(mode==='read'){ $('play').classList.add('hidden'); }
-  else { $('play').classList.remove('hidden'); $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen'; }
+  if(mode==='read'){ $('play').classList.add('hidden'); $('next').classList.add('hidden'); }
+  else { $('play').classList.remove('hidden'); $('next').classList.remove('hidden'); $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen'; }
   $('next').disabled = nextLocked();
   if(mode==='listen' || mode==='song') playPage(false);
 }
@@ -486,13 +503,15 @@ function onWordTap(el){
   const lem=el.dataset.lem, i=+el.dataset.i;
   document.querySelectorAll('.w').forEach(w=>w.classList.remove('on'));
   if(mode==='read'){
+    const wasDone=!!(bookProg(pack.book_id).readPages||{})[pageIndex];
     el.classList.add('on');
     tapped.add(pageIndex+':'+i); el.classList.add('done');
     if(allTapped()){
       const rp=Object.assign({}, bookProg(pack.book_id).readPages||{});
       rp[pageIndex]=true; setBookProg(pack.book_id,{readPages:rp});
+      playWord(lem, ()=>{ if(mode==='read' && !wasDone) go(1); });
+      return;
     }
-    $('next').disabled=!allTapped();
   }
   playWord(lem);
 }
@@ -791,19 +810,18 @@ function wireRecorder(line){
 }
 async function gradeBlob(line, blob){
   $('speakStatus').textContent='Checking your speaking…';
-  const fd=new FormData();
-  fd.append('text', line);
-  fd.append('audio', blob, 'say.webm');
-  let res, j;
-  try{
-    res=await fetch(gradeUrl(), {method:'POST', body:fd});
-    j=await res.json();
-  }catch(e){
-    $('speakStatus').textContent='Pronounce grader not reachable. Stay on the https page and try again.';
+  if(!window.MRJPronounce){
+    $('speakStatus').textContent='Scoring engine missing. Reload the page.';
     return;
   }
-  if(!res.ok || j.error){
-    $('speakStatus').textContent='Grader failed: '+(j.message||j.error||res.status);
+  let j;
+  try{
+    $('speakStatus').textContent='Loading scoring engine (one-time)…';
+    await MRJPronounce.load();
+    $('speakStatus').textContent='Checking your speaking…';
+    j=await MRJPronounce.grade(blob, line);
+  }catch(e){
+    $('speakStatus').textContent='Scoring failed. Tap 🎙️ again. '+(e && e.message ? e.message : '');
     return;
   }
   if(j.meta && String(j.meta.scoring_mode||'').startsWith('stub')){
