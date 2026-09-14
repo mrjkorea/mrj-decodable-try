@@ -1,0 +1,29 @@
+{
+  "product": "decodable",
+  "books": [
+    {
+      "id": "mlr_dec_001",
+      "title": "A Mat",
+      "level": "DEC 001",
+      "sound": "a m s t",
+      "align": "align_mlr_dec_001.json",
+      "cover": "books/mlr_dec_001/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_002",
+      "title": "A Tap",
+      "level": "DEC 002",
+      "sound": "+p",
+      "align": "align_mlr_dec_002.json",
+      "cover": "books/mlr_dec_002/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_003",
+      "title": "A Pit",
+      "level": "DEC 003",
+      "sound": "+i",
+      "align": "align_mlr_dec_003.json",
+      "cover": "books/mlr_dec_003/cover/cover.png"
+    }
+  ]
+}

@@ -1,0 +1,615 @@
+{
+  "default": "ko",
+  "languages": [
+    {
+      "code": "ko",
+      "name": "한국어"
+    },
+    {
+      "code": "ja",
+      "name": "日本語"
+    },
+    {
+      "code": "zh-Hans",
+      "name": "简体中文"
+    },
+    {
+      "code": "vi",
+      "name": "Tiếng Việt"
+    },
+    {
+      "code": "es",
+      "name": "Español"
+    },
+    {
+      "code": "pt-BR",
+      "name": "Português"
+    },
+    {
+      "code": "fr",
+      "name": "Français"
+    },
+    {
+      "code": "de",
+      "name": "Deutsch"
+    },
+    {
+      "code": "id",
+      "name": "Indonesia"
+    },
+    {
+      "code": "hi",
+      "name": "हिन्दी"
+    },
+    {
+      "code": "ar",
+      "name": "العربية"
+    },
+    {
+      "code": "tr",
+      "name": "Türkçe"
+    },
+    {
+      "code": "it",
+      "name": "Italiano"
+    },
+    {
+      "code": "pl",
+      "name": "Polski"
+    }
+  ],
+  "books": {
+    "mlr_dec_001": {
+      "en": [
+        "Sam.",
+        "Tam.",
+        "Sam sat.",
+        "Tam sat.",
+        "\"Tam.\"",
+        "\"Sam.\"",
+        "\"Tam... A mat!\"",
+        "Tam sat at a mat.",
+        "\"Sam... A mat?\"",
+        "Sam sat at a mat."
+      ],
+      "l1": {
+        "ko": [
+          "샘.",
+          "탬.",
+          "샘이 앉았어요.",
+          "탬이 앉았어요.",
+          "\"탬.\"",
+          "\"샘.\"",
+          "\"탬... 매트다!\"",
+          "탬이 매트에 앉았어요.",
+          "\"샘... 매트야?\"",
+          "샘이 매트에 앉았어요."
+        ],
+        "ja": [
+          "サム。",
+          "タム。",
+          "サムは座った。",
+          "タムは座った。",
+          "「タム。」",
+          "「サム。」",
+          "「タム…マットだ！」",
+          "タムはマットに座った。",
+          "「サム…マット？」",
+          "サムはマットに座った。"
+        ],
+        "zh-Hans": [
+          "山姆。",
+          "塔姆。",
+          "山姆坐下了。",
+          "塔姆坐下了。",
+          "“塔姆。”",
+          "“山姆。”",
+          "“塔姆……是垫子！”",
+          "塔姆坐在垫子上。",
+          "“山姆……垫子？”",
+          "山姆坐在垫子上。"
+        ],
+        "vi": [
+          "Sam.",
+          "Tam.",
+          "Sam ngồi.",
+          "Tam ngồi.",
+          "\"Tam.\"",
+          "\"Sam.\"",
+          "\"Tam... Một tấm thảm!\"",
+          "Tam ngồi trên tấm thảm.",
+          "\"Sam... Một tấm thảm?\"",
+          "Sam ngồi trên tấm thảm."
+        ],
+        "es": [
+          "Sam.",
+          "Tam.",
+          "Sam se sentó.",
+          "Tam se sentó.",
+          "\"Tam.\"",
+          "\"Sam.\"",
+          "\"¡Tam... Una estera!\"",
+          "Tam se sentó en una estera.",
+          "\"¿Sam... Una estera?\"",
+          "Sam se sentó en una estera."
+        ],
+        "pt-BR": [
+          "Sam.",
+          "Tam.",
+          "Sam sentou.",
+          "Tam sentou.",
+          "\"Tam.\"",
+          "\"Sam.\"",
+          "\"Tam... Um tapete!\"",
+          "Tam sentou num tapete.",
+          "\"Sam... Um tapete?\"",
+          "Sam sentou num tapete."
+        ],
+        "fr": [
+          "Sam.",
+          "Tam.",
+          "Sam s'est assis.",
+          "Tam s'est assise.",
+          "« Tam. »",
+          "« Sam. »",
+          "« Tam... Un tapis ! »",
+          "Tam s'est assise sur un tapis.",
+          "« Sam... Un tapis ? »",
+          "Sam s'est assis sur un tapis."
+        ],
+        "de": [
+          "Sam.",
+          "Tam.",
+          "Sam setzte sich.",
+          "Tam setzte sich.",
+          "„Tam.“",
+          "„Sam.“",
+          "„Tam … Eine Matte!“",
+          "Tam saß auf einer Matte.",
+          "„Sam … Eine Matte?“",
+          "Sam saß auf einer Matte."
+        ],
+        "id": [
+          "Sam.",
+          "Tam.",
+          "Sam duduk.",
+          "Tam duduk.",
+          "\"Tam.\"",
+          "\"Sam.\"",
+          "\"Tam... Alas!\"",
+          "Tam duduk di sebuah alas.",
+          "\"Sam... Alas?\"",
+          "Sam duduk di sebuah alas."
+        ],
+        "hi": [
+          "सैम।",
+          "टैम।",
+          "सैम बैठ गया।",
+          "टैम बैठ गई।",
+          "\"टैम।\"",
+          "\"सैम।\"",
+          "\"टैम... एक चटाई!\"",
+          "टैम एक चटाई पर बैठी।",
+          "\"सैम... एक चटाई?\"",
+          "सैम एक चटाई पर बैठा।"
+        ],
+        "ar": [
+          "سام.",
+          "تام.",
+          "جلس سام.",
+          "جلست تام.",
+          "\"تام.\"",
+          "\"سام.\"",
+          "\"تام... حصيرة!\"",
+          "جلست تام على حصيرة.",
+          "\"سام... حصيرة؟\"",
+          "جلس سام على حصيرة."
+        ],
+        "tr": [
+          "Sam.",
+          "Tam.",
+          "Sam oturdu.",
+          "Tam oturdu.",
+          "\"Tam.\"",
+          "\"Sam.\"",
+          "\"Tam... Bir hasır!\"",
+          "Tam bir hasıra oturdu.",
+          "\"Sam... Bir hasır?\"",
+          "Sam bir hasıra oturdu."
+        ],
+        "it": [
+          "Sam.",
+          "Tam.",
+          "Sam si è seduto.",
+          "Tam si è seduta.",
+          "\"Tam.\"",
+          "\"Sam.\"",
+          "\"Tam... Un tappetino!\"",
+          "Tam si è seduta su un tappetino.",
+          "\"Sam... Un tappetino?\"",
+          "Sam si è seduto su un tappetino."
+        ],
+        "pl": [
+          "Sam.",
+          "Tam.",
+          "Sam usiadł.",
+          "Tam usiadła.",
+          "\"Tam.\"",
+          "\"Sam.\"",
+          "\"Tam... Mata!\"",
+          "Tam usiadła na macie.",
+          "\"Sam... Mata?\"",
+          "Sam usiadł na macie."
+        ]
+      }
+    },
+    "mlr_dec_002": {
+      "en": [
+        "Pam.",
+        "Pat.",
+        "A map.",
+        "Pam taps a map.",
+        "Tap, tap, tap, tap, tap.",
+        "A tap!",
+        "Pat is at a tap.",
+        "Tap a tap, Pat!",
+        "Pat taps a tap.",
+        "Sap!"
+      ],
+      "l1": {
+        "ko": [
+          "팸.",
+          "팻.",
+          "지도.",
+          "팸이 지도를 톡톡 쳐요.",
+          "톡, 톡, 톡, 톡, 톡.",
+          "수도꼭지!",
+          "팻이 수도꼭지 앞에 있어요.",
+          "수도꼭지를 눌러, 팻!",
+          "팻이 수도꼭지를 눌러요.",
+          "나무진액!"
+        ],
+        "ja": [
+          "パム。",
+          "パット。",
+          "地図。",
+          "パムは地図をタップする。",
+          "タップ、タップ、タップ、タップ、タップ。",
+          "蛇口！",
+          "パットは蛇口のところにいる。",
+          "蛇口をタップして、パット！",
+          "パットは蛇口をタップする。",
+          "樹液！"
+        ],
+        "zh-Hans": [
+          "帕姆。",
+          "帕特。",
+          "一张地图。",
+          "帕姆点了点地图。",
+          "点，点，点，点，点。",
+          "水龙头！",
+          "帕特在水龙头旁。",
+          "按水龙头，帕特！",
+          "帕特按水龙头。",
+          "树汁！"
+        ],
+        "vi": [
+          "Pam.",
+          "Pat.",
+          "Một tấm bản đồ.",
+          "Pam gõ vào bản đồ.",
+          "Gõ, gõ, gõ, gõ, gõ.",
+          "Một vòi nước!",
+          "Pat ở cạnh một vòi nước.",
+          "Gõ vòi nước đi, Pat!",
+          "Pat gõ vào vòi nước.",
+          "Nhựa cây!"
+        ],
+        "es": [
+          "Pam.",
+          "Pat.",
+          "Un mapa.",
+          "Pam toca un mapa.",
+          "Toc, toc, toc, toc, toc.",
+          "¡Un grifo!",
+          "Pat está en un grifo.",
+          "¡Toca un grifo, Pat!",
+          "Pat toca un grifo.",
+          "¡Savia!"
+        ],
+        "pt-BR": [
+          "Pam.",
+          "Pat.",
+          "Um mapa.",
+          "Pam toca um mapa.",
+          "Toque, toque, toque, toque, toque.",
+          "Uma torneira!",
+          "Pat está numa torneira.",
+          "Toque a torneira, Pat!",
+          "Pat toca uma torneira.",
+          "Seiva!"
+        ],
+        "fr": [
+          "Pam.",
+          "Pat.",
+          "Une carte.",
+          "Pam tape une carte.",
+          "Tap, tap, tap, tap, tap.",
+          "Un robinet !",
+          "Pat est près d'un robinet.",
+          "Tape un robinet, Pat !",
+          "Pat tape un robinet.",
+          "Sève !"
+        ],
+        "de": [
+          "Pam.",
+          "Pat.",
+          "Eine Karte.",
+          "Pam tippt auf eine Karte.",
+          "Tipp, tipp, tipp, tipp, tipp.",
+          "Ein Hahn!",
+          "Pat ist an einem Hahn.",
+          "Tipp auf einen Hahn, Pat!",
+          "Pat tippt auf einen Hahn.",
+          "Saft!"
+        ],
+        "id": [
+          "Pam.",
+          "Pat.",
+          "Sebuah peta.",
+          "Pam mengetuk peta.",
+          "Tok, tok, tok, tok, tok.",
+          "Keran!",
+          "Pat ada di sebuah keran.",
+          "Ketuk kerannya, Pat!",
+          "Pat mengetuk keran.",
+          "Getah!"
+        ],
+        "hi": [
+          "पैम।",
+          "पैट।",
+          "एक नक्शा।",
+          "पैम एक नक्शे को थपथपाती है।",
+          "थप, थप, थप, थप, थप।",
+          "एक नल!",
+          "पैट एक नल के पास है।",
+          "नल को थपथपाओ, पैट!",
+          "पैट नल को थपथपाता है।",
+          "रस!"
+        ],
+        "ar": [
+          "بام.",
+          "بات.",
+          "خريطة.",
+          "بام تطرق خريطة.",
+          "طق، طق، طق، طق، طق.",
+          "صنبور!",
+          "بات عند صنبور.",
+          "اطرق الصنبور يا بات!",
+          "بات يطرق صنبورًا.",
+          "عصارة!"
+        ],
+        "tr": [
+          "Pam.",
+          "Pat.",
+          "Bir harita.",
+          "Pam bir haritaya dokunur.",
+          "Dok, dok, dok, dok, dok.",
+          "Bir musluk!",
+          "Pat bir musluğun yanında.",
+          "Musluğa dokun, Pat!",
+          "Pat bir musluğa dokunur.",
+          "Özsu!"
+        ],
+        "it": [
+          "Pam.",
+          "Pat.",
+          "Una mappa.",
+          "Pam tocca una mappa.",
+          "Toc, toc, toc, toc, toc.",
+          "Un rubinetto!",
+          "Pat è a un rubinetto.",
+          "Tocca un rubinetto, Pat!",
+          "Pat tocca un rubinetto.",
+          "Linfa!"
+        ],
+        "pl": [
+          "Pam.",
+          "Pat.",
+          "Mapa.",
+          "Pam stuka w mapę.",
+          "Stuk, stuk, stuk, stuk, stuk.",
+          "Kran!",
+          "Pat jest przy kranie.",
+          "Stuknij w kran, Pat!",
+          "Pat stuka w kran.",
+          "Sok!"
+        ]
+      }
+    },
+    "mlr_dec_003": {
+      "en": [
+        "A pit.",
+        "It is a pit.",
+        "Tim is at a pit.",
+        "Sam is at a pit.",
+        "Pam is at a pit.",
+        "It is a pit tip!",
+        "Go!",
+        "Go, Sam!",
+        "Go, Pam!",
+        "Go, Tim!"
+      ],
+      "l1": {
+        "ko": [
+          "구덩이.",
+          "구덩이야.",
+          "팀이 구덩이 앞에 있어요.",
+          "샘이 구덩이 앞에 있어요.",
+          "팸이 구덩이 앞에 있어요.",
+          "구덩이 끝이야!",
+          "가!",
+          "가, 샘!",
+          "가, 팸!",
+          "가, 팀!"
+        ],
+        "ja": [
+          "穴だ。",
+          "それは穴だ。",
+          "ティムは穴のところにいる。",
+          "サムは穴のところにいる。",
+          "パムは穴のところにいる。",
+          "穴の先っぽだ！",
+          "行け！",
+          "行け、サム！",
+          "行け、パム！",
+          "行け、ティム！"
+        ],
+        "zh-Hans": [
+          "一个坑。",
+          "这是一个坑。",
+          "蒂姆在坑边。",
+          "山姆在坑边。",
+          "帕姆在坑边。",
+          "这是坑的尖边！",
+          "走！",
+          "走，山姆！",
+          "走，帕姆！",
+          "走，蒂姆！"
+        ],
+        "vi": [
+          "Một cái hố.",
+          "Đó là một cái hố.",
+          "Tim ở cạnh một cái hố.",
+          "Sam ở cạnh một cái hố.",
+          "Pam ở cạnh một cái hố.",
+          "Đó là mép hố!",
+          "Đi!",
+          "Đi đi, Sam!",
+          "Đi đi, Pam!",
+          "Đi đi, Tim!"
+        ],
+        "es": [
+          "Un hoyo.",
+          "Es un hoyo.",
+          "Tim está en un hoyo.",
+          "Sam está en un hoyo.",
+          "Pam está en un hoyo.",
+          "¡Es el borde del hoyo!",
+          "¡Ve!",
+          "¡Ve, Sam!",
+          "¡Ve, Pam!",
+          "¡Ve, Tim!"
+        ],
+        "pt-BR": [
+          "Um buraco.",
+          "É um buraco.",
+          "Tim está num buraco.",
+          "Sam está num buraco.",
+          "Pam está num buraco.",
+          "É a ponta do buraco!",
+          "Vai!",
+          "Vai, Sam!",
+          "Vai, Pam!",
+          "Vai, Tim!"
+        ],
+        "fr": [
+          "Un trou.",
+          "C'est un trou.",
+          "Tim est près d'un trou.",
+          "Sam est près d'un trou.",
+          "Pam est près d'un trou.",
+          "C'est le bord du trou !",
+          "Va !",
+          "Va, Sam !",
+          "Va, Pam !",
+          "Va, Tim !"
+        ],
+        "de": [
+          "Ein Loch.",
+          "Es ist ein Loch.",
+          "Tim ist an einem Loch.",
+          "Sam ist an einem Loch.",
+          "Pam ist an einem Loch.",
+          "Es ist die Lochspitze!",
+          "Los!",
+          "Los, Sam!",
+          "Los, Pam!",
+          "Los, Tim!"
+        ],
+        "id": [
+          "Sebuah lubang.",
+          "Itu sebuah lubang.",
+          "Tim ada di sebuah lubang.",
+          "Sam ada di sebuah lubang.",
+          "Pam ada di sebuah lubang.",
+          "Itu ujung lubang!",
+          "Pergi!",
+          "Pergi, Sam!",
+          "Pergi, Pam!",
+          "Pergi, Tim!"
+        ],
+        "hi": [
+          "एक गड्ढा।",
+          "यह एक गड्ढा है।",
+          "टिम एक गड्ढे के पास है।",
+          "सैम एक गड्ढे के पास है।",
+          "पैम एक गड्ढे के पास है।",
+          "यह गड्ढे की नोक है!",
+          "जाओ!",
+          "जाओ, सैम!",
+          "जाओ, पैम!",
+          "जाओ, टिम!"
+        ],
+        "ar": [
+          "حفرة.",
+          "إنها حفرة.",
+          "تيم عند حفرة.",
+          "سام عند حفرة.",
+          "بام عند حفرة.",
+          "إنها حافة الحفرة!",
+          "اذهب!",
+          "اذهب يا سام!",
+          "اذهبي يا بام!",
+          "اذهب يا تيم!"
+        ],
+        "tr": [
+          "Bir çukur.",
+          "Bu bir çukur.",
+          "Tim bir çukurun yanında.",
+          "Sam bir çukurun yanında.",
+          "Pam bir çukurun yanında.",
+          "Bu çukurun ucu!",
+          "Git!",
+          "Git, Sam!",
+          "Git, Pam!",
+          "Git, Tim!"
+        ],
+        "it": [
+          "Una buca.",
+          "È una buca.",
+          "Tim è a una buca.",
+          "Sam è a una buca.",
+          "Pam è a una buca.",
+          "È la punta della buca!",
+          "Vai!",
+          "Vai, Sam!",
+          "Vai, Pam!",
+          "Vai, Tim!"
+        ],
+        "pl": [
+          "Dół.",
+          "To jest dół.",
+          "Tim jest przy dole.",
+          "Sam jest przy dole.",
+          "Pam jest przy dole.",
+          "To krawędź dołu!",
+          "Idź!",
+          "Idź, Sam!",
+          "Idź, Pam!",
+          "Idź, Tim!"
+        ]
+      }
+    }
+  }
+}

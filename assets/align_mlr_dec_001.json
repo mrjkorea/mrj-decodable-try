@@ -1,0 +1,237 @@
+{
+  "book_id": "mlr_dec_001",
+  "product": "decodable",
+  "title": "A Mat",
+  "level": "DEC 001",
+  "sound": "a m s t",
+  "famous": [
+    "a"
+  ],
+  "law_breaker": [],
+  "pages": [
+    {
+      "page_id": "p01",
+      "text": "Sam.",
+      "image": "books/mlr_dec_001/pages/p01.png",
+      "audio": "books/mlr_dec_001/audio/pages/p01.mp3",
+      "duration_ms": 1070,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": true,
+      "song_audio": "books/mlr_dec_001/audio/song/p01.mp3",
+      "song_duration_ms": 1724,
+      "video": "books/mlr_dec_001/video/p01.mp4"
+    },
+    {
+      "page_id": "p02",
+      "text": "Tam.",
+      "image": "books/mlr_dec_001/pages/p02.png",
+      "audio": "books/mlr_dec_001/audio/pages/p02.mp3",
+      "duration_ms": 1070,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": true,
+      "song_audio": "books/mlr_dec_001/audio/song/p02.mp3",
+      "song_duration_ms": 1645,
+      "video": "books/mlr_dec_001/video/p02.mp4"
+    },
+    {
+      "page_id": "p03",
+      "text": "Sam sat.",
+      "image": "books/mlr_dec_001/pages/p03.png",
+      "audio": "books/mlr_dec_001/audio/pages/p03.mp3",
+      "duration_ms": 1384,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": true,
+      "song_audio": "books/mlr_dec_001/audio/song/p03.mp3",
+      "song_duration_ms": 2638,
+      "video": "books/mlr_dec_001/video/p03.mp4"
+    },
+    {
+      "page_id": "p04",
+      "text": "Tam sat.",
+      "image": "books/mlr_dec_001/pages/p04.png",
+      "audio": "books/mlr_dec_001/audio/pages/p04.mp3",
+      "duration_ms": 1279,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": true,
+      "song_audio": "books/mlr_dec_001/audio/song/p04.mp3",
+      "song_duration_ms": 2638,
+      "video": "books/mlr_dec_001/video/p04.mp4"
+    },
+    {
+      "page_id": "p05",
+      "text": "\"Tam.\"",
+      "image": "books/mlr_dec_001/pages/p05.png",
+      "audio": "books/mlr_dec_001/audio/pages/p05.mp3",
+      "duration_ms": 1227,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": true,
+      "song_audio": "books/mlr_dec_001/audio/song/p05.mp3",
+      "song_duration_ms": 1828,
+      "video": "books/mlr_dec_001/video/p05.mp4"
+    },
+    {
+      "page_id": "p06",
+      "text": "\"Sam.\"",
+      "image": "books/mlr_dec_001/pages/p06.png",
+      "audio": "books/mlr_dec_001/audio/pages/p06.mp3",
+      "duration_ms": 1436,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_001/audio/song/p06.mp3",
+      "song_duration_ms": 1906
+    },
+    {
+      "page_id": "p07",
+      "text": "\"Tam... A mat!\"",
+      "image": "books/mlr_dec_001/pages/p07.png",
+      "audio": "books/mlr_dec_001/audio/pages/p07.mp3",
+      "duration_ms": 2246,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_001/audio/song/p07.mp3",
+      "song_duration_ms": 3866
+    },
+    {
+      "page_id": "p08",
+      "text": "Tam sat at a mat.",
+      "image": "books/mlr_dec_001/pages/p08.png",
+      "audio": "books/mlr_dec_001/audio/pages/p08.mp3",
+      "duration_ms": 2194,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_001/audio/song/p08.mp3",
+      "song_duration_ms": 4414
+    },
+    {
+      "page_id": "p09",
+      "text": "\"Sam... A mat?\"",
+      "image": "books/mlr_dec_001/pages/p09.png",
+      "audio": "books/mlr_dec_001/audio/pages/p09.mp3",
+      "duration_ms": 2194,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_001/audio/song/p09.mp3",
+      "song_duration_ms": 3866
+    },
+    {
+      "page_id": "p10",
+      "text": "Sam sat at a mat.",
+      "image": "books/mlr_dec_001/pages/p10.png",
+      "audio": "books/mlr_dec_001/audio/pages/p10.mp3",
+      "duration_ms": 2037,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": true,
+      "video": "books/mlr_dec_001/video/p10.mp4",
+      "song_audio": "books/mlr_dec_001/audio/song/p10.mp3",
+      "song_duration_ms": 3970
+    }
+  ],
+  "cover": {
+    "title": "A Mat",
+    "image": "books/mlr_dec_001/cover/cover.png"
+  },
+  "glossary": {
+    "entries": [
+      {
+        "lemma": "a",
+        "definition_en": "one; any",
+        "example_en": "I see a mat.",
+        "audio_word": "books/mlr_dec_001/audio/words/a.mp3",
+        "audio_definition": "books/mlr_dec_001/audio/glossary/a__def.mp3",
+        "audio_example": "books/mlr_dec_001/audio/glossary/a__ex.mp3"
+      },
+      {
+        "lemma": "at",
+        "definition_en": "in a place",
+        "example_en": "Sam sat at a mat.",
+        "audio_word": "books/mlr_dec_001/audio/words/at.mp3",
+        "audio_definition": "books/mlr_dec_001/audio/glossary/at__def.mp3",
+        "audio_example": "books/mlr_dec_001/audio/glossary/at__ex.mp3"
+      },
+      {
+        "lemma": "mat",
+        "definition_en": "a small pad to sit on",
+        "example_en": "Sam sat at a mat.",
+        "audio_word": "books/mlr_dec_001/audio/words/mat.mp3",
+        "audio_definition": "books/mlr_dec_001/audio/glossary/mat__def.mp3",
+        "audio_example": "books/mlr_dec_001/audio/glossary/mat__ex.mp3"
+      },
+      {
+        "lemma": "sam",
+        "definition_en": "a boy's name",
+        "example_en": "Sam sat.",
+        "audio_word": "books/mlr_dec_001/audio/words/sam.mp3",
+        "audio_definition": "books/mlr_dec_001/audio/glossary/sam__def.mp3",
+        "audio_example": "books/mlr_dec_001/audio/glossary/sam__ex.mp3"
+      },
+      {
+        "lemma": "sat",
+        "definition_en": "rested on a seat",
+        "example_en": "Tam sat.",
+        "audio_word": "books/mlr_dec_001/audio/words/sat.mp3",
+        "audio_definition": "books/mlr_dec_001/audio/glossary/sat__def.mp3",
+        "audio_example": "books/mlr_dec_001/audio/glossary/sat__ex.mp3"
+      },
+      {
+        "lemma": "tam",
+        "definition_en": "a girl's name",
+        "example_en": "Tam sat.",
+        "audio_word": "books/mlr_dec_001/audio/words/tam.mp3",
+        "audio_definition": "books/mlr_dec_001/audio/glossary/tam__def.mp3",
+        "audio_example": "books/mlr_dec_001/audio/glossary/tam__ex.mp3"
+      }
+    ]
+  },
+  "voices": {
+    "listen": "57785406027844b29b63a772a8477bc2",
+    "emotion": "podcast_host2_expressive",
+    "words": "851d4a3a36814f8faef50db1884e1ef6",
+    "song": "02019f80d2604688a746fbb5d2a0a0f8",
+    "song_label": "Youthful Nursery Singer #4",
+    "listen_speed": 0.58,
+    "song_speed": 0.52,
+    "read_taps": "clear_american_male",
+    "dictation": "736de7d32d7949469ba4664bce9f3f32",
+    "dictation_label": "Harper",
+    "listen_label": "Friendly Podcast Host #2"
+  },
+  "no_quiz": true,
+  "jay_finish": "2026-08-25-harper-listen",
+  "must_tap_all_words": true,
+  "dictation": {
+    "n": 5,
+    "pass_pct": 80,
+    "speaker": "Harper",
+    "voice": "736de7d32d7949469ba4664bce9f3f32",
+    "items": [
+      {
+        "page_id": "p03",
+        "text": "Sam sat.",
+        "audio": "books/mlr_dec_001/audio/pages/p03.mp3"
+      },
+      {
+        "page_id": "p07",
+        "text": "\"Tam... A mat!\"",
+        "audio": "books/mlr_dec_001/audio/pages/p07.mp3"
+      },
+      {
+        "page_id": "p08",
+        "text": "Tam sat at a mat.",
+        "audio": "books/mlr_dec_001/audio/pages/p08.mp3"
+      },
+      {
+        "page_id": "p09",
+        "text": "\"Sam... A mat?\"",
+        "audio": "books/mlr_dec_001/audio/pages/p09.mp3"
+      },
+      {
+        "page_id": "p10",
+        "text": "Sam sat at a mat.",
+        "audio": "books/mlr_dec_001/audio/pages/p10.mp3"
+      }
+    ],
+    "note": "Exact printed page sentences. Easy=tiles. Hard=A-Z pad. Punctuation given on hard."
+  },
+  "listen_speed": 0.8,
+  "jay_finish_listen": "2026-09-09-listen-podcast-host2"
+}
