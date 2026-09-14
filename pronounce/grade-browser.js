@@ -7,6 +7,7 @@
     'model_int8.onnx.part03',
     'model_int8.onnx.part04'
   ];
+  const PART_PCTS = [10, 30, 50, 70, 85];
   let session = null;
   let ready = null;
   let base = '';
@@ -15,17 +16,25 @@
     base = b.endsWith('/') ? b : b + '/';
   }
 
-  async function concatParts() {
+  function emitProgress(onProgress, stage, pct) {
+    if (typeof onProgress === 'function') {
+      try { onProgress({ stage, pct }); } catch (_) {}
+    }
+  }
+
+  async function concatParts(onProgress) {
     const bufs = [];
     let total = 0;
     const raw = 'https://raw.githubusercontent.com/mrjkorea/mrj-decodable-try/main/pronounce/model_parts/';
-    for (const name of PARTS) {
+    for (let i = 0; i < PARTS.length; i++) {
+      const name = PARTS[i];
       let r = await fetch(base + 'model_parts/' + name);
       if (!r.ok) r = await fetch(raw + name);
       if (!r.ok) throw new Error('missing model part ' + name);
       const u8 = new Uint8Array(await r.arrayBuffer());
       bufs.push(u8);
       total += u8.length;
+      emitProgress(onProgress, 'download', PART_PCTS[i] ?? 85);
     }
     const out = new Uint8Array(total);
     let o = 0;
@@ -33,18 +42,29 @@
     return out.buffer;
   }
 
-  async function load() {
-    if (ready) return ready;
+  async function load(onProgress) {
+    if (session) {
+      emitProgress(onProgress, 'done', 100);
+      return ready || Promise.resolve(true);
+    }
+    if (ready) {
+      return ready.then((r) => {
+        emitProgress(onProgress, 'done', 100);
+        return r;
+      });
+    }
     ready = (async () => {
       if (typeof ort === 'undefined') throw new Error('onnxruntime missing');
       ort.env.wasm.wasmPaths = base + 'ort/';
       await loadG2P(base);
-      const bytes = await concatParts();
+      const bytes = await concatParts(onProgress);
+      emitProgress(onProgress, 'session', 90);
       session = await ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] });
       try {
         const warm = new Float32Array(1600);
         await session.run({ input_values: new ort.Tensor('float32', warm, [1, 1600]) });
       } catch (_) {}
+      emitProgress(onProgress, 'done', 100);
       return true;
     })().catch((e) => { ready = null; throw e; });
     return ready;

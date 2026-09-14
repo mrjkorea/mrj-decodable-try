@@ -87,6 +87,10 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 .rec-bars i{width:8px;height:8px;background:#3ecf8e;border-radius:3px}
 .spd button.active,.repeat button.active{background:linear-gradient(135deg,#4d7dff,#7a5cff)}
 .tile.punct{min-width:36px;background:#5a3b1b}
+.loadbar{padding:0 12px 10px}
+.loadbar-track{height:10px;background:#1b2740;border-radius:8px;overflow:hidden}
+#loadbarFill{height:100%;width:0;background:linear-gradient(90deg,#4d7dff,#3ecf8e);transition:width .18s ease;border-radius:8px}
+#loadbarLbl{text-align:center;font-size:.72rem;color:var(--muted);margin-top:6px;font-weight:800}
 </style>
 </head>
 <body>
@@ -138,7 +142,7 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260914v3';
+const ASSET_V='dec20260915v1';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -233,7 +237,7 @@ async function boot(){
   try{
     if(window.MRJPronounce){
       MRJPronounce.setBase(BASE+'pronounce/');
-      MRJPronounce.load().catch(()=>{});
+      MRJPronounce.load().then(()=>{pronounceLoaded=true;}).catch(()=>{});
     }
   }catch(e){}
   $('prev').onclick=()=>go(-1);
@@ -706,6 +710,44 @@ function unlockMic(){
   if(micCtx.state==='suspended') micCtx.resume().catch(()=>{});
   return micCtx;
 }
+let pronounceLoaded=false, gradeBarTimer=null;
+function loadbarLabel(stage){
+  if(stage==='session') return 'Starting scorer…';
+  if(stage==='grade') return 'Checking your speaking…';
+  if(stage==='done') return 'Ready';
+  return 'Loading scorer…';
+}
+function setLoadbar({stage,pct}){
+  const bar=$('loadbar'), fill=$('loadbarFill'), lbl=$('loadbarLbl');
+  if(!bar||!fill||!lbl) return;
+  bar.classList.remove('hidden');
+  fill.style.width=Math.min(100,Math.max(0,pct))+'%';
+  lbl.textContent=loadbarLabel(stage)+' '+Math.round(pct)+'%';
+}
+function hideLoadbar(){
+  if(gradeBarTimer){ clearInterval(gradeBarTimer); gradeBarTimer=null; }
+  const bar=$('loadbar');
+  if(bar) bar.classList.add('hidden');
+}
+function onPronounceProgress(ev){ setLoadbar(ev); if(ev&&ev.pct>=100) pronounceLoaded=true; }
+function kickPronouncePreload(){
+  if(!window.MRJPronounce || pronounceLoaded) return;
+  MRJPronounce.load(onPronounceProgress).then(()=>{
+    pronounceLoaded=true;
+    hideLoadbar();
+  }).catch(()=>hideLoadbar());
+}
+function startGradeBarAnim(from){
+  const bar=$('loadbar');
+  if(!bar) return;
+  bar.classList.remove('hidden');
+  let pct=from||40;
+  if(gradeBarTimer) clearInterval(gradeBarTimer);
+  gradeBarTimer=setInterval(()=>{
+    pct=Math.min(96,pct+1.8);
+    setLoadbar({stage:'grade',pct});
+  },100);
+}
 function paintSayChips(text, words){
   const parts=String(text||'').split(/(\s+)/);
   let wi=0;
@@ -735,6 +777,7 @@ function renderSay(){
     <div class="g-lbl">Say the page · ${sayPage+1} / ${pack.pages.length}</div>
     <div class="g-en" id="sayLineText"></div>
     <div class="langline">${showLang? (i18n.books[pack.book_id].l1[lang][sayPage]||'') : ''}</div>
+    <div class="loadbar hidden" id="loadbar"><div class="loadbar-track"><div id="loadbarFill"></div></div><div id="loadbarLbl"></div></div>
     <div class="status" id="speakStatus">Listen, then tap the mic and say it. Pass is ${SPEAK_DEFAULT}%.</div>
     <div class="say-controls">
       <button id="hearLine" type="button" title="Listen" aria-label="Listen">🔊</button>
@@ -743,10 +786,12 @@ function renderSay(){
     </div>
     <div class="rec-bars hidden" id="recBars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div id="wordScores"></div>
-    <div class="status" id="speakHeard"></div>`;
+    <div class="status" id="speakHeard"></div>
+    <button id="sayNext" class="hidden" type="button" style="width:100%;margin-top:12px;background:linear-gradient(135deg,#4d7dff,#7a5cff)">Next</button>`;
   paintSayChips(p.text, null);
   $('hearLine').onclick=()=>playPath(p.audio, null, LISTEN_RATE);
   wireRecorder(p.text);
+  kickPronouncePreload();
 }
 function wireRecorder(line){
   const btn=$('sayLine');
@@ -763,6 +808,7 @@ function wireRecorder(line){
   };
   const start=async ()=>{
     unlockMic();
+    const nx=$('sayNext'); if(nx) nx.classList.add('hidden');
     $('speakStatus').textContent='Listening… speak now';
     $('speakHeard').textContent='';
     $('wordScores').innerHTML='';
@@ -809,21 +855,26 @@ function wireRecorder(line){
   stopBtn.onclick=ev=>{ ev.preventDefault(); stop(); };
 }
 async function gradeBlob(line, blob){
+  const nx=$('sayNext'); if(nx) nx.classList.add('hidden');
   $('speakStatus').textContent='Checking your speaking…';
   if(!window.MRJPronounce){
+    hideLoadbar();
     $('speakStatus').textContent='Scoring engine missing. Reload the page.';
     return;
   }
   let j;
   try{
-    $('speakStatus').textContent='Loading scoring engine (one-time)…';
-    await MRJPronounce.load();
+    if(!pronounceLoaded) setLoadbar({stage:'download',pct:5});
+    await MRJPronounce.load(onPronounceProgress);
     $('speakStatus').textContent='Checking your speaking…';
+    startGradeBarAnim(pronounceLoaded?55:30);
     j=await MRJPronounce.grade(blob, line);
   }catch(e){
+    hideLoadbar();
     $('speakStatus').textContent='Scoring failed. Tap 🎙️ again. '+(e && e.message ? e.message : '');
     return;
   }
+  hideLoadbar();
   if(j.meta && String(j.meta.scoring_mode||'').startsWith('stub')){
     $('speakStatus').textContent='Grader came back stub. Real model did not load.';
     return;
@@ -833,8 +884,14 @@ async function gradeBlob(line, blob){
   $('speakHeard').textContent=sc+'% · '+band+' · '+(j.model_id||'');
   paintSayChips(line, j.words||[]);
   $('wordScores').innerHTML='';
-  if(sc>=SPEAK_DEFAULT) finishSayPage(sc);
-  else $('speakStatus').textContent=sc+'% — need '+SPEAK_DEFAULT+'%. Listen, then tap 🎙️ and say it again.';
+  if(sc>=SPEAK_DEFAULT){
+    $('speakStatus').textContent=sc+'% — you passed! Tap Next.';
+    const nextBtn=$('sayNext');
+    if(nextBtn){
+      nextBtn.classList.remove('hidden');
+      nextBtn.onclick=()=>finishSayPage(sc);
+    }
+  }else $('speakStatus').textContent=sc+'% — need '+SPEAK_DEFAULT+'%. Listen, then tap 🎙️ and say it again.';
 }
 function finishSayPage(score){
   const sp=Object.assign({}, bookProg(pack.book_id).speakPages||{});
