@@ -18,8 +18,10 @@
   async function concatParts() {
     const bufs = [];
     let total = 0;
+    const raw = 'https://raw.githubusercontent.com/mrjkorea/mrj-decodable-try/main/pronounce/model_parts/';
     for (const name of PARTS) {
-      const r = await fetch(base + 'model_parts/' + name);
+      let r = await fetch(base + 'model_parts/' + name);
+      if (!r.ok) r = await fetch(raw + name);
       if (!r.ok) throw new Error('missing model part ' + name);
       const u8 = new Uint8Array(await r.arrayBuffer());
       bufs.push(u8);
