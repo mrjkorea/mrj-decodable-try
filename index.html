@@ -132,7 +132,7 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260914v1';
+const ASSET_V='dec20260914v2';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -265,7 +265,7 @@ async function openBook(id){
     setMode(QS.get('mode'));
     return;
   }
-  introStep = bp.difficulty ? 'cousin' : 'mode';
+  introStep = 'cousin';
   cousinIdx=0;
   showIntro();
 }
@@ -278,16 +278,6 @@ function showIntro(){
   $('introStage').classList.remove('hidden');
   $('introGo').classList.remove('hidden');
   const famous=(pack.famous||[])[0]||'';
-  if(introStep==='mode'){
-    $('modeBadge').textContent='Easy or Hard';
-    $('introBody').innerHTML=`<div class="g-lbl">How will they play?</div>
-      <div style="font-weight:800;margin-top:8px">Easy = put the words in order. Hard = type the letters. Punctuation is already there. Need 80%.</div>
-      <div class="choice"><button id="pickEasy">Easy</button><button id="pickHard">Hard</button></div>`;
-    $('introGo').classList.add('hidden');
-    $('pickEasy').onclick=()=>chooseDiff('easy');
-    $('pickHard').onclick=()=>chooseDiff('hard');
-    return;
-  }
   if(introStep==='cousin'){
     const letters=cousinLetters();
     const L=letters[cousinIdx];
@@ -308,23 +298,35 @@ function showIntro(){
     $('introGo').textContent = cousinIdx<letters.length-1 ? 'Next letter' : 'Next';
     return;
   }
+  if(introStep==='famous-card'){
+    $('modeBadge').textContent='Famous word';
+    const word=String(famous||'a').toLowerCase();
+    const label=word==='a'?'a  ·  uh':word;
+    $('introBody').innerHTML=`<div class="onelet">
+      <div class="g-lbl">Famous word</div>
+      <div class="en" style="font-size:4.2rem">${label}</div>
+      <div class="hint">Next: the red carpet.</div>
+    </div>`;
+    $('introGo').textContent='See the word';
+    return;
+  }
   if(introStep==='famous'){
     $('modeBadge').textContent='Famous word';
     const word=String(famous||'a').toLowerCase();
     const clips={a:'decodable/famous_carpet/famous_a_steps_out.mp4',is:'decodable/famous_carpet/famous_is_steps_out.mp4',go:'decodable/famous_carpet/famous_go_steps_out.mp4'};
     const crowds={a:'decodable/famous_carpet/famous_a_crowd10.mp3',is:'decodable/famous_carpet/famous_is_crowd10.mp3',go:'decodable/famous_carpet/famous_go_crowd10.mp3'};
-    const label=word==='a'?'uh (short u)':word;
+    const label=word==='a'?'uh':word;
     const vid=asset(clips[word]||'decodable/famous_carpet/base_limo_door.mp4');
     $('introBody').innerHTML=`<div class="scene" id="famousScene">
-      <video class="carpetVid" id="carpetVid" src="${vid}" autoplay playsinline webkit-playsinline></video>
+      <video class="carpetVid" id="carpetVid" src="${vid}" autoplay muted playsinline webkit-playsinline></video>
     </div>
-    <div class="g-lbl">Famous word — red carpet</div>
-    <div style="color:var(--muted);font-weight:800">Letter steps out. Then a crowd screams <b>${label}</b>. Tap the video to hear it again.</div>`;
+    <div class="g-lbl">Famous word</div>
+    <div style="color:var(--muted);font-weight:800">The crowd shouts <b>${label}</b>. Tap to hear it again.</div>`;
     const scream=()=>{ if(crowds[word]) playPath(crowds[word], null, 1); };
     const v=$('carpetVid');
     if(v){
-      v.muted=false;
-      v.volume=1;
+      v.muted=true;
+      v.volume=0;
       const kick=()=>v.play().catch(()=>{});
       v.onloadedmetadata=kick;
       kick();
@@ -337,32 +339,38 @@ function showIntro(){
     return;
   }
   const n=(pack.law_breaker||[]).length;
+  if(!n){ setMode('listen'); return; }
   $('modeBadge').textContent=n+' law breakers';
   $('introBody').innerHTML=`<div class="cops">
     <div class="faces">👮 👮</div>
-    <div class="g-lbl">Briefing</div>
+    <div class="g-lbl">One lawbreaker</div>
     <div class="zero">${n}</div>
-    <div style="font-size:1.4rem;font-weight:900">law breakers to catch</div>
-    <div style="color:var(--muted);margin-top:10px">We do not say which.</div>
+    <div style="font-size:1.4rem;font-weight:900">to catch</div>
   </div>`;
   $('introGo').textContent='Start Listen';
 }
-function chooseDiff(d){ setBookProg(pack.book_id,{difficulty:d}); introStep='cousin'; cousinIdx=0; showIntro(); }
+function chooseDiff(d){ setBookProg(pack.book_id,{difficulty:d}); startDictation(); }
 function introAdvance(){
   if(introStep==='cousin'){
     if(cousinIdx<cousinLetters().length-1){ cousinIdx++; showIntro(); return; }
-    introStep='famous'; showIntro(); return;
+    introStep='famous-card'; showIntro(); return;
   }
-  if(introStep==='famous'){ introStep='jail'; showIntro(); return; }
+  if(introStep==='famous-card'){ introStep='famous'; showIntro(); return; }
+  if(introStep==='famous'){
+    const n=(pack.law_breaker||[]).length;
+    if(!n){ setMode('listen'); return; }
+    introStep='jail'; showIntro(); return;
+  }
   setMode('listen');
 }
 
 function canEnter(m){
   if(!pack) return false;
+  if(TEST) return true;
   const bp=bookProg(pack.book_id);
   if(m==='listen') return true;
-  if(m==='song') return bp.listen || mode==='song';
-  if(m==='read') return bp.song;
+  if(m==='song') return bp.listen || mode==='song' || mode==='listen-end';
+  if(m==='read') return bp.song || mode==='read';
   if(m==='dictation') return bp.read;
   if(m==='speak') return bp.dictation;
   if(m==='pass') return bp.speak;
@@ -372,8 +380,9 @@ function setMode(m){
   if(!pack) return;
   if(!canEnter(m)){
     const bp=bookProg(pack.book_id);
-    if(!bp.listen) m='listen';
-    else if(!bp.song) m='listen-end';
+    if(m==='read' && bp.listen && !bp.song) m='song';
+    else if(!bp.listen) m='listen';
+    else if(!bp.song) m='song';
     else if(!bp.read) m='read';
     else if(!bp.dictation) m='dictation';
     else if(!bp.speak) m='speak';
@@ -491,6 +500,18 @@ function onWordTap(el){
 function tileWord(el){ try{ return decodeURIComponent(el.dataset.word||''); }catch(e){ return el.dataset.word||''; } }
 function unique(a){ return [...new Set(a)]; }
 function dictLettersOf(s){ return String(s||'').replace(/[^A-Za-z]/g,'').split(''); }
+function renderEasyTpl(text, filled){
+  let i=0;
+  return dictEasyTokens(text).map(tok=>{
+    if(/[A-Za-z]/.test(tok)){
+      const v=filled[i++]||'';
+      const safe=String(v||'___').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      return `<span class="blank${v?' on':''}">${safe}</span>`;
+    }
+    const safe=String(tok).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    return `<span class="given">${safe}</span>`;
+  }).join(' ');
+}
 function renderDictTpl(text, filled){
   let i=0;
   return [...String(text||'')].map(ch=>{
@@ -530,6 +551,14 @@ function fillerWords(targetTokens){
   return shuffle(bank).slice(0,3);
 }
 function startDictation(){
+  if(!bookProg(pack.book_id).difficulty){
+    $('workBody').innerHTML=`<div class="g-lbl">Dictation</div>
+      <div style="font-weight:800;margin:10px 0 16px">Easy = put the words in order. Hard = type the letters. Punctuation is already there.</div>
+      <div class="choice"><button id="pickEasy">Easy</button><button id="pickHard">Hard</button></div>`;
+    $('pickEasy').onclick=()=>chooseDiff('easy');
+    $('pickHard').onclick=()=>chooseDiff('hard');
+    return;
+  }
   dictQueue=dictItems(); dictIdx=0; dictRight=0; nextDict();
 }
 function markDict(ok){
@@ -571,6 +600,7 @@ function nextDict(){
   }
   const item=dictQueue[dictIdx];
   const targetTokens=dictEasyTokens(item.text);
+  const wordTokens=targetTokens.filter(w=>/[A-Za-z]/.test(w));
   const hard=(bookProg(pack.book_id).difficulty||'easy')==='hard';
   dictBuilt=[];
   let tilesHtml='';
@@ -578,15 +608,16 @@ function nextDict(){
     tilesHtml=`<div class="az">${'abcdefghijklmnopqrstuvwxyz'.split('').map(t=>`<button class="tile" data-ch="${t}">${t}</button>`).join('')}<button class="tile" data-ch="del">⌫</button></div>`;
   } else {
     const tiles=shuffle([
-      ...targetTokens.map((w,i)=>({id:'t'+i,word:w,punct:!/[A-Za-z]/.test(w)})),
-      ...fillerWords(targetTokens).map((w,i)=>({id:'f'+i,word:w,punct:false}))
+      ...wordTokens.map((w,i)=>({id:'t'+i,word:w})),
+      ...fillerWords(wordTokens).map((w,i)=>({id:'f'+i,word:w}))
     ]);
-    tilesHtml=`<div class="tiles">${tiles.map(t=>`<button class="tile${t.punct?' punct':''}" data-id="${t.id}" data-word="${encodeURIComponent(t.word)}">${t.word.replace(/</g,'&lt;')}</button>`).join('')}</div>`;
+    tilesHtml=`<div class="tiles">${tiles.map(t=>`<button class="tile" data-id="${t.id}" data-word="${encodeURIComponent(t.word)}">${t.word.replace(/</g,'&lt;')}</button>`).join('')}</div>`;
   }
   $('workBody').innerHTML=`
+    <div class="choice" style="margin-bottom:10px"><button id="pickEasy" class="${hard?'':'active'}">Easy</button><button id="pickHard" class="${hard?'active':''}">Hard</button></div>
     <div class="speaker"><img src="${asset('decodable/harper.png')}" alt="Miss Harper"><div class="label">Miss Harper · says the sentence</div></div>
-    <div class="g-lbl">Dictation ${dictIdx+1} / ${dictQueue.length} · ${hard?'Hard · letters only. Punctuation already there.':'Easy · words + punctuation'}</div>
-    <div class="${hard?'tpl':'built'}" id="built">${hard?renderDictTpl(item.text,[]):'…'}</div>
+    <div class="g-lbl">Dictation ${dictIdx+1} / ${dictQueue.length} · ${hard?'Hard · letters only. Punctuation already there.':'Easy · words. Punctuation already there.'}</div>
+    <div class="${hard?'tpl':'tpl'}" id="built">${hard?renderDictTpl(item.text,[]):renderEasyTpl(item.text,[])}</div>
     ${tilesHtml}
     <div class="g-lbl">Speed</div>
     <div class="repeat spd">
@@ -603,18 +634,22 @@ function nextDict(){
     <div class="status" id="dictStatus">Need 4 of 5. Right so far: ${dictRight}</div>`;
   const hearN=n=>playTimes(item.audio, n, dictRate);
   paintSpeedBtns();
+  const pe=$('pickEasy'), ph=$('pickHard');
+  if(pe) pe.onclick=()=>chooseDiff('easy');
+  if(ph) ph.onclick=()=>chooseDiff('hard');
   $('hear1x').onclick=()=>hearN(1);
   $('hear3x').onclick=()=>hearN(3);
   $('hear5x').onclick=()=>hearN(5);
   $('clearWord').onclick=()=>{
     dictBuilt=[];
     if(hard) $('built').innerHTML=renderDictTpl(item.text,[]);
-    else { paintBuiltEasy(); document.querySelectorAll('.tile').forEach(b=>b.classList.remove('used')); }
+    else { $('built').innerHTML=renderEasyTpl(item.text,[]); document.querySelectorAll('.tile').forEach(b=>b.classList.remove('used')); }
   };
   if(hard){
     const need=dictLettersOf(item.text);
-    document.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('.az .tile, .tile').forEach(b=>b.onclick=()=>{
       const ch=b.dataset.ch;
+      if(!ch) return;
       if(ch==='del') dictBuilt.pop();
       else if(dictBuilt.length<need.length) dictBuilt.push(ch);
       $('built').innerHTML=renderDictTpl(item.text, dictBuilt);
@@ -624,13 +659,13 @@ function nextDict(){
       }
     });
   } else {
-    document.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('.tiles .tile').forEach(b=>b.onclick=()=>{
       if(b.classList.contains('used')) return;
       b.classList.add('used');
       dictBuilt.push(tileWord(b));
-      paintBuiltEasy();
-      if(dictBuilt.length>=targetTokens.length){
-        const ok=dictEasyJoin(dictBuilt).toLowerCase()===dictEasyJoin(targetTokens).toLowerCase();
+      $('built').innerHTML=renderEasyTpl(item.text, dictBuilt);
+      if(dictBuilt.length>=wordTokens.length){
+        const ok=dictBuilt.map(w=>w.toLowerCase()).join(' ')===wordTokens.map(w=>w.toLowerCase()).join(' ');
         markDict(ok);
       }
     });

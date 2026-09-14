@@ -1,0 +1,34 @@
+{
+  "http": 201,
+  "resp": {
+    "agent": {
+      "id": "bc-c6944a05-315f-441f-b49f-492097cf4faf",
+      "name": "decodable-try-mic-grade",
+      "status": "ACTIVE",
+      "env": {
+        "type": "cloud"
+      },
+      "repos": [
+        {
+          "url": "https://github.com/mrjkorea/mrj-decodable-try",
+          "startingRef": "main"
+        }
+      ],
+      "workOnCurrentBranch": false,
+      "autoCreatePR": true,
+      "openAsCursorGithubApp": false,
+      "skipReviewerRequest": true,
+      "url": "https://cursor.com/agents/bc-c6944a05-315f-441f-b49f-492097cf4faf",
+      "createdAt": "2026-09-14T11:06:32.101Z",
+      "updatedAt": "2026-09-14T11:06:33.019Z",
+      "latestRunId": "run-19053a3a-61cc-4488-a047-f316444b5984"
+    },
+    "run": {
+      "id": "run-19053a3a-61cc-4488-a047-f316444b5984",
+      "agentId": "bc-c6944a05-315f-441f-b49f-492097cf4faf",
+      "status": "CREATING",
+      "createdAt": "2026-09-14T11:06:32.101Z",
+      "updatedAt": "2026-09-14T11:06:32.101Z"
+    }
+  }
+}

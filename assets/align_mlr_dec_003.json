@@ -212,12 +212,12 @@
   "voices": {
     "listen": "57785406027844b29b63a772a8477bc2",
     "emotion": "podcast_host2_expressive",
-    "words": "851d4a3a36814f8faef50db1884e1ef6",
+    "words": "18aea83acb7f40c3b0291ac6d575398b",
     "song": "02019f80d2604688a746fbb5d2a0a0f8",
     "song_label": "Youthful Nursery Singer #4",
     "listen_speed": 0.58,
     "song_speed": 0.52,
-    "read_taps": "clear_american_male",
+    "read_taps": "g1_clear_american",
     "dictation": "736de7d32d7949469ba4664bce9f3f32",
     "dictation_label": "Harper",
     "listen_label": "Friendly Podcast Host #2"
