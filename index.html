@@ -87,6 +87,15 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 .spd button.active,.repeat button.active{background:linear-gradient(135deg,#4d7dff,#7a5cff)}
 .tile.punct{min-width:36px;background:#5a3b1b}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
+<script>
+(function(){
+  const p=location.pathname;
+  const base=/\.html?$/i.test(p)?p.replace(/[^/]+$/,''):(p.endsWith('/')?p:p+'/');
+  window.MRJ_GRADE_VOCAB_URL=base+'assets/wav2vec2-espeak-vocab.json?v=dec20260914v1';
+})();
+</script>
+<script src="assets/browser-grader.js?v=dec20260914v1"></script>
 </head>
 <body>
 <div class="app">
@@ -139,7 +148,6 @@ const BASE=(function(){
   return p.endsWith('/')?p:p+'/';
 })();
 const LISTEN_RATE=0.8;
-const GRADE_PATH='/api/grade';
 (function bounceToMicHost(){
   const h=location.hostname;
   const loop=h==='127.0.0.1'||h==='localhost';
@@ -638,10 +646,6 @@ function nextDict(){
   hearN(1);
 }
 
-function gradeUrl(){
-  if(location.protocol==='https:') return GRADE_PATH;
-  return 'https://'+location.hostname+':8768'+GRADE_PATH;
-}
 function isSecureCtx(){
   return window.isSecureContext || location.protocol==='https:' || location.hostname==='127.0.0.1' || location.hostname==='localhost';
 }
@@ -756,23 +760,11 @@ function wireRecorder(line){
 }
 async function gradeBlob(line, blob){
   $('speakStatus').textContent='Checking your speaking…';
-  const fd=new FormData();
-  fd.append('text', line);
-  fd.append('audio', blob, 'say.webm');
-  let res, j;
+  let j;
   try{
-    res=await fetch(gradeUrl(), {method:'POST', body:fd});
-    j=await res.json();
+    j=await MrjBrowserGrader.grade(line, blob, msg=>{ $('speakStatus').textContent=msg; });
   }catch(e){
-    $('speakStatus').textContent='Pronounce grader not reachable. Stay on the https page and try again.';
-    return;
-  }
-  if(!res.ok || j.error){
-    $('speakStatus').textContent='Grader failed: '+(j.message||j.error||res.status);
-    return;
-  }
-  if(j.meta && String(j.meta.scoring_mode||'').startsWith('stub')){
-    $('speakStatus').textContent='Grader came back stub. Real model did not load.';
+    $('speakStatus').textContent='Scoring failed: '+(e && e.message ? e.message : String(e));
     return;
   }
   const sc=Math.round(100*(j.overall&&j.overall.score||0));
