@@ -1,0 +1,264 @@
+{
+  "book_id": "mlr_dec_003",
+  "product": "decodable",
+  "title": "A Pit",
+  "level": "DEC 003",
+  "sound": "+i",
+  "famous": [
+    "go"
+  ],
+  "law_breaker": [],
+  "pages": [
+    {
+      "page_id": "p01",
+      "text": "A pit.",
+      "image": "books/mlr_dec_003/pages/p01.png",
+      "audio": "books/mlr_dec_003/audio/pages/p01.mp3",
+      "duration_ms": 1175,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_003/audio/song/p01.mp3",
+      "song_duration_ms": 2011
+    },
+    {
+      "page_id": "p02",
+      "text": "It is a pit.",
+      "image": "books/mlr_dec_003/pages/p02.png",
+      "audio": "books/mlr_dec_003/audio/pages/p02.mp3",
+      "duration_ms": 1541,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_003/audio/song/p02.mp3",
+      "song_duration_ms": 2899
+    },
+    {
+      "page_id": "p03",
+      "text": "Tim is at a pit.",
+      "image": "books/mlr_dec_003/pages/p03.png",
+      "audio": "books/mlr_dec_003/audio/pages/p03.mp3",
+      "duration_ms": 1802,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_003/audio/song/p03.mp3",
+      "song_duration_ms": 3082
+    },
+    {
+      "page_id": "p04",
+      "text": "Sam is at a pit.",
+      "image": "books/mlr_dec_003/pages/p04.png",
+      "audio": "books/mlr_dec_003/audio/pages/p04.mp3",
+      "duration_ms": 2089,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_003/audio/song/p04.mp3",
+      "song_duration_ms": 3604
+    },
+    {
+      "page_id": "p05",
+      "text": "Pam is at a pit.",
+      "image": "books/mlr_dec_003/pages/p05.png",
+      "audio": "books/mlr_dec_003/audio/pages/p05.mp3",
+      "duration_ms": 2194,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_003/audio/song/p05.mp3",
+      "song_duration_ms": 3422
+    },
+    {
+      "page_id": "p06",
+      "text": "It is a pit tip!",
+      "image": "books/mlr_dec_003/pages/p06.png",
+      "audio": "books/mlr_dec_003/audio/pages/p06.mp3",
+      "duration_ms": 1802,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_003/audio/song/p06.mp3",
+      "song_duration_ms": 3239
+    },
+    {
+      "page_id": "p07",
+      "text": "Go!",
+      "image": "books/mlr_dec_003/pages/p07.png",
+      "audio": "books/mlr_dec_003/audio/pages/p07.mp3",
+      "duration_ms": 1070,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_003/audio/song/p07.mp3",
+      "song_duration_ms": 2011
+    },
+    {
+      "page_id": "p08",
+      "text": "Go, Sam!",
+      "image": "books/mlr_dec_003/pages/p08.png",
+      "audio": "books/mlr_dec_003/audio/pages/p08.mp3",
+      "duration_ms": 1436,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_003/audio/song/p08.mp3",
+      "song_duration_ms": 2533
+    },
+    {
+      "page_id": "p09",
+      "text": "Go, Pam!",
+      "image": "books/mlr_dec_003/pages/p09.png",
+      "audio": "books/mlr_dec_003/audio/pages/p09.mp3",
+      "duration_ms": 1384,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": false,
+      "song_audio": "books/mlr_dec_003/audio/song/p09.mp3",
+      "song_duration_ms": 2638
+    },
+    {
+      "page_id": "p10",
+      "text": "Go, Tim!",
+      "image": "books/mlr_dec_003/pages/p10.png",
+      "audio": "books/mlr_dec_003/audio/pages/p10.mp3",
+      "duration_ms": 1436,
+      "voice": "57785406027844b29b63a772a8477bc2",
+      "has_video": true,
+      "video": "books/mlr_dec_003/video/p10.mp4",
+      "song_audio": "books/mlr_dec_003/audio/song/p10.mp3",
+      "song_duration_ms": 2638
+    }
+  ],
+  "cover": {
+    "title": "A Pit",
+    "image": "books/mlr_dec_003/cover/cover.png"
+  },
+  "glossary": {
+    "entries": [
+      {
+        "lemma": "a",
+        "definition_en": "one; any",
+        "example_en": "I see a mat.",
+        "audio_word": "books/mlr_dec_003/audio/words/a.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/a__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/a__ex.mp3"
+      },
+      {
+        "lemma": "at",
+        "definition_en": "in a place",
+        "example_en": "Sam sat at a mat.",
+        "audio_word": "books/mlr_dec_003/audio/words/at.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/at__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/at__ex.mp3"
+      },
+      {
+        "lemma": "go",
+        "definition_en": "leave; move away",
+        "example_en": "Go, Sam!",
+        "audio_word": "books/mlr_dec_003/audio/words/go.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/go__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/go__ex.mp3"
+      },
+      {
+        "lemma": "is",
+        "definition_en": "tells what something is",
+        "example_en": "It is a pit.",
+        "audio_word": "books/mlr_dec_003/audio/words/is.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/is__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/is__ex.mp3"
+      },
+      {
+        "lemma": "it",
+        "definition_en": "that thing",
+        "example_en": "It is a pit.",
+        "audio_word": "books/mlr_dec_003/audio/words/it.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/it__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/it__ex.mp3"
+      },
+      {
+        "lemma": "pam",
+        "definition_en": "a girl's name",
+        "example_en": "Pam taps a map.",
+        "audio_word": "books/mlr_dec_003/audio/words/pam.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/pam__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/pam__ex.mp3"
+      },
+      {
+        "lemma": "pit",
+        "definition_en": "a deep hole",
+        "example_en": "It is a pit.",
+        "audio_word": "books/mlr_dec_003/audio/words/pit.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/pit__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/pit__ex.mp3"
+      },
+      {
+        "lemma": "sam",
+        "definition_en": "a boy's name",
+        "example_en": "Sam sat.",
+        "audio_word": "books/mlr_dec_003/audio/words/sam.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/sam__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/sam__ex.mp3"
+      },
+      {
+        "lemma": "tim",
+        "definition_en": "a boy's name",
+        "example_en": "Go, Tim!",
+        "audio_word": "books/mlr_dec_003/audio/words/tim.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/tim__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/tim__ex.mp3"
+      },
+      {
+        "lemma": "tip",
+        "definition_en": "the pointed edge",
+        "example_en": "It is a pit tip!",
+        "audio_word": "books/mlr_dec_003/audio/words/tip.mp3",
+        "audio_definition": "books/mlr_dec_003/audio/glossary/tip__def.mp3",
+        "audio_example": "books/mlr_dec_003/audio/glossary/tip__ex.mp3"
+      }
+    ]
+  },
+  "voices": {
+    "listen": "57785406027844b29b63a772a8477bc2",
+    "emotion": "podcast_host2_expressive",
+    "words": "18aea83acb7f40c3b0291ac6d575398b",
+    "song": "02019f80d2604688a746fbb5d2a0a0f8",
+    "song_label": "Youthful Nursery Singer #4",
+    "listen_speed": 0.58,
+    "song_speed": 0.52,
+    "read_taps": "g1_clear_american",
+    "dictation": "736de7d32d7949469ba4664bce9f3f32",
+    "dictation_label": "Harper",
+    "listen_label": "Friendly Podcast Host #2"
+  },
+  "no_quiz": true,
+  "jay_finish": "2026-08-25-harper-listen",
+  "must_tap_all_words": true,
+  "dictation": {
+    "n": 5,
+    "pass_pct": 80,
+    "speaker": "Harper",
+    "voice": "736de7d32d7949469ba4664bce9f3f32",
+    "items": [
+      {
+        "page_id": "p02",
+        "text": "It is a pit.",
+        "audio": "books/mlr_dec_003/audio/dictation/p02.mp3"
+      },
+      {
+        "page_id": "p06",
+        "text": "It is a pit tip!",
+        "audio": "books/mlr_dec_003/audio/dictation/p06.mp3"
+      },
+      {
+        "page_id": "p08",
+        "text": "Go, Sam!",
+        "audio": "books/mlr_dec_003/audio/dictation/p08.mp3"
+      },
+      {
+        "page_id": "p09",
+        "text": "Go, Pam!",
+        "audio": "books/mlr_dec_003/audio/dictation/p09.mp3"
+      },
+      {
+        "page_id": "p10",
+        "text": "Go, Tim!",
+        "audio": "books/mlr_dec_003/audio/dictation/p10.mp3"
+      }
+    ],
+    "note": "Exact printed page sentences. Easy=tiles. Hard=A-Z pad. Punctuation given on hard."
+  },
+  "listen_speed": 0.8,
+  "jay_finish_listen": "2026-09-09-listen-podcast-host2"
+}
