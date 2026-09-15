@@ -20,3 +20,21 @@
 - **Deploy:** slim `gh-pages` branch (no ONNX `model_parts`) + Pages source `gh-pages` / legacy. Build `328bbac` status `built` 2026-09-15T11:58:04Z
 - **Live URL:** https://mrjkorea.github.io/mrj-decodable-try/?test=1
 - **Curl proof:** HTML len 44050 contains `dec20260915v1`, `sayNext`, `loadbarFill`; last-modified Tue, 15 Sep 2026 11:57:55 GMT
+
+## Receipt 15SEP2026 night — Listen 3× + books 4–10
+- **Command/job:** `CURSOR_JOB_15SEP_4TO10.md`
+- **Model:** `cursor-grok-4.6-high`
+- **Files:**
+  - `mrj-decodable-try/index.html` — `ASSET_V=dec20260915v2`, `LISTEN_LOOPS=3`, listen plays page audio 3× at `LISTEN_RATE` 0.8 with `Listen n / 3` status, `listenGen` invalidates leftover `onended`, `MAX_BOOKS=10`, BASE GitHub Pages path lock unchanged
+  - `mrj-leveled-readers/vertical-slice-max/player/decodable.html` — same Listen 3× / library 10 (factory paths unchanged; not committed from this repo)
+  - `mrj-decodable-try/assets/decodable_library.json` — books 001–010
+  - `mrj-decodable-try/assets/books/mlr_dec_004` … `mlr_dec_010` — pages p01–p10, cover from p01, audio pages/song/words/dictation, `video/p10.mp4` only; 009/010 pages from Drive
+  - `mrj-decodable-try/assets/align_mlr_dec_004.json` … `align_mlr_dec_010.json`
+  - `mrj-decodable-try/assets/decodable/famous_carpet/famous_{no,see,he,me,we,be,my}_crowd10.mp3`
+- **Deploy:** main `382f098` + slim `gh-pages` `ad56fd4` (no ONNX `model_parts`, `.nojekyll`, Pages source `gh-pages` / root). `gh` as `mrjkorea`. Direct `git push origin main` refused workflow scope on leftover `.github/workflows/pages.yml`; cherry-picked this job onto `origin/main` instead.
+- **Live URL:** https://mrjkorea.github.io/mrj-decodable-try/?test=1
+- **Local proof:** `LISTEN_LOOPS=3` in `index.html`; library 10 books; p01+p10 exist for 004–010. Browser: library shows 10 books; book 004 Listen status `Listen 1 / 3` then `2 / 3` then `3 / 3` then auto-next; ▶ Listen restarts to `Listen 1 / 3`.
+- **Curl proof (200, last-modified Tue, 15 Sep 2026 14:57:53 GMT):**
+  - `/?test=1` HTML len 46662 contains `dec20260915v2` + `LISTEN_LOOPS=3`
+  - `/assets/books/mlr_dec_004/pages/p01.png` 713942 image/png
+  - `/assets/books/mlr_dec_010/pages/p01.png` 3500490 image/png
