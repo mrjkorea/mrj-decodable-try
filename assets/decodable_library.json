@@ -24,6 +24,62 @@
       "sound": "+i",
       "align": "align_mlr_dec_003.json",
       "cover": "books/mlr_dec_003/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_004",
+      "title": "An Ant in Pants",
+      "level": "DEC 004",
+      "sound": "+n",
+      "align": "align_mlr_dec_004.json",
+      "cover": "books/mlr_dec_004/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_005",
+      "title": "A Fan",
+      "level": "DEC 005",
+      "sound": "+f",
+      "align": "align_mlr_dec_005.json",
+      "cover": "books/mlr_dec_005/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_006",
+      "title": "A Pot",
+      "level": "DEC 006",
+      "sound": "+o",
+      "align": "align_mlr_dec_006.json",
+      "cover": "books/mlr_dec_006/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_007",
+      "title": "Dan at a Pond",
+      "level": "DEC 007",
+      "sound": "+d",
+      "align": "align_mlr_dec_007.json",
+      "cover": "books/mlr_dec_007/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_008",
+      "title": "A Cat at a Picnic",
+      "level": "DEC 008",
+      "sound": "+c",
+      "align": "align_mlr_dec_008.json",
+      "cover": "books/mlr_dec_008/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_009",
+      "title": "Amit's Sun Spot",
+      "level": "DEC 009",
+      "sound": "+u",
+      "align": "align_mlr_dec_009.json",
+      "cover": "books/mlr_dec_009/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_010",
+      "title": "A Dog",
+      "level": "DEC 010",
+      "sound": "+g",
+      "align": "align_mlr_dec_010.json",
+      "cover": "books/mlr_dec_010/cover/cover.png"
     }
   ]
 }
