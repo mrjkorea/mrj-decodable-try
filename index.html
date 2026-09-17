@@ -18,7 +18,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .art img,.art video{width:100%;height:100%;object-fit:contain;position:absolute;inset:0}
 .sentence{font-size:clamp(1.7rem,6.8vw,2.6rem);font-weight:900;line-height:1.3;text-align:center;padding:12px 12px 4px;min-height:2.2em}
 .sentence .w{display:inline-block;padding:.02em .08em;border-radius:.18em;cursor:pointer}
-.sentence .w.on{background:rgba(255,255,255,.12)}
+.sentence .w.on{background:#ffd84a;color:#1a1400;box-shadow:0 0 0 3px #ffe27a}
 .sentence .w.done{outline:3px solid var(--ok);background:rgba(62,207,142,.18)}
 .langline{text-align:center;color:#ffd84a;font-weight:800;padding:0 14px 10px;font-size:1.15rem}
 .status{text-align:center;color:var(--muted);font-size:.84rem;padding:0 12px 10px}
@@ -141,7 +141,7 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260916v3';
+const ASSET_V='dec20260917v1';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -183,7 +183,7 @@ const COUSIN={
 };
 const NEW_LETTERS={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['p'],mlr_dec_003:['i'],mlr_dec_004:['n'],mlr_dec_005:['f'],mlr_dec_006:['o'],mlr_dec_007:['d'],mlr_dec_008:['c'],mlr_dec_009:['u'],mlr_dec_010:['g']};
 const TAUGHT={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['a','m','s','t','p'],mlr_dec_003:['a','m','s','t','p','i'],mlr_dec_004:['a','m','s','t','p','i','n'],mlr_dec_005:['a','m','s','t','p','i','n','f'],mlr_dec_006:['a','m','s','t','p','i','n','f','o'],mlr_dec_007:['a','m','s','t','p','i','n','f','o','d'],mlr_dec_008:['a','m','s','t','p','i','n','f','o','d','c'],mlr_dec_009:['a','m','s','t','p','i','n','f','o','d','c','u'],mlr_dec_010:['a','m','s','t','p','i','n','f','o','d','c','u','g']};
-let lib=null, i18n=null, pack=null, pageIndex=0, mode='library', audio=null, listenGen=0;
+let lib=null, i18n=null, pack=null, pageIndex=0, mode='library', audio=null, listenGen=0, hlRaf=0;
 let introStep='mode', cousinIdx=0;
 let tapped=new Set(), heardListen=new Set(), heardSong=new Set();
 let clipDone=false, showLang=true, lang='ko';
@@ -204,12 +204,42 @@ function tokens(s){ return String(s||'').toLowerCase().replace(/[^a-z'\\s]/g,' '
 function page(){ return pack.pages[pageIndex]; }
 function pageTr(){ const b=i18n.books[pack.book_id]; return (b && b.l1[lang] && b.l1[lang][pageIndex]) || ''; }
 
-function stopA(){ if(audio){ try{audio.pause();}catch(e){} audio.onended=null; audio=null; } }
+function stopWordHighlight(){ if(hlRaf){ cancelAnimationFrame(hlRaf); hlRaf=0; } }
+function syncWordHighlight(a, gen){
+  stopWordHighlight();
+  const apply=()=>{
+    if(gen!==listenGen || audio!==a) return;
+    const els=[...$('sentence').querySelectorAll('.w')];
+    const n=els.length;
+    if(!n) return;
+    const d=a.duration;
+    let idx=0;
+    if(d && isFinite(d) && d>0){
+      const frac=Math.max(0, Math.min(0.999999, (a.currentTime||0)/d));
+      idx=Math.min(n-1, Math.floor(frac*n));
+    }
+    for(let i=0;i<n;i++) els[i].classList.toggle('on', i===idx);
+  };
+  const tick=()=>{
+    if(gen!==listenGen || audio!==a) return;
+    apply();
+    if(!a.paused && !a.ended) hlRaf=requestAnimationFrame(tick);
+  };
+  a.ontimeupdate=apply;
+  a.onloadedmetadata=apply;
+  apply();
+  hlRaf=requestAnimationFrame(tick);
+}
+function stopA(){
+  stopWordHighlight();
+  if(audio){ try{audio.pause();}catch(e){} audio.onended=null; audio.ontimeupdate=null; audio.onloadedmetadata=null; audio=null; }
+}
 function playPath(path, onend, rate){
   stopA(); if(!path){ if(onend) onend(); return; }
   const a=new Audio(asset(path)); audio=a;
   a.playbackRate = (rate==null?1:rate);
   a.onended=()=>{ if(audio===a && onend) onend(); };
+  if(mode==='listen' || mode==='song') syncWordHighlight(a, listenGen);
   a.play().catch(()=>{});
 }
 function playTimes(path, n, rate){
@@ -495,17 +525,12 @@ function renderPage(){
 function playPage(manual){
   const p=page();
   const path = mode==='song' ? p.song_audio : p.audio;
-  let i=0;
-  const bump=()=>{
-    const els=[...$('sentence').querySelectorAll('.w')];
-    els.forEach(e=>e.classList.remove('on'));
-    if(els[i]) els[i].classList.add('on'); i++;
-  };
-  bump(); clipDone=false; $('next').disabled=nextLocked();
+  clipDone=false; $('next').disabled=nextLocked();
   const rate = mode==='listen' ? LISTEN_RATE : 1;
+  const gen=++listenGen;
+  const startPage=pageIndex;
+  const startMode=mode;
   if(mode==='listen'){
-    const gen=++listenGen;
-    const startPage=pageIndex;
     let loop=0;
     const playOnce=()=>{
       if(gen!==listenGen || pageIndex!==startPage || mode!=='listen') return;
@@ -527,6 +552,7 @@ function playPage(manual){
     return;
   }
   playPath(path, ()=>{
+    if(gen!==listenGen || pageIndex!==startPage || mode!==startMode) return;
     clipDone=true;
     if(mode==='song') heardSong.add(pageIndex);
     document.querySelectorAll('.w').forEach(e=>e.classList.remove('on'));
