@@ -141,27 +141,27 @@
       {
         "page_id": "p02",
         "text": "A pup is a dog.",
-        "audio": "books/mlr_dec_010/audio/pages/p02.mp3"
+        "audio": "books/mlr_dec_010/audio/dictation/p02.mp3"
       },
       {
         "page_id": "p04",
         "text": "A dog dug up my fig!",
-        "audio": "books/mlr_dec_010/audio/pages/p04.mp3"
+        "audio": "books/mlr_dec_010/audio/dictation/p04.mp3"
       },
       {
         "page_id": "p06",
         "text": "A dog can dip in a pond.",
-        "audio": "books/mlr_dec_010/audio/pages/p06.mp3"
+        "audio": "books/mlr_dec_010/audio/dictation/p06.mp3"
       },
       {
         "page_id": "p08",
         "text": "A dog naps in a sun spot.",
-        "audio": "books/mlr_dec_010/audio/pages/p08.mp3"
+        "audio": "books/mlr_dec_010/audio/dictation/p08.mp3"
       },
       {
         "page_id": "p10",
         "text": "A dog can nag us. My dog is fun!",
-        "audio": "books/mlr_dec_010/audio/pages/p10.mp3"
+        "audio": "books/mlr_dec_010/audio/dictation/p10.mp3"
       }
     ],
     "note": "Exact printed page sentences. Easy=tiles. Hard=A-Z pad. Punctuation given on hard."

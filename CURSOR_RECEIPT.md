@@ -38,3 +38,12 @@
   - `/?test=1` HTML len 46662 contains `dec20260915v2` + `LISTEN_LOOPS=3`
   - `/assets/books/mlr_dec_004/pages/p01.png` 713942 image/png
   - `/assets/books/mlr_dec_010/pages/p01.png` 3500490 image/png
+
+## Receipt 16SEP2026 01:47 KST — Book 4 fury (NO video, language, word taps)
+- cursor-agent CLI was logged out; finished on this Mac (Grok 4.6).
+- Famous: overlay_famous_box.py → famous_{no,see,he,me,we,be,my}_steps_out.mp4. Player clips map + object-fit contain (cover was the zoom crop).
+- Language: #langPick in header on every screen. i18n books 001–010 × 14 langs. Live ko book4 p01: 민이 수액을 마셔요.
+- Word taps: words_v10 copy where lemma exists; 54 missing CVC baked G1 18aea83a [clear]. Live no.mp3 200.
+- Apps lock: decodables ≠ readers. Readers = packs A–D, no pron/record.
+- Deploy: gh-pages a617928 force, live HTML contains dec20260916v1 + famous_no_steps_out.
+- Say: not claimed fixed (web try still pulls the big grader from GitHub raw).
