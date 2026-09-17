@@ -64,3 +64,36 @@
   - `/assets/books/mlr_dec_009/pages/p01.png` 1974061 image/png
   - `/pronounce/model_parts/model_int8.onnx.part00` 76000000 application/octet-stream (**github.io**, not only raw)
   - `/assets/books/mlr_dec_009/audio/words/sits.mp3` 25748 audio/mp3
+
+---
+
+## 17 Sep 2026 — Cousin + Mouth (CURSOR_JOB_17SEP_COUSIN_MOUTH.md)
+
+**Model:** `claude-sonnet-4-6`
+
+**Files changed:**
+- `index.html` — removed fake `LATIN_SAME` + `COUSIN` objects (Hangul/Hiragana/Devanagari/Arabic pseudo-cousins). Added `COUSIN_META` (mirrors `cousin_alphabets.json`), `SOUND_HINT` map, updated `cousinGlyph()` to use official-alphabet check. Intro cousin screen now shows mouth SVG + "Does not exist in this language." when glyph absent. `ASSET_V` bumped to `dec20260917v3`.
+- `~/.hermes/projects/mrj-leveled-readers/vertical-slice-max/player/decodable.html` — same patch applied (factory player kept in sync).
+- `assets/decodable/cousin_alphabets.json` — already existed and correct; unchanged.
+- `assets/decodable/mouth/` — all required SVGs already on disk (a c d f g i m n o p s t u v).
+
+**Prove output:**
+```
+mouth missing []
+PASS cousins+mouth files
+```
+
+## Receipt 17SEP2026 evening — teacher Next skip + last-page movies (CURSOR_JOB_17SEP_TEACHER_NEXT.md)
+- **Command/job:** `CURSOR_JOB_17SEP_TEACHER_NEXT.md`
+- **Model:** Composer
+- **Files:**
+  - `mrj-decodable-try/index.html` — `ASSET_V=dec20260917v4`, `nextLocked()` returns false for Listen/Song when `TEST` (`?test=1`); `#next` label **Next** in teacher mode; kid lock unchanged (3× Listen)
+  - `mrj-leveled-readers/vertical-slice-max/player/decodable.html` — same TEST Next skip + label (factory `/assets/` paths unchanged)
+  - `mrj-decodable-try/assets/align_mlr_dec_004.json` … `align_mlr_dec_010.json` — last page `has_video: true` + `video: books/mlr_dec_00N/video/p10.mp4` where mp4 exists on disk (001–003 unchanged)
+  - `mrj-leveled-readers/vertical-slice-max/assets/align_mlr_dec_004.json` … `009` (+ `010` in factory tree) — same last-page video flags
+- **Deploy:** main `ca6e96a`; gh-pages `bc2eca7` (`.nojekyll`, `pronounce/model_parts` kept). Pages source `gh-pages` / root / `build_type=legacy`. `gh` as `mrjkorea`.
+- **Live URL:** https://mrjkorea.github.io/mrj-decodable-try/?test=1&v=dec20260917v4
+- **Curl proof (200, last-modified Thu, 17 Sep 2026 09:23:38 GMT):**
+  - `/?test=1&v=dec20260917v4` HTML contains `dec20260917v4`, `if(TEST) return false`, `TEST ? 'Next'`
+  - `/assets/align_mlr_dec_004.json?v=dec20260917v4` last page `has_video: true`, `video: books/mlr_dec_004/video/p10.mp4`
+  - `/assets/books/mlr_dec_004/video/p10.mp4` 908333 video/mp4
