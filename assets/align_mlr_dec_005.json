@@ -3,7 +3,7 @@
   "product": "decodable",
   "title": "A Fan",
   "level": "DEC 005",
-  "sound": "+f",
+  "sound": "consonant F",
   "famous": [
     "see"
   ],
@@ -13,8 +13,8 @@
       "text": "See a fan!",
       "image": "books/mlr_dec_005/pages/p01.png",
       "audio": "books/mlr_dec_005/audio/pages/p01.mp3",
-      "duration_ms": 1593,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1411,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_005/audio/song/p01.mp3",
       "song_duration_ms": 2089
@@ -24,8 +24,8 @@
       "text": "A fan is in a spin.",
       "image": "books/mlr_dec_005/pages/p02.png",
       "audio": "books/mlr_dec_005/audio/pages/p02.mp3",
-      "duration_ms": 2194,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1985,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_005/audio/song/p02.mp3",
       "song_duration_ms": 2455
@@ -35,8 +35,8 @@
       "text": "A fan is fast!",
       "image": "books/mlr_dec_005/pages/p03.png",
       "audio": "books/mlr_dec_005/audio/pages/p03.mp3",
-      "duration_ms": 2507,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2351,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_005/audio/song/p03.mp3",
       "song_duration_ms": 2220
@@ -46,8 +46,8 @@
       "text": "Spin, fan, spin!",
       "image": "books/mlr_dec_005/pages/p04.png",
       "audio": "books/mlr_dec_005/audio/pages/p04.mp3",
-      "duration_ms": 3186,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2717,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_005/audio/song/p04.mp3",
       "song_duration_ms": 2638
@@ -57,8 +57,8 @@
       "text": "A fan spits mist at a man.",
       "image": "books/mlr_dec_005/pages/p05.png",
       "audio": "books/mlr_dec_005/audio/pages/p05.mp3",
-      "duration_ms": 3082,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2847,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_005/audio/song/p05.mp3",
       "song_duration_ms": 3578
@@ -68,8 +68,8 @@
       "text": "A fan fits in a fist.",
       "image": "books/mlr_dec_005/pages/p06.png",
       "audio": "books/mlr_dec_005/audio/pages/p06.mp3",
-      "duration_ms": 2559,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1985,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_005/audio/song/p06.mp3",
       "song_duration_ms": 3030
@@ -79,8 +79,8 @@
       "text": "It snaps! A fan snaps.",
       "image": "books/mlr_dec_005/pages/p07.png",
       "audio": "books/mlr_dec_005/audio/pages/p07.mp3",
-      "duration_ms": 3239,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 3265,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_005/audio/song/p07.mp3",
       "song_duration_ms": 3343
@@ -90,8 +90,8 @@
       "text": "A fan fits in pants.",
       "image": "books/mlr_dec_005/pages/p08.png",
       "audio": "books/mlr_dec_005/audio/pages/p08.mp3",
-      "duration_ms": 2194,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2299,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_005/audio/song/p08.mp3",
       "song_duration_ms": 2690
@@ -101,8 +101,8 @@
       "text": "Fan it fast!",
       "image": "books/mlr_dec_005/pages/p09.png",
       "audio": "books/mlr_dec_005/audio/pages/p09.mp3",
-      "duration_ms": 1750,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1515,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_005/audio/song/p09.mp3",
       "song_duration_ms": 2037
@@ -112,8 +112,8 @@
       "text": "An ant naps in a fan!",
       "image": "books/mlr_dec_005/pages/p10.png",
       "audio": "books/mlr_dec_005/audio/pages/p10.mp3",
-      "duration_ms": 2925,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2508,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": true,
       "song_audio": "books/mlr_dec_005/audio/song/p10.mp3",
       "song_duration_ms": 3030,
@@ -121,7 +121,7 @@
     }
   ],
   "voices": {
-    "listen": "57785406027844b29b63a772a8477bc2",
+    "listen": "02dd00b374cb4750b856c7394938d222",
     "words": "851d4a3a36814f8faef50db1884e1ef6",
     "read_taps": "clear_american_male",
     "song": "02019f80d2604688a746fbb5d2a0a0f8",

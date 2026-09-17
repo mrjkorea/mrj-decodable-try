@@ -3,7 +3,7 @@
   "product": "decodable",
   "title": "A Pit",
   "level": "DEC 003",
-  "sound": "+i",
+  "sound": "short vowel I",
   "famous": [
     "go"
   ],
@@ -14,8 +14,8 @@
       "text": "A pit.",
       "image": "books/mlr_dec_003/pages/p01.png",
       "audio": "books/mlr_dec_003/audio/pages/p01.mp3",
-      "duration_ms": 1175,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 940,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_003/audio/song/p01.mp3",
       "song_duration_ms": 2011
@@ -25,8 +25,8 @@
       "text": "It is a pit.",
       "image": "books/mlr_dec_003/pages/p02.png",
       "audio": "books/mlr_dec_003/audio/pages/p02.mp3",
-      "duration_ms": 1541,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1045,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_003/audio/song/p02.mp3",
       "song_duration_ms": 2899
@@ -36,8 +36,8 @@
       "text": "Tim is at a pit.",
       "image": "books/mlr_dec_003/pages/p03.png",
       "audio": "books/mlr_dec_003/audio/pages/p03.mp3",
-      "duration_ms": 1802,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1620,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_003/audio/song/p03.mp3",
       "song_duration_ms": 3082
@@ -47,8 +47,8 @@
       "text": "Sam is at a pit.",
       "image": "books/mlr_dec_003/pages/p04.png",
       "audio": "books/mlr_dec_003/audio/pages/p04.mp3",
-      "duration_ms": 2089,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1567,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_003/audio/song/p04.mp3",
       "song_duration_ms": 3604
@@ -58,8 +58,8 @@
       "text": "Pam is at a pit.",
       "image": "books/mlr_dec_003/pages/p05.png",
       "audio": "books/mlr_dec_003/audio/pages/p05.mp3",
-      "duration_ms": 2194,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1672,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_003/audio/song/p05.mp3",
       "song_duration_ms": 3422
@@ -69,8 +69,8 @@
       "text": "It is a pit tip!",
       "image": "books/mlr_dec_003/pages/p06.png",
       "audio": "books/mlr_dec_003/audio/pages/p06.mp3",
-      "duration_ms": 1802,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1567,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_003/audio/song/p06.mp3",
       "song_duration_ms": 3239
@@ -80,8 +80,8 @@
       "text": "Go!",
       "image": "books/mlr_dec_003/pages/p07.png",
       "audio": "books/mlr_dec_003/audio/pages/p07.mp3",
-      "duration_ms": 1070,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 993,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_003/audio/song/p07.mp3",
       "song_duration_ms": 2011
@@ -91,8 +91,8 @@
       "text": "Go, Sam!",
       "image": "books/mlr_dec_003/pages/p08.png",
       "audio": "books/mlr_dec_003/audio/pages/p08.mp3",
-      "duration_ms": 1436,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1254,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_003/audio/song/p08.mp3",
       "song_duration_ms": 2533
@@ -102,8 +102,8 @@
       "text": "Go, Pam!",
       "image": "books/mlr_dec_003/pages/p09.png",
       "audio": "books/mlr_dec_003/audio/pages/p09.mp3",
-      "duration_ms": 1384,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1254,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_003/audio/song/p09.mp3",
       "song_duration_ms": 2638
@@ -113,8 +113,8 @@
       "text": "Go, Tim!",
       "image": "books/mlr_dec_003/pages/p10.png",
       "audio": "books/mlr_dec_003/audio/pages/p10.mp3",
-      "duration_ms": 1436,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1463,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": true,
       "video": "books/mlr_dec_003/video/p10.mp4",
       "song_audio": "books/mlr_dec_003/audio/song/p10.mp3",
@@ -210,7 +210,7 @@
     ]
   },
   "voices": {
-    "listen": "57785406027844b29b63a772a8477bc2",
+    "listen": "02dd00b374cb4750b856c7394938d222",
     "emotion": "podcast_host2_expressive",
     "words": "18aea83acb7f40c3b0291ac6d575398b",
     "song": "02019f80d2604688a746fbb5d2a0a0f8",

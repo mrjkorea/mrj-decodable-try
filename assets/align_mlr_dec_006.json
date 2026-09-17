@@ -3,7 +3,7 @@
   "product": "decodable",
   "title": "A Pot",
   "level": "DEC 006",
-  "sound": "+o",
+  "sound": "short vowel O",
   "famous": [
     "he"
   ],
@@ -13,8 +13,8 @@
       "text": "See a pot!",
       "image": "books/mlr_dec_006/pages/p01.png",
       "audio": "books/mlr_dec_006/audio/pages/p01.mp3",
-      "duration_ms": 1436,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1202,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_006/audio/song/p01.mp3",
       "song_duration_ms": 2037
@@ -24,8 +24,8 @@
       "text": "A pot is tin. A top fits it.",
       "image": "books/mlr_dec_006/pages/p02.png",
       "audio": "books/mlr_dec_006/audio/pages/p02.mp3",
-      "duration_ms": 3813,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 3579,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_006/audio/song/p02.mp3",
       "song_duration_ms": 4466
@@ -35,8 +35,8 @@
       "text": "A fat pot sits.",
       "image": "books/mlr_dec_006/pages/p03.png",
       "audio": "books/mlr_dec_006/audio/pages/p03.mp3",
-      "duration_ms": 2194,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2038,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_006/audio/song/p03.mp3",
       "song_duration_ms": 2272
@@ -46,8 +46,8 @@
       "text": "Pop! Pop! A pot pops.",
       "image": "books/mlr_dec_006/pages/p04.png",
       "audio": "books/mlr_dec_006/audio/pages/p04.mp3",
-      "duration_ms": 3761,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 3004,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_006/audio/song/p04.mp3",
       "song_duration_ms": 2873
@@ -57,8 +57,8 @@
       "text": "A pot spits mist.",
       "image": "books/mlr_dec_006/pages/p05.png",
       "audio": "books/mlr_dec_006/audio/pages/p05.mp3",
-      "duration_ms": 2507,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1776,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_006/audio/song/p05.mp3",
       "song_duration_ms": 2377
@@ -68,8 +68,8 @@
       "text": "It is soft in a pot.",
       "image": "books/mlr_dec_006/pages/p06.png",
       "audio": "books/mlr_dec_006/audio/pages/p06.mp3",
-      "duration_ms": 1985,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2299,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_006/audio/song/p06.mp3",
       "song_duration_ms": 2925
@@ -79,8 +79,8 @@
       "text": "Stop! A pot spits!",
       "image": "books/mlr_dec_006/pages/p07.png",
       "audio": "books/mlr_dec_006/audio/pages/p07.mp3",
-      "duration_ms": 2977,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2246,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_006/audio/song/p07.mp3",
       "song_duration_ms": 3160
@@ -90,8 +90,8 @@
       "text": "A pot tips!",
       "image": "books/mlr_dec_006/pages/p08.png",
       "audio": "books/mlr_dec_006/audio/pages/p08.mp3",
-      "duration_ms": 1750,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1776,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_006/audio/song/p08.mp3",
       "song_duration_ms": 1906
@@ -101,8 +101,8 @@
       "text": "A mop mops a spot.",
       "image": "books/mlr_dec_006/pages/p09.png",
       "audio": "books/mlr_dec_006/audio/pages/p09.mp3",
-      "duration_ms": 2246,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1933,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_006/audio/song/p09.mp3",
       "song_duration_ms": 2377
@@ -112,8 +112,8 @@
       "text": "He sips it. It is tip-top!",
       "image": "books/mlr_dec_006/pages/p10.png",
       "audio": "books/mlr_dec_006/audio/pages/p10.mp3",
-      "duration_ms": 3134,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 3213,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": true,
       "song_audio": "books/mlr_dec_006/audio/song/p10.mp3",
       "song_duration_ms": 4048,
@@ -121,7 +121,7 @@
     }
   ],
   "voices": {
-    "listen": "57785406027844b29b63a772a8477bc2",
+    "listen": "02dd00b374cb4750b856c7394938d222",
     "words": "851d4a3a36814f8faef50db1884e1ef6",
     "read_taps": "clear_american_male",
     "song": "02019f80d2604688a746fbb5d2a0a0f8",

@@ -141,7 +141,7 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260917v4';
+const ASSET_V='dec20260917v2';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -166,6 +166,20 @@ const DICT_N=5;
 const DICT_PASS=80;
 const COUSIN_META={no_latin_script:['ko','ja','zh-Hans','hi','ar'],latin_letters:{vi:'aăâbcdđeêghiklmnoôơpqrstuưvxy',es:'abcdefghijklmnñopqrstuvwxyz','pt-BR':'abcdefghijklmnopqrstuvwxyz',fr:'abcdefghijklmnopqrstuvwxyz',de:'abcdefghijklmnopqrstuvwxyzäöüß',id:'abcdefghijklmnopqrstuvwxyz',tr:'abcçdefgğhıijklmnoöprsştuüvyz',it:'abcdefghijklmnopqrstuvwxyz',pl:'aąbcćdeęfghijklłmnńoóprsśtuwyzźż'}};
 const SOUND_HINT={a:'/æ/ · sat',m:'/m/ · mat',s:'/s/ · sat',t:'/t/ · sat',p:'/p/ · tap',i:'/ɪ/ · pit',n:'/n/ · ant',f:'/f/ · fan',o:'/ɑ/ · pot',d:'/d/ · dad',c:'/k/ · cat',u:'/ʌ/ · sun',g:'/g/ · dog',v:'/v/ · van'};
+const LETTER_KIND={a:'short_vowel',e:'short_vowel',i:'short_vowel',o:'short_vowel',u:'short_vowel',c:'hard_consonant'};
+function letterKind(L){ return LETTER_KIND[String(L||'').toLowerCase()]||'consonant'; }
+function letterTitle(L){
+  const U=String(L||'').toUpperCase();
+  const k=letterKind(L);
+  if(k==='short_vowel') return 'The short vowel '+U;
+  if(k==='long_vowel') return 'The long vowel '+U;
+  if(k==='hard_consonant') return 'The hard consonant '+U;
+  if(k==='soft_consonant') return 'The soft consonant '+U;
+  return 'The consonant '+U;
+}
+function soundLine(id){
+  return (NEW_LETTERS[id]||[]).map(L=>letterTitle(L).replace(/^The /,'')).join(' · ');
+}
 const NEW_LETTERS={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['p'],mlr_dec_003:['i'],mlr_dec_004:['n'],mlr_dec_005:['f'],mlr_dec_006:['o'],mlr_dec_007:['d'],mlr_dec_008:['c'],mlr_dec_009:['u'],mlr_dec_010:['g']};
 const TAUGHT={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['a','m','s','t','p'],mlr_dec_003:['a','m','s','t','p','i'],mlr_dec_004:['a','m','s','t','p','i','n'],mlr_dec_005:['a','m','s','t','p','i','n','f'],mlr_dec_006:['a','m','s','t','p','i','n','f','o'],mlr_dec_007:['a','m','s','t','p','i','n','f','o','d'],mlr_dec_008:['a','m','s','t','p','i','n','f','o','d','c'],mlr_dec_009:['a','m','s','t','p','i','n','f','o','d','c','u'],mlr_dec_010:['a','m','s','t','p','i','n','f','o','d','c','u','g']};
 let lib=null, i18n=null, pack=null, pageIndex=0, mode='library', audio=null, listenGen=0, hlRaf=0;
@@ -283,7 +297,7 @@ function showLib(){
     return `<button class="card${open?'':' lock'}" data-id="${b.id}" ${open?'':'disabled'}>
       <img src="${asset(b.cover)}" alt="">
       <div><b>${b.title}</b>
-      <div style="color:#a9b7d6;font-size:.85rem">${b.level} · ${b.sound}</div>
+      <div style="color:#a9b7d6;font-size:.85rem">${b.level} · ${soundLine(b.id)}</div>
       <div style="font-size:.8rem;margin-top:4px">${done?'✅ Passed':(open?'Ready':'🔒 Pass the book before this')}</div></div></button>`;
   }).join('')+(TEST?`<button id="tryDict" style="width:100%">Try dictation (skip to test)</button><button id="resetProg" style="width:100%">Reset progress</button>`:'');
   document.querySelectorAll('.card').forEach(el=>{ if(!el.disabled) el.onclick=()=>openBook(el.dataset.id); });
@@ -329,12 +343,12 @@ function showIntro(){
     if(!letters.length){ introStep='famous-card'; showIntro(); return; }
     const L=letters[cousinIdx];
     const cu=cousinGlyph(L);
-    $('modeBadge').textContent='Letter '+(cousinIdx+1)+' / '+letters.length;
+    $('modeBadge').textContent=letterTitle(L);
     const cousinBlock=cu
       ? `<div class="g-lbl">Cousin in ${lang}</div><div class="cu">${cu}</div>`
-      : `<div class="g-lbl">Cousin</div><div class="sadface">😢</div><div style="color:var(--muted);font-weight:800;margin-top:6px">Does not exist in this language.</div>`;
+      : '';
     $('introBody').innerHTML=`<div class="onelet">
-      <div class="g-lbl">The letter</div>
+      <div class="g-lbl">${letterTitle(L)}</div>
       <div class="en">${L.toUpperCase()}</div>
       <img src="${asset('decodable/mouth/'+L+'.svg')}" alt="Mouth diagram for ${L.toUpperCase()}" style="max-height:160px;width:auto;object-fit:contain;margin:10px auto;display:block">
       <div style="font-size:.65rem;color:var(--muted);margin-bottom:6px">Mouth picture: Wikimedia / IPA (CC BY-SA)</div>
@@ -439,7 +453,7 @@ function setMode(m){
     else m='pass';
   }
   mode=m; stopA(); listenGen++; hideAll(); clipDone=false;
-  $('modeBadge').textContent=m+' · '+(pack.sound||'');
+  $('modeBadge').textContent=m+' · '+(soundLine(pack.book_id)||pack.sound||'');
   $('mListen').classList.toggle('active', m==='listen');
   $('mSong').classList.toggle('active', m==='song');
   $('mRead').classList.toggle('active', m==='read');
