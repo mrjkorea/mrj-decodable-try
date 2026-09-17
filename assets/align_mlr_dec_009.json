@@ -3,7 +3,7 @@
   "product": "decodable",
   "title": "Amit's Sun Spot",
   "level": "DEC 009",
-  "sound": "+u",
+  "sound": "short vowel U",
   "famous": [
     "be"
   ],
@@ -13,8 +13,8 @@
       "text": "Amit is up. It is sunup!",
       "image": "books/mlr_dec_009/pages/p01.png",
       "audio": "books/mlr_dec_009/audio/pages/p01.mp3",
-      "duration_ms": 3448,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 3422,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_009/audio/song/p01.mp3",
       "song_duration_ms": 3448
@@ -24,8 +24,8 @@
       "text": "A sun spot!",
       "image": "books/mlr_dec_009/pages/p02.png",
       "audio": "books/mlr_dec_009/audio/pages/p02.mp3",
-      "duration_ms": 1802,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1567,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_009/audio/song/p02.mp3",
       "song_duration_ms": 2455
@@ -35,8 +35,8 @@
       "text": "Amit sits in it.",
       "image": "books/mlr_dec_009/pages/p03.png",
       "audio": "books/mlr_dec_009/audio/pages/p03.mp3",
-      "duration_ms": 1645,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1358,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_009/audio/song/p03.mp3",
       "song_duration_ms": 2142
@@ -46,8 +46,8 @@
       "text": "Amit fits a comic in it.",
       "image": "books/mlr_dec_009/pages/p04.png",
       "audio": "books/mlr_dec_009/audio/pages/p04.mp3",
-      "duration_ms": 2194,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1933,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_009/audio/song/p04.mp3",
       "song_duration_ms": 3030
@@ -57,8 +57,8 @@
       "text": "It is fun!",
       "image": "books/mlr_dec_009/pages/p05.png",
       "audio": "books/mlr_dec_009/audio/pages/p05.mp3",
-      "duration_ms": 1750,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1515,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_009/audio/song/p05.mp3",
       "song_duration_ms": 1854
@@ -68,8 +68,8 @@
       "text": "A pup is in it!",
       "image": "books/mlr_dec_009/pages/p06.png",
       "audio": "books/mlr_dec_009/audio/pages/p06.mp3",
-      "duration_ms": 1802,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1776,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_009/audio/song/p06.mp3",
       "song_duration_ms": 2220
@@ -79,8 +79,8 @@
       "text": "\"Scat, pup!\"",
       "image": "books/mlr_dec_009/pages/p07.png",
       "audio": "books/mlr_dec_009/audio/pages/p07.mp3",
-      "duration_ms": 1436,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1567,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_009/audio/song/p07.mp3",
       "song_duration_ms": 2455
@@ -90,8 +90,8 @@
       "text": "A pup must be in it.",
       "image": "books/mlr_dec_009/pages/p08.png",
       "audio": "books/mlr_dec_009/audio/pages/p08.mp3",
-      "duration_ms": 2246,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1828,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_009/audio/song/p08.mp3",
       "song_duration_ms": 2638
@@ -101,8 +101,8 @@
       "text": "A sun spot is in a cot!",
       "image": "books/mlr_dec_009/pages/p09.png",
       "audio": "books/mlr_dec_009/audio/pages/p09.mp3",
-      "duration_ms": 2716,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2351,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_009/audio/song/p09.mp3",
       "song_duration_ms": 3291
@@ -112,8 +112,8 @@
       "text": "Amit sits up in it. A pup naps in Amit's spot!",
       "image": "books/mlr_dec_009/pages/p10.png",
       "audio": "books/mlr_dec_009/audio/pages/p10.mp3",
-      "duration_ms": 4989,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 4728,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": true,
       "song_audio": "books/mlr_dec_009/audio/song/p10.mp3",
       "song_duration_ms": 5773,
@@ -121,7 +121,7 @@
     }
   ],
   "voices": {
-    "listen": "57785406027844b29b63a772a8477bc2",
+    "listen": "02dd00b374cb4750b856c7394938d222",
     "words": "851d4a3a36814f8faef50db1884e1ef6",
     "read_taps": "clear_american_male",
     "song": "02019f80d2604688a746fbb5d2a0a0f8",
