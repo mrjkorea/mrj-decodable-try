@@ -141,7 +141,7 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260917v1';
+const ASSET_V='dec20260917v2';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -423,10 +423,7 @@ function introAdvance(){
 function canEnter(m){
   if(!pack) return false;
   const bp=bookProg(pack.book_id);
-  if(TEST){
-    if(m==='speak') return !!bp.dictation;
-    return true;
-  }
+  if(TEST) return true;
   if(m==='listen') return true;
   if(m==='song') return bp.listen || mode==='song' || mode==='listen-end';
   if(m==='read') return bp.song || mode==='read';
@@ -437,9 +434,12 @@ function canEnter(m){
 }
 function setMode(m){
   if(!pack) return;
+  const want=m;
   if(!canEnter(m)){
     const bp=bookProg(pack.book_id);
-    if(m==='read' && bp.listen && !bp.song) m='song';
+    if(want==='speak'){
+      m = bp.dictation ? 'speak' : (bp.read ? 'dictation' : (bp.song ? 'read' : (bp.listen ? 'song' : 'listen')));
+    } else if(m==='read' && bp.listen && !bp.song) m='song';
     else if(!bp.listen) m='listen';
     else if(!bp.song) m='song';
     else if(!bp.read) m='read';
