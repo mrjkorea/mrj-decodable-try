@@ -141,27 +141,27 @@
       {
         "page_id": "p02",
         "text": "We picnic.",
-        "audio": "books/mlr_dec_008/audio/pages/p02.mp3"
+        "audio": "books/mlr_dec_008/audio/dictation/p02.mp3"
       },
       {
         "page_id": "p04",
         "text": "He taps a can.",
-        "audio": "books/mlr_dec_008/audio/pages/p04.mp3"
+        "audio": "books/mlr_dec_008/audio/dictation/p04.mp3"
       },
       {
         "page_id": "p06",
         "text": "He can!",
-        "audio": "books/mlr_dec_008/audio/pages/p06.mp3"
+        "audio": "books/mlr_dec_008/audio/dictation/p06.mp3"
       },
       {
         "page_id": "p08",
         "text": "Can we sit? We can!",
-        "audio": "books/mlr_dec_008/audio/pages/p08.mp3"
+        "audio": "books/mlr_dec_008/audio/dictation/p08.mp3"
       },
       {
         "page_id": "p10",
         "text": "Cam's cat picnics.",
-        "audio": "books/mlr_dec_008/audio/pages/p10.mp3"
+        "audio": "books/mlr_dec_008/audio/dictation/p10.mp3"
       }
     ],
     "note": "Exact printed page sentences. Easy=tiles. Hard=A-Z pad. Punctuation given on hard."

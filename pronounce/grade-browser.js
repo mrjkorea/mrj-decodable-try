@@ -22,15 +22,38 @@
     }
   }
 
+  function isGithubIo() {
+    try { return /\.github\.io$/i.test(location.hostname); } catch (_) { return false; }
+  }
+
+  async function fetchPartResponse(url, timeoutMs) {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      const r = await fetch(url, { signal: ctrl.signal });
+      if (!r.ok) {
+        try { if (r.body && r.body.cancel) r.body.cancel(); } catch (_) {}
+        return null;
+      }
+      return r;
+    } catch (_) {
+      return null;
+    } finally {
+      clearTimeout(t);
+    }
+  }
+
   async function concatParts(onProgress) {
     const bufs = [];
     let total = 0;
     const raw = 'https://raw.githubusercontent.com/mrjkorea/mrj-decodable-try/main/pronounce/model_parts/';
+    const githubIo = isGithubIo();
+    const localTimeout = githubIo ? 8000 : 20000;
     for (let i = 0; i < PARTS.length; i++) {
       const name = PARTS[i];
-      let r = await fetch(base + 'model_parts/' + name);
-      if (!r.ok) r = await fetch(raw + name);
-      if (!r.ok) throw new Error('missing model part ' + name);
+      let r = await fetchPartResponse(base + 'model_parts/' + name, localTimeout);
+      if (!r) r = await fetchPartResponse(raw + name, 60000);
+      if (!r) throw new Error('missing model part ' + name);
       const u8 = new Uint8Array(await r.arrayBuffer());
       bufs.push(u8);
       total += u8.length;

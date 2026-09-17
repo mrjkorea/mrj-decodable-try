@@ -141,27 +141,27 @@
       {
         "page_id": "p02",
         "text": "A fan is in a spin.",
-        "audio": "books/mlr_dec_005/audio/pages/p02.mp3"
+        "audio": "books/mlr_dec_005/audio/dictation/p02.mp3"
       },
       {
         "page_id": "p04",
         "text": "Spin, fan, spin!",
-        "audio": "books/mlr_dec_005/audio/pages/p04.mp3"
+        "audio": "books/mlr_dec_005/audio/dictation/p04.mp3"
       },
       {
         "page_id": "p06",
         "text": "A fan fits in a fist.",
-        "audio": "books/mlr_dec_005/audio/pages/p06.mp3"
+        "audio": "books/mlr_dec_005/audio/dictation/p06.mp3"
       },
       {
         "page_id": "p08",
         "text": "A fan fits in pants.",
-        "audio": "books/mlr_dec_005/audio/pages/p08.mp3"
+        "audio": "books/mlr_dec_005/audio/dictation/p08.mp3"
       },
       {
         "page_id": "p10",
         "text": "An ant naps in a fan!",
-        "audio": "books/mlr_dec_005/audio/pages/p10.mp3"
+        "audio": "books/mlr_dec_005/audio/dictation/p10.mp3"
       }
     ],
     "note": "Exact printed page sentences. Easy=tiles. Hard=A-Z pad. Punctuation given on hard."

@@ -207,27 +207,27 @@
       {
         "page_id": "p03",
         "text": "Sam sat.",
-        "audio": "books/mlr_dec_001/audio/pages/p03.mp3"
+        "audio": "books/mlr_dec_001/audio/dictation/p03.mp3"
       },
       {
         "page_id": "p07",
         "text": "\"Tam... A mat!\"",
-        "audio": "books/mlr_dec_001/audio/pages/p07.mp3"
+        "audio": "books/mlr_dec_001/audio/dictation/p07.mp3"
       },
       {
         "page_id": "p08",
         "text": "Tam sat at a mat.",
-        "audio": "books/mlr_dec_001/audio/pages/p08.mp3"
+        "audio": "books/mlr_dec_001/audio/dictation/p08.mp3"
       },
       {
         "page_id": "p09",
         "text": "\"Sam... A mat?\"",
-        "audio": "books/mlr_dec_001/audio/pages/p09.mp3"
+        "audio": "books/mlr_dec_001/audio/dictation/p09.mp3"
       },
       {
         "page_id": "p10",
         "text": "Sam sat at a mat.",
-        "audio": "books/mlr_dec_001/audio/pages/p10.mp3"
+        "audio": "books/mlr_dec_001/audio/dictation/p10.mp3"
       }
     ],
     "note": "Exact printed page sentences. Easy=tiles. Hard=A-Z pad. Punctuation given on hard."
