@@ -141,7 +141,7 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260917v2';
+const ASSET_V='dec20260917v4';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -164,23 +164,8 @@ const MAX_BOOKS=10;
 const SPEAK_DEFAULT=50;
 const DICT_N=5;
 const DICT_PASS=80;
-const LATIN_SAME=['vi','es','pt-BR','fr','de','id','tr','it','pl'];
-const COUSIN={
-  ko:{a:'애',m:'ㅁ',s:'ㅅ',t:'ㅌ',p:'ㅍ',i:'이',n:'ㄴ',f:'프',o:'오',d:'ㄷ',c:'ㅋ',u:'우',g:'ㄱ'},
-  ja:{a:'ア',m:'ム',s:'ス',t:'ト',p:'プ',i:'イ',n:'ン',f:'フ',o:'オ',d:'ド',c:'ク',u:'ウ',g:'グ'},
-  'zh-Hans':{a:'啊',m:'姆',s:'斯',t:'特',p:'普',i:'伊',n:'恩',f:'夫',o:'哦',d:'德',c:'克',u:'乌',g:'哥'},
-  vi:{a:'a',m:'m',s:'s',t:'t',p:'p',i:'i',n:'n',f:'f',o:'o',d:'d',c:'c',u:'u',g:'g'},
-  es:{a:'a',m:'m',s:'s',t:'t',p:'p',i:'i',n:'n',f:'f',o:'o',d:'d',c:'c',u:'u',g:'g'},
-  'pt-BR':{a:'a',m:'m',s:'s',t:'t',p:'p',i:'i',n:'n',f:'f',o:'o',d:'d',c:'c',u:'u',g:'g'},
-  fr:{a:'a',m:'m',s:'s',t:'t',p:'p',i:'i',n:'n',f:'f',o:'o',d:'d',c:'c',u:'u',g:'g'},
-  de:{a:'a',m:'m',s:'s',t:'t',p:'p',i:'i',n:'n',f:'f',o:'o',d:'d',c:'c',u:'u',g:'g'},
-  id:{a:'a',m:'m',s:'s',t:'t',p:'p',i:'i',n:'n',f:'f',o:'o',d:'d',c:'c',u:'u',g:'g'},
-  hi:{a:'अ',m:'म',s:'स',t:'ट',p:'प',i:'इ',n:'न',f:'फ',o:'ओ',d:'द',c:'क',u:'उ',g:'ग'},
-  ar:{a:'ا',m:'م',s:'س',t:'ت',p:'ب',i:'ي',n:'ن',f:'ف',o:'و',d:'د',c:'ك',u:'و',g:'ج'},
-  tr:{a:'a',m:'m',s:'s',t:'t',p:'p',i:'i',n:'n',f:'f',o:'o',d:'d',c:'c',u:'u',g:'g'},
-  it:{a:'a',m:'m',s:'s',t:'t',p:'p',i:'i',n:'n',f:'f',o:'o',d:'d',c:'c',u:'u',g:'g'},
-  pl:{a:'a',m:'m',s:'s',t:'t',p:'p',i:'i',n:'n',f:'f',o:'o',d:'d',c:'c',u:'u',g:'g'}
-};
+const COUSIN_META={no_latin_script:['ko','ja','zh-Hans','hi','ar'],latin_letters:{vi:'aăâbcdđeêghiklmnoôơpqrstuưvxy',es:'abcdefghijklmnñopqrstuvwxyz','pt-BR':'abcdefghijklmnopqrstuvwxyz',fr:'abcdefghijklmnopqrstuvwxyz',de:'abcdefghijklmnopqrstuvwxyzäöüß',id:'abcdefghijklmnopqrstuvwxyz',tr:'abcçdefgğhıijklmnoöprsştuüvyz',it:'abcdefghijklmnopqrstuvwxyz',pl:'aąbcćdeęfghijklłmnńoóprsśtuwyzźż'}};
+const SOUND_HINT={a:'/æ/ · sat',m:'/m/ · mat',s:'/s/ · sat',t:'/t/ · sat',p:'/p/ · tap',i:'/ɪ/ · pit',n:'/n/ · ant',f:'/f/ · fan',o:'/ɑ/ · pot',d:'/d/ · dad',c:'/k/ · cat',u:'/ʌ/ · sun',g:'/g/ · dog',v:'/v/ · van'};
 const NEW_LETTERS={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['p'],mlr_dec_003:['i'],mlr_dec_004:['n'],mlr_dec_005:['f'],mlr_dec_006:['o'],mlr_dec_007:['d'],mlr_dec_008:['c'],mlr_dec_009:['u'],mlr_dec_010:['g']};
 const TAUGHT={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['a','m','s','t','p'],mlr_dec_003:['a','m','s','t','p','i'],mlr_dec_004:['a','m','s','t','p','i','n'],mlr_dec_005:['a','m','s','t','p','i','n','f'],mlr_dec_006:['a','m','s','t','p','i','n','f','o'],mlr_dec_007:['a','m','s','t','p','i','n','f','o','d'],mlr_dec_008:['a','m','s','t','p','i','n','f','o','d','c'],mlr_dec_009:['a','m','s','t','p','i','n','f','o','d','c','u'],mlr_dec_010:['a','m','s','t','p','i','n','f','o','d','c','u','g']};
 let lib=null, i18n=null, pack=null, pageIndex=0, mode='library', audio=null, listenGen=0, hlRaf=0;
@@ -326,7 +311,13 @@ async function openBook(id){
 }
 
 function cousinLetters(){ return NEW_LETTERS[pack.book_id]||[]; }
-function cousinGlyph(letter){ return (COUSIN[lang]||{})[letter] || ''; }
+function cousinGlyph(letter){
+  const L=String(letter||'').toLowerCase();
+  if(!L) return '';
+  if((COUSIN_META.no_latin_script||[]).includes(lang)) return '';
+  const alpha=(COUSIN_META.latin_letters||{})[lang]||'';
+  return alpha.includes(L)?L:'';
+}
 
 function showIntro(){
   mode='intro'; stopA(); hideAll();
@@ -339,16 +330,16 @@ function showIntro(){
     const L=letters[cousinIdx];
     const cu=cousinGlyph(L);
     $('modeBadge').textContent='Letter '+(cousinIdx+1)+' / '+letters.length;
-    const same=LATIN_SAME.includes(lang);
-    const glyph=cu || (same ? L : '');
-    const cousinBlock=glyph
-      ? `<div class="g-lbl">Cousin</div><div class="cu">${glyph}</div>`
-      : `<div class="g-lbl">Cousin</div><div class="sadface">😢</div>`;
+    const cousinBlock=cu
+      ? `<div class="g-lbl">Cousin in ${lang}</div><div class="cu">${cu}</div>`
+      : `<div class="g-lbl">Cousin</div><div class="sadface">😢</div><div style="color:var(--muted);font-weight:800;margin-top:6px">Does not exist in this language.</div>`;
     $('introBody').innerHTML=`<div class="onelet">
       <div class="g-lbl">The letter</div>
       <div class="en">${L.toUpperCase()}</div>
+      <img src="${asset('decodable/mouth/'+L+'.svg')}" alt="Mouth diagram for ${L.toUpperCase()}" style="max-height:160px;width:auto;object-fit:contain;margin:10px auto;display:block">
+      <div style="font-size:.65rem;color:var(--muted);margin-bottom:6px">Mouth picture: Wikimedia / IPA (CC BY-SA)</div>
       ${cousinBlock}
-      <div class="hint">English name only. Not the sound.</div>
+      <div class="hint">${SOUND_HINT[L]||''}</div>
     </div>`;
     playPath('decodable/letter_names/'+L+'.mp3', null, 1);
     $('introGo').textContent = cousinIdx<letters.length-1 ? 'Next letter' : 'Next';
@@ -469,7 +460,10 @@ function allTapped(){
 }
 function nextLocked(){
   if(mode==='read') return !allTapped();
-  if(mode==='listen' || mode==='song') return !(clipDone || (mode==='listen'?heardListen:heardSong).has(pageIndex));
+  if(mode==='listen' || mode==='song'){
+    if(TEST) return false;
+    return !(clipDone || (mode==='listen'?heardListen:heardSong).has(pageIndex));
+  }
   return false;
 }
 function go(d){
@@ -518,7 +512,11 @@ function renderPage(){
   if(mode==='listen'||mode==='song') need=(clipDone|| (mode==='listen'?heardListen:heardSong).has(pageIndex))?'Page heard.':'Play to the end.';
   $('status').textContent=`${pageIndex+1} / ${pack.pages.length}`+(need?' · '+need:'');
   if(mode==='read'){ $('play').classList.add('hidden'); $('next').classList.add('hidden'); }
-  else { $('play').classList.remove('hidden'); $('next').classList.remove('hidden'); $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen'; }
+  else {
+    $('play').classList.remove('hidden'); $('next').classList.remove('hidden');
+    $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen';
+    $('next').textContent = TEST ? 'Next' : '▶';
+  }
   $('next').disabled = nextLocked();
   if(mode==='listen' || mode==='song') playPage(false);
 }
