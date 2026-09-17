@@ -141,7 +141,7 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260917v3';
+const ASSET_V='dec20260917v4';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -460,7 +460,10 @@ function allTapped(){
 }
 function nextLocked(){
   if(mode==='read') return !allTapped();
-  if(mode==='listen' || mode==='song') return !(clipDone || (mode==='listen'?heardListen:heardSong).has(pageIndex));
+  if(mode==='listen' || mode==='song'){
+    if(TEST) return false;
+    return !(clipDone || (mode==='listen'?heardListen:heardSong).has(pageIndex));
+  }
   return false;
 }
 function go(d){
@@ -509,7 +512,11 @@ function renderPage(){
   if(mode==='listen'||mode==='song') need=(clipDone|| (mode==='listen'?heardListen:heardSong).has(pageIndex))?'Page heard.':'Play to the end.';
   $('status').textContent=`${pageIndex+1} / ${pack.pages.length}`+(need?' · '+need:'');
   if(mode==='read'){ $('play').classList.add('hidden'); $('next').classList.add('hidden'); }
-  else { $('play').classList.remove('hidden'); $('next').classList.remove('hidden'); $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen'; }
+  else {
+    $('play').classList.remove('hidden'); $('next').classList.remove('hidden');
+    $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen';
+    $('next').textContent = TEST ? 'Next' : '▶';
+  }
   $('next').disabled = nextLocked();
   if(mode==='listen' || mode==='song') playPage(false);
 }
