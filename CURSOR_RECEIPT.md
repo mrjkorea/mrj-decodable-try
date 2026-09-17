@@ -47,3 +47,20 @@
 - Apps lock: decodables ≠ readers. Readers = packs A–D, no pron/record.
 - Deploy: gh-pages a617928 force, live HTML contains dec20260916v1 + famous_no_steps_out.
 - Say: not claimed fixed (web try still pulls the big grader from GitHub raw).
+
+## Receipt 17SEP2026 — word highlight + Say on GitHub + no-clip taps
+- **Command/job:** `CURSOR_JOB_17SEP_HIGHLIGHT_SAY.md`
+- **Model:** `cursor-grok-4.6-high`
+- **Files:**
+  - `mrj-decodable-try/index.html` — `ASSET_V=dec20260917v1`, `syncWordHighlight` (`currentTime/duration` over `#sentence .w`, rAF + `timeupdate`), Listen resets each of 3 loops, Song 1×, `listenGen` cancels leftover rAF, `.w.on` yellow
+  - `mrj-decodable-try/pronounce/grade-browser.js` — `*.github.io` fetches same-origin `model_parts` first (8s header timeout, cancel 404 body), then raw.githubusercontent; `MRJPronounce.setBase(BASE+'pronounce/')` unchanged
+  - `mrj-leveled-readers/vertical-slice-max/player/decodable.html` + `player/pronounce/grade-browser.js` — same highlight + fetch (factory paths unchanged)
+  - Word taps: `/tmp/dec_word_taps_clear/*.mp3` duration ≥ 0.85s copied over books 001–010 `audio/words/` (and factory copies). `sits` 1.016s / 25748 bytes. Listen page mp3s untouched.
+- **Deploy:** main `0695f7f` + `66c3ccc`; slim `gh-pages` `ba04963` **includes** `pronounce/model_parts/*.part0N` + `ort/` + `models/` + js, `.nojekyll`. Pages source `gh-pages` / root / `build_type=legacy`. `gh` as `mrjkorea`.
+- **Live URL:** https://mrjkorea.github.io/mrj-decodable-try/?test=1&v=dec20260917v1
+- **Browser (localhost:8770):** Listen page “Tam sat at a mat.” highlight walked Tam→sat→at→a→mat, reset to Tam on loop 2; Song same walk; Read tap kept `.on` on the tapped word; Next bumped `listenGen`.
+- **Curl proof (200, last-modified Thu, 17 Sep 2026 04:17:54 GMT):**
+  - `/?test=1&v=dec20260917v1` HTML len 47931 contains `dec20260917v1` + `syncWordHighlight`
+  - `/assets/books/mlr_dec_009/pages/p01.png` 1974061 image/png
+  - `/pronounce/model_parts/model_int8.onnx.part00` 76000000 application/octet-stream (**github.io**, not only raw)
+  - `/assets/books/mlr_dec_009/audio/words/sits.mp3` 25748 audio/mp3
