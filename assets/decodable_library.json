@@ -5,7 +5,7 @@
       "id": "mlr_dec_001",
       "title": "A Mat",
       "level": "DEC 001",
-      "sound": "short vowel A \u00b7 consonant M \u00b7 consonant S \u00b7 consonant T",
+      "sound": "short vowel A · consonant M · consonant S · consonant T",
       "align": "align_mlr_dec_001.json",
       "cover": "books/mlr_dec_001/cover/cover.png"
     },
@@ -47,7 +47,7 @@
       "level": "DEC 006",
       "sound": "short vowel O",
       "align": "align_mlr_dec_006.json",
-      "cover": "books/mlr_dec_006/cover/cover.png"
+      "cover": "books/mlr_dec_006/pages/p01.webp"
     },
     {
       "id": "mlr_dec_007",
@@ -80,6 +80,86 @@
       "sound": "consonant G",
       "align": "align_mlr_dec_010.json",
       "cover": "books/mlr_dec_010/cover/cover.png"
+    },
+    {
+      "id": "mlr_dec_011",
+      "title": "Bugs",
+      "level": "DEC 011",
+      "sound": "consonant B",
+      "align": "align_mlr_dec_011.json",
+      "cover": "books/mlr_dec_011/pages/p01.webp"
+    },
+    {
+      "id": "mlr_dec_012",
+      "title": "Fen's Ten Pet Ants",
+      "level": "DEC 012",
+      "sound": "short vowel E",
+      "align": "align_mlr_dec_012.json",
+      "cover": "books/mlr_dec_012/pages/p01.webp"
+    },
+    {
+      "id": "mlr_dec_013",
+      "title": "Masks",
+      "level": "DEC 013",
+      "sound": "consonant K",
+      "align": "align_mlr_dec_013.json",
+      "cover": "books/mlr_dec_013/pages/p01.webp"
+    },
+    {
+      "id": "mlr_dec_014",
+      "title": "Hens",
+      "level": "DEC 014",
+      "sound": "consonant H",
+      "align": "align_mlr_dec_014.json",
+      "cover": "books/mlr_dec_014/pages/p01.webp"
+    },
+    {
+      "id": "mlr_dec_015",
+      "title": "Rats",
+      "level": "DEC 015",
+      "sound": "consonant R",
+      "align": "align_mlr_dec_015.json",
+      "cover": "books/mlr_dec_015/pages/p01.webp"
+    },
+    {
+      "id": "mlr_dec_016",
+      "title": "Lamps",
+      "level": "DEC 016",
+      "sound": "consonant L",
+      "align": "align_mlr_dec_016.json",
+      "cover": "books/mlr_dec_016/pages/p01.webp"
+    },
+    {
+      "id": "mlr_dec_017",
+      "title": "Webs",
+      "level": "DEC 017",
+      "sound": "consonant W",
+      "align": "align_mlr_dec_017.json",
+      "cover": "books/mlr_dec_017/pages/p01.webp"
+    },
+    {
+      "id": "mlr_dec_018",
+      "title": "Kim's Jam Jug",
+      "level": "DEC 018",
+      "sound": "consonant J",
+      "align": "align_mlr_dec_018.json",
+      "cover": "books/mlr_dec_018/pages/p01.webp"
+    },
+    {
+      "id": "mlr_dec_019",
+      "title": "Yaks",
+      "level": "DEC 019",
+      "sound": "consonant Y",
+      "align": "align_mlr_dec_019.json",
+      "cover": "books/mlr_dec_019/pages/p01.webp"
+    },
+    {
+      "id": "mlr_dec_020",
+      "title": "Foxes",
+      "level": "DEC 020",
+      "sound": "consonant X",
+      "align": "align_mlr_dec_020.json",
+      "cover": "books/mlr_dec_020/pages/p01.webp"
     }
   ]
 }
