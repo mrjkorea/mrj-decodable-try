@@ -91,6 +91,9 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 .loadbar-track{height:10px;background:#1b2740;border-radius:8px;overflow:hidden}
 #loadbarFill{height:100%;width:0;background:linear-gradient(90deg,#4d7dff,#3ecf8e);transition:width .18s ease;border-radius:8px}
 #loadbarLbl{text-align:center;font-size:.72rem;color:var(--muted);margin-top:6px;font-weight:800}
+.testnav{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;max-width:520px;margin:0 auto 8px}
+.testnav button{font-size:1.05rem;padding:14px 4px;background:#16356e}
+body.test-on .app{padding-bottom:196px}
 </style>
 </head>
 <body>
@@ -126,6 +129,11 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
   </div>
 </div>
 <div class="bar">
+  <div class="testnav hidden" id="testNav">
+    <button id="testBack" type="button">◀ Back</button>
+    <button id="testLib" type="button">📚 Library</button>
+    <button id="testNext" type="button">Next ▶</button>
+  </div>
   <div class="bar-row">
     <button id="mListen">Listen</button>
     <button id="mSong">Song</button>
@@ -141,7 +149,7 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260924v4';
+const ASSET_V='dec20260924v5';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -190,7 +198,7 @@ let introStep='mode', cousinIdx=0;
 let tapped=new Set(), heardListen=new Set(), heardSong=new Set();
 let clipDone=false, showLang=true, lang='ko';
 let dictBuilt=[], dictQueue=[], dictIdx=0, dictRight=0, dictRate=0.8;
-let speakRec=null, sayPage=0, micCtx=null, lastYouBlob=null;
+let speakRec=null, sayPage=0, micCtx=null, lastYouBlob=null, lastTestBook=null;
 
 function blankProg(){ return {passed:false,listen:false,song:false,read:false,dictation:false,speak:false,readPages:{},difficulty:null,dictScore:null,speakPages:{}}; }
 function loadAll(){ try{return JSON.parse(localStorage.getItem(SAVE)||'{}');}catch(e){return{};} }
@@ -292,12 +300,20 @@ async function boot(){
   $('next').onclick=()=>go(1);
   $('play').onclick=()=>playPage(true);
   $('introGo').onclick=()=>introAdvance();
+  if(TEST){
+    document.body.classList.add('test-on');
+    $('testNav').classList.remove('hidden');
+    $('testBack').onclick=()=>testGo(-1);
+    $('testLib').onclick=()=>showLib();
+    $('testNext').onclick=()=>testGo(1);
+  }
   const want=QS.get('book');
   if(want && bookOrder().includes(want) && (TEST || unlocked(want))) openBook(want);
   else showLib();
 }
 function hideAll(){ ['libStage','introStage','bookStage','workStage'].forEach(id=>$(id).classList.add('hidden')); }
 function showLib(){
+  if(pack && pack.book_id) lastTestBook=pack.book_id;
   mode='library'; pack=null; stopA(); hideAll();
   $('libStage').classList.remove('hidden');
   $('bookTitle').textContent='MRJ Decodables';
@@ -484,6 +500,7 @@ function allTapped(){
   return n>0;
 }
 function nextLocked(){
+  if(TEST) return false;
   if(mode==='read') return !allTapped();
   if(mode==='listen' || mode==='song'){
     if(TEST) return false;
@@ -536,7 +553,7 @@ function renderPage(){
   if(mode==='read') need=allTapped()?'All words tapped.':'Tap every word.';
   if(mode==='listen'||mode==='song') need=(clipDone|| (mode==='listen'?heardListen:heardSong).has(pageIndex))?'Page heard.':'Play to the end.';
   $('status').textContent=`${pageIndex+1} / ${pack.pages.length}`+(need?' · '+need:'');
-  if(mode==='read'){ $('play').classList.add('hidden'); $('next').classList.add('hidden'); }
+  if(mode==='read' && !TEST){ $('play').classList.add('hidden'); $('next').classList.add('hidden'); }
   else {
     $('play').classList.remove('hidden'); $('next').classList.remove('hidden');
     $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen';
@@ -567,7 +584,7 @@ function playPage(manual){
         document.querySelectorAll('.w').forEach(e=>e.classList.remove('on'));
         $('next').disabled=nextLocked();
         $('status').textContent=`${pageIndex+1} / ${pack.pages.length} · Page heard.`;
-        if(manual) return;
+        if(manual || TEST) return;
         go(1);
       }, rate);
     };
@@ -581,7 +598,7 @@ function playPage(manual){
     document.querySelectorAll('.w').forEach(e=>e.classList.remove('on'));
     $('next').disabled=nextLocked();
     $('status').textContent=`${pageIndex+1} / ${pack.pages.length} · Page heard.`;
-    if(manual) return;
+    if(manual || TEST) return;
     go(1);
   }, rate);
 }
@@ -595,7 +612,7 @@ function onWordTap(el){
     if(allTapped()){
       const rp=Object.assign({}, bookProg(pack.book_id).readPages||{});
       rp[pageIndex]=true; setBookProg(pack.book_id,{readPages:rp});
-      playWord(lem, ()=>{ if(mode==='read' && !wasDone) go(1); });
+      playWord(lem, ()=>{ if(mode==='read' && !wasDone && !TEST) go(1); });
       return;
     }
   }
@@ -849,6 +866,12 @@ function paintSayChips(text, words){
   }).join('');
 }
 function startSpeak(){
+  if(TEST){
+    if(sayPage<0) sayPage=0;
+    if(sayPage>=pack.pages.length) sayPage=Math.max(0, pack.pages.length-1);
+    renderSay();
+    return;
+  }
   sayPage = Object.keys(bookProg(pack.book_id).speakPages||{}).length;
   if(sayPage>=pack.pages.length){ setBookProg(pack.book_id,{speak:true}); setMode('pass'); return; }
   renderSay();
@@ -996,6 +1019,101 @@ function renderPass(){
     ${nxt?`<button id="nextBook" style="width:100%;margin-top:8px;background:linear-gradient(135deg,#4d7dff,#7a5cff)">Next book</button>`:''}`;
   $('backLib').onclick=()=>showLib();
   if(nxt) $('nextBook').onclick=()=>openBook(nxt);
+}
+function testGo(d){
+  if(!TEST) return;
+  if(mode==='library' || !pack){
+    if(d>0){
+      const id=(lastTestBook && bookOrder().includes(lastTestBook)) ? lastTestBook : bookOrder()[0];
+      if(id) openBook(id);
+    }
+    return;
+  }
+  if(mode==='intro'){
+    if(d<0){ testBackIntro(); return; }
+    introAdvance();
+    return;
+  }
+  if(mode==='listen' || mode==='song' || mode==='read'){
+    const nxt=pageIndex+d;
+    if(nxt<0){
+      if(mode==='listen'){
+        introStep=(pack.law_breaker||[]).length ? 'jail' : 'famous';
+        showIntro();
+        return;
+      }
+      if(mode==='song'){ setMode('listen-end'); return; }
+      pageIndex=pack.pages.length-1; setMode('song'); return;
+    }
+    if(nxt>=pack.pages.length){
+      if(mode==='listen'){ setMode('listen-end'); return; }
+      if(mode==='song'){ pageIndex=0; setMode('read'); return; }
+      jumpDict(0); return;
+    }
+    pageIndex=nxt; clipDone=true; renderPage();
+    return;
+  }
+  if(mode==='listen-end'){
+    if(d<0){ pageIndex=pack.pages.length-1; setMode('listen'); return; }
+    pageIndex=0; setMode('song'); return;
+  }
+  if(mode==='dictation'){
+    if($('pickEasy') && !$('hear1x')){
+      if(d<0){ pageIndex=pack.pages.length-1; setMode('read'); return; }
+      setBookProg(pack.book_id,{difficulty:'easy'});
+      jumpDict(0); return;
+    }
+    if(d<0){
+      if(dictIdx>0){ jumpDict(dictIdx-1); return; }
+      pageIndex=pack.pages.length-1; setMode('read'); return;
+    }
+    if(dictIdx<dictQueue.length-1){ jumpDict(dictIdx+1); return; }
+    sayPage=0; setMode('speak'); return;
+  }
+  if(mode==='speak'){
+    if(d<0){
+      if(sayPage>0){ sayPage--; renderSay(); return; }
+      jumpDict(Math.max(0, (dictItems().length||1)-1)); return;
+    }
+    if(sayPage<pack.pages.length-1){ sayPage++; renderSay(); return; }
+    setMode('pass'); return;
+  }
+  if(mode==='pass'){
+    if(d<0){ sayPage=pack.pages.length-1; setMode('speak'); return; }
+    const order=bookOrder();
+    const i=order.indexOf(pack.book_id);
+    if(order[i+1]) openBook(order[i+1]);
+    else showLib();
+  }
+}
+function testBackIntro(){
+  const letters=cousinLetters();
+  if(introStep==='cousin'){
+    if(cousinIdx>0){ cousinIdx--; showIntro(); return; }
+    showLib(); return;
+  }
+  if(introStep==='famous-card'){
+    if(letters.length){ introStep='cousin'; cousinIdx=letters.length-1; showIntro(); return; }
+    showLib(); return;
+  }
+  if(introStep==='famous'){ introStep='famous-card'; showIntro(); return; }
+  if(introStep==='jail'){ introStep='famous'; showIntro(); return; }
+  showLib();
+}
+function jumpDict(idx){
+  setBookProg(pack.book_id,{difficulty: bookProg(pack.book_id).difficulty || 'easy'});
+  dictQueue=dictItems();
+  dictIdx=Math.max(0, Math.min(idx, Math.max(0, dictQueue.length-1)));
+  dictRight=0;
+  mode='dictation'; stopA(); listenGen++; hideAll(); clipDone=false;
+  $('modeBadge').textContent='dictation · '+(soundLine(pack.book_id)||pack.sound||'');
+  $('mListen').classList.remove('active');
+  $('mSong').classList.remove('active');
+  $('mRead').classList.remove('active');
+  $('mDict').classList.add('active');
+  $('mSay').classList.remove('active');
+  $('workStage').classList.remove('hidden');
+  nextDict();
 }
 boot();
 </script>
