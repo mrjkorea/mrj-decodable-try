@@ -52,9 +52,10 @@
       "audio": "books/mlr_dec_002/audio/pages/p04.mp3",
       "duration_ms": 1620,
       "voice": "02dd00b374cb4750b856c7394938d222",
-      "has_video": false,
+      "has_video": true,
       "song_audio": "books/mlr_dec_002/audio/song/p04.mp3",
-      "song_duration_ms": 3343
+      "song_duration_ms": 3343,
+      "video": "books/mlr_dec_002/video/p04.mp4"
     },
     {
       "page_id": "p05",
@@ -63,9 +64,10 @@
       "audio": "books/mlr_dec_002/audio/pages/p05.mp3",
       "duration_ms": 2612,
       "voice": "02dd00b374cb4750b856c7394938d222",
-      "has_video": false,
+      "has_video": true,
       "song_audio": "books/mlr_dec_002/audio/song/p05.mp3",
-      "song_duration_ms": 4675
+      "song_duration_ms": 4675,
+      "video": "books/mlr_dec_002/video/p05.mp4"
     },
     {
       "page_id": "p06",
@@ -74,9 +76,10 @@
       "audio": "books/mlr_dec_002/audio/pages/p06.mp3",
       "duration_ms": 1045,
       "voice": "02dd00b374cb4750b856c7394938d222",
-      "has_video": false,
+      "has_video": true,
       "song_audio": "books/mlr_dec_002/audio/song/p06.mp3",
-      "song_duration_ms": 2011
+      "song_duration_ms": 2011,
+      "video": "books/mlr_dec_002/video/p06.mp4"
     },
     {
       "page_id": "p07",
@@ -85,9 +88,10 @@
       "audio": "books/mlr_dec_002/audio/pages/p07.mp3",
       "duration_ms": 1567,
       "voice": "02dd00b374cb4750b856c7394938d222",
-      "has_video": false,
+      "has_video": true,
       "song_audio": "books/mlr_dec_002/audio/song/p07.mp3",
-      "song_duration_ms": 3526
+      "song_duration_ms": 3526,
+      "video": "books/mlr_dec_002/video/p07.mp4"
     },
     {
       "page_id": "p08",
@@ -96,9 +100,10 @@
       "audio": "books/mlr_dec_002/audio/pages/p08.mp3",
       "duration_ms": 1620,
       "voice": "02dd00b374cb4750b856c7394938d222",
-      "has_video": false,
+      "has_video": true,
       "song_audio": "books/mlr_dec_002/audio/song/p08.mp3",
-      "song_duration_ms": 3604
+      "song_duration_ms": 3604,
+      "video": "books/mlr_dec_002/video/p08.mp4"
     },
     {
       "page_id": "p09",
@@ -107,9 +112,10 @@
       "audio": "books/mlr_dec_002/audio/pages/p09.mp3",
       "duration_ms": 1776,
       "voice": "02dd00b374cb4750b856c7394938d222",
-      "has_video": false,
+      "has_video": true,
       "song_audio": "books/mlr_dec_002/audio/song/p09.mp3",
-      "song_duration_ms": 3239
+      "song_duration_ms": 3239,
+      "video": "books/mlr_dec_002/video/p09.mp4"
     },
     {
       "page_id": "p10",
