@@ -3,7 +3,7 @@
   "product": "decodable",
   "title": "A Dog",
   "level": "DEC 010",
-  "sound": "+g",
+  "sound": "consonant G",
   "famous": [
     "my"
   ],
@@ -11,10 +11,10 @@
     {
       "page_id": "p01",
       "text": "See a dog!",
-      "image": "books/mlr_dec_010/pages/p01.png",
+      "image": "books/mlr_dec_010/pages/p01.webp",
       "audio": "books/mlr_dec_010/audio/pages/p01.mp3",
-      "duration_ms": 1593,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1567,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_010/audio/song/p01.mp3",
       "song_duration_ms": 2037
@@ -22,10 +22,10 @@
     {
       "page_id": "p02",
       "text": "A pup is a dog.",
-      "image": "books/mlr_dec_010/pages/p02.png",
+      "image": "books/mlr_dec_010/pages/p02.webp",
       "audio": "books/mlr_dec_010/audio/pages/p02.mp3",
-      "duration_ms": 1985,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1933,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_010/audio/song/p02.mp3",
       "song_duration_ms": 2455
@@ -33,10 +33,10 @@
     {
       "page_id": "p03",
       "text": "A dog can dig.",
-      "image": "books/mlr_dec_010/pages/p03.png",
+      "image": "books/mlr_dec_010/pages/p03.webp",
       "audio": "books/mlr_dec_010/audio/pages/p03.mp3",
-      "duration_ms": 2194,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2090,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_010/audio/song/p03.mp3",
       "song_duration_ms": 1959
@@ -44,10 +44,10 @@
     {
       "page_id": "p04",
       "text": "A dog dug up my fig!",
-      "image": "books/mlr_dec_010/pages/p04.png",
+      "image": "books/mlr_dec_010/pages/p04.webp",
       "audio": "books/mlr_dec_010/audio/pages/p04.mp3",
-      "duration_ms": 2716,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2508,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_010/audio/song/p04.mp3",
       "song_duration_ms": 3291
@@ -55,10 +55,10 @@
     {
       "page_id": "p05",
       "text": "A dog can go fast.",
-      "image": "books/mlr_dec_010/pages/p05.png",
+      "image": "books/mlr_dec_010/pages/p05.webp",
       "audio": "books/mlr_dec_010/audio/pages/p05.mp3",
-      "duration_ms": 2246,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1985,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_010/audio/song/p05.mp3",
       "song_duration_ms": 2455
@@ -66,10 +66,10 @@
     {
       "page_id": "p06",
       "text": "A dog can dip in a pond.",
-      "image": "books/mlr_dec_010/pages/p06.png",
+      "image": "books/mlr_dec_010/pages/p06.webp",
       "audio": "books/mlr_dec_010/audio/pages/p06.mp3",
-      "duration_ms": 2559,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2612,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_010/audio/song/p06.mp3",
       "song_duration_ms": 2977
@@ -77,10 +77,10 @@
     {
       "page_id": "p07",
       "text": "A dog can nip!",
-      "image": "books/mlr_dec_010/pages/p07.png",
+      "image": "books/mlr_dec_010/pages/p07.webp",
       "audio": "books/mlr_dec_010/audio/pages/p07.mp3",
-      "duration_ms": 2298,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1567,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_010/audio/song/p07.mp3",
       "song_duration_ms": 2089
@@ -88,10 +88,10 @@
     {
       "page_id": "p08",
       "text": "A dog naps in a sun spot.",
-      "image": "books/mlr_dec_010/pages/p08.png",
+      "image": "books/mlr_dec_010/pages/p08.webp",
       "audio": "books/mlr_dec_010/audio/pages/p08.mp3",
-      "duration_ms": 2612,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 2508,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_010/audio/song/p08.mp3",
       "song_duration_ms": 2977
@@ -99,10 +99,10 @@
     {
       "page_id": "p09",
       "text": "My dog got a gift.",
-      "image": "books/mlr_dec_010/pages/p09.png",
+      "image": "books/mlr_dec_010/pages/p09.webp",
       "audio": "books/mlr_dec_010/audio/pages/p09.mp3",
-      "duration_ms": 2142,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 1776,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": false,
       "song_audio": "books/mlr_dec_010/audio/song/p09.mp3",
       "song_duration_ms": 2324
@@ -110,10 +110,10 @@
     {
       "page_id": "p10",
       "text": "A dog can nag us. My dog is fun!",
-      "image": "books/mlr_dec_010/pages/p10.png",
+      "image": "books/mlr_dec_010/pages/p10.webp",
       "audio": "books/mlr_dec_010/audio/pages/p10.mp3",
-      "duration_ms": 4022,
-      "voice": "57785406027844b29b63a772a8477bc2",
+      "duration_ms": 3370,
+      "voice": "02dd00b374cb4750b856c7394938d222",
       "has_video": true,
       "song_audio": "books/mlr_dec_010/audio/song/p10.mp3",
       "song_duration_ms": 3996,
@@ -121,7 +121,7 @@
     }
   ],
   "voices": {
-    "listen": "57785406027844b29b63a772a8477bc2",
+    "listen": "02dd00b374cb4750b856c7394938d222",
     "words": "851d4a3a36814f8faef50db1884e1ef6",
     "read_taps": "clear_american_male",
     "song": "02019f80d2604688a746fbb5d2a0a0f8",
