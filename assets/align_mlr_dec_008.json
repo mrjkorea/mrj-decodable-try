@@ -11,7 +11,7 @@
     {
       "page_id": "p01",
       "text": "See Cam? Cam is fat. See? Cam's cat is not fat.",
-      "image": "books/mlr_dec_008/pages/p01.png",
+      "image": "books/mlr_dec_008/pages/p01.webp",
       "audio": "books/mlr_dec_008/audio/pages/p01.mp3",
       "duration_ms": 5590,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -22,7 +22,7 @@
     {
       "page_id": "p02",
       "text": "We picnic.",
-      "image": "books/mlr_dec_008/pages/p02.png",
+      "image": "books/mlr_dec_008/pages/p02.webp",
       "audio": "books/mlr_dec_008/audio/pages/p02.mp3",
       "duration_ms": 1254,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -33,7 +33,7 @@
     {
       "page_id": "p03",
       "text": "Cam's cat is at Cam's picnic.",
-      "image": "books/mlr_dec_008/pages/p03.png",
+      "image": "books/mlr_dec_008/pages/p03.webp",
       "audio": "books/mlr_dec_008/audio/pages/p03.mp3",
       "duration_ms": 2664,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -44,7 +44,7 @@
     {
       "page_id": "p04",
       "text": "He taps a can.",
-      "image": "books/mlr_dec_008/pages/p04.png",
+      "image": "books/mlr_dec_008/pages/p04.webp",
       "audio": "books/mlr_dec_008/audio/pages/p04.mp3",
       "duration_ms": 1620,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -55,7 +55,7 @@
     {
       "page_id": "p05",
       "text": "Can Cam pop Cam's cat's can?",
-      "image": "books/mlr_dec_008/pages/p05.png",
+      "image": "books/mlr_dec_008/pages/p05.webp",
       "audio": "books/mlr_dec_008/audio/pages/p05.mp3",
       "duration_ms": 2847,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -66,7 +66,7 @@
     {
       "page_id": "p06",
       "text": "He can!",
-      "image": "books/mlr_dec_008/pages/p06.png",
+      "image": "books/mlr_dec_008/pages/p06.webp",
       "audio": "books/mlr_dec_008/audio/pages/p06.mp3",
       "duration_ms": 1202,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -77,7 +77,7 @@
     {
       "page_id": "p07",
       "text": "We sip.",
-      "image": "books/mlr_dec_008/pages/p07.png",
+      "image": "books/mlr_dec_008/pages/p07.webp",
       "audio": "books/mlr_dec_008/audio/pages/p07.mp3",
       "duration_ms": 1097,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -88,7 +88,7 @@
     {
       "page_id": "p08",
       "text": "Can we sit? We can!",
-      "image": "books/mlr_dec_008/pages/p08.png",
+      "image": "books/mlr_dec_008/pages/p08.webp",
       "audio": "books/mlr_dec_008/audio/pages/p08.mp3",
       "duration_ms": 2508,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -99,7 +99,7 @@
     {
       "page_id": "p09",
       "text": "Can cats picnic? Cats can!",
-      "image": "books/mlr_dec_008/pages/p09.png",
+      "image": "books/mlr_dec_008/pages/p09.webp",
       "audio": "books/mlr_dec_008/audio/pages/p09.mp3",
       "duration_ms": 3422,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -110,7 +110,7 @@
     {
       "page_id": "p10",
       "text": "Cam's cat picnics.",
-      "image": "books/mlr_dec_008/pages/p10.png",
+      "image": "books/mlr_dec_008/pages/p10.webp",
       "audio": "books/mlr_dec_008/audio/pages/p10.mp3",
       "duration_ms": 1985,
       "voice": "02dd00b374cb4750b856c7394938d222",

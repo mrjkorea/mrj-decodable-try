@@ -12,7 +12,7 @@
     {
       "page_id": "p01",
       "text": "A pit.",
-      "image": "books/mlr_dec_003/pages/p01.png",
+      "image": "books/mlr_dec_003/pages/p01.webp",
       "audio": "books/mlr_dec_003/audio/pages/p01.mp3",
       "duration_ms": 940,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -23,7 +23,7 @@
     {
       "page_id": "p02",
       "text": "It is a pit.",
-      "image": "books/mlr_dec_003/pages/p02.png",
+      "image": "books/mlr_dec_003/pages/p02.webp",
       "audio": "books/mlr_dec_003/audio/pages/p02.mp3",
       "duration_ms": 1045,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -34,7 +34,7 @@
     {
       "page_id": "p03",
       "text": "Tim is at a pit.",
-      "image": "books/mlr_dec_003/pages/p03.png",
+      "image": "books/mlr_dec_003/pages/p03.webp",
       "audio": "books/mlr_dec_003/audio/pages/p03.mp3",
       "duration_ms": 1620,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -45,7 +45,7 @@
     {
       "page_id": "p04",
       "text": "Sam is at a pit.",
-      "image": "books/mlr_dec_003/pages/p04.png",
+      "image": "books/mlr_dec_003/pages/p04.webp",
       "audio": "books/mlr_dec_003/audio/pages/p04.mp3",
       "duration_ms": 1567,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -56,7 +56,7 @@
     {
       "page_id": "p05",
       "text": "Pam is at a pit.",
-      "image": "books/mlr_dec_003/pages/p05.png",
+      "image": "books/mlr_dec_003/pages/p05.webp",
       "audio": "books/mlr_dec_003/audio/pages/p05.mp3",
       "duration_ms": 1672,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -67,7 +67,7 @@
     {
       "page_id": "p06",
       "text": "It is a pit tip!",
-      "image": "books/mlr_dec_003/pages/p06.png",
+      "image": "books/mlr_dec_003/pages/p06.webp",
       "audio": "books/mlr_dec_003/audio/pages/p06.mp3",
       "duration_ms": 1567,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -78,7 +78,7 @@
     {
       "page_id": "p07",
       "text": "Go!",
-      "image": "books/mlr_dec_003/pages/p07.png",
+      "image": "books/mlr_dec_003/pages/p07.webp",
       "audio": "books/mlr_dec_003/audio/pages/p07.mp3",
       "duration_ms": 993,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -89,7 +89,7 @@
     {
       "page_id": "p08",
       "text": "Go, Sam!",
-      "image": "books/mlr_dec_003/pages/p08.png",
+      "image": "books/mlr_dec_003/pages/p08.webp",
       "audio": "books/mlr_dec_003/audio/pages/p08.mp3",
       "duration_ms": 1254,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -100,7 +100,7 @@
     {
       "page_id": "p09",
       "text": "Go, Pam!",
-      "image": "books/mlr_dec_003/pages/p09.png",
+      "image": "books/mlr_dec_003/pages/p09.webp",
       "audio": "books/mlr_dec_003/audio/pages/p09.mp3",
       "duration_ms": 1254,
       "voice": "02dd00b374cb4750b856c7394938d222",
@@ -111,7 +111,7 @@
     {
       "page_id": "p10",
       "text": "Go, Tim!",
-      "image": "books/mlr_dec_003/pages/p10.png",
+      "image": "books/mlr_dec_003/pages/p10.webp",
       "audio": "books/mlr_dec_003/audio/pages/p10.mp3",
       "duration_ms": 1463,
       "voice": "02dd00b374cb4750b856c7394938d222",
