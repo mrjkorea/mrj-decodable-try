@@ -94,6 +94,16 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 .testnav{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;max-width:520px;margin:0 auto 8px}
 .testnav button{font-size:1.05rem;padding:14px 4px;background:#16356e}
 body.test-on .app{padding-bottom:196px}
+.catchLine{position:absolute;left:0;right:0;top:10%;text-align:center;font-size:clamp(1.35rem,5.2vw,1.95rem);font-weight:900;color:#ffe27a;text-shadow:0 0 14px #000,0 3px 10px #000;z-index:2;pointer-events:none;line-height:1.2;letter-spacing:.02em;animation:pulse 1.1s ease-in-out infinite}
+.catchLine .bigq{font-size:clamp(4.2rem,20vw,7rem);display:inline-block;line-height:.75;vertical-align:middle;color:#fff;text-shadow:0 0 22px #ffd84a}
+.sheriffBan{text-align:center;font-weight:900;margin:0 0 12px;line-height:1.12}
+.sheriffBan .hey{font-size:2.4rem;color:#ffd84a;text-shadow:0 0 12px #ff9f1c}
+.sheriffBan .lb{font-size:clamp(2.2rem,9vw,3.2rem);color:#ff5c7a;text-shadow:0 0 18px #ff4d6d;margin:4px 0}
+.sheriffBan .ask{font-size:clamp(1.05rem,4.2vw,1.35rem);color:var(--muted);margin-top:6px}
+.me{color:#ff6b6b;font-weight:900;font-size:1.2em}
+.nervousWord{font-size:clamp(3.2rem,15vw,5.8rem);font-weight:900;text-align:center;color:#ffe27a;text-shadow:0 0 20px #ffd84a;animation:shake .45s ease-in-out infinite}
+.nervousLine{font-size:clamp(1.5rem,5.5vw,2rem);font-weight:900;text-align:center;margin-top:16px}
+@keyframes shake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-4px) rotate(-1.2deg)}75%{transform:translateX(4px) rotate(1.2deg)}}
 </style>
 </head>
 <body>
@@ -149,7 +159,7 @@ body.test-on .app{padding-bottom:196px}
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260928v1';
+const ASSET_V='dec20260928v3';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -173,7 +183,7 @@ const SPEAK_DEFAULT=50;
 const DICT_N=5;
 const DICT_PASS=80;
 const COUSIN_META={no_latin_script:['ko','ja','zh-Hans','hi','ar'],latin_letters:{vi:'aăâbcdđeêghiklmnoôơpqrstuưvxy',es:'abcdefghijklmnñopqrstuvwxyz','pt-BR':'abcdefghijklmnopqrstuvwxyz',fr:'abcdefghijklmnopqrstuvwxyz',de:'abcdefghijklmnopqrstuvwxyzäöüß',id:'abcdefghijklmnopqrstuvwxyz',tr:'abcçdefgğhıijklmnoöprsştuüvyz',it:'abcdefghijklmnopqrstuvwxyz',pl:'aąbcćdeęfghijklłmnńoóprsśtuwyzźż'}};
-const SOUND_HINT={a:'/æ/ · sat',m:'/m/ · mat',s:'/s/ · sat',t:'/t/ · sat',p:'/p/ · tap',i:'/ɪ/ · pit',n:'/n/ · ant',f:'/f/ · fan',o:'/ɑ/ · pot',d:'/d/ · dad',c:'/k/ · cat',u:'/ʌ/ · sun',g:'/g/ · dog',v:'/v/ · van'};
+const SOUND_HINT={a:'/æ/ · sat',m:'/m/ · mat',s:'/s/ · sat',t:'/t/ · sat',p:'/p/ · tap',i:'/ɪ/ · pit',n:'/n/ · ant',f:'/f/ · fan',o:'/ɑ/ · pot',d:'/d/ · dad',c:'/k/ · cat',u:'/ʌ/ · sun',g:'/g/ · dog',v:'/v/ · van',b:'/b/ · bug',e:'/ɛ/ · bed',k:'/k/ · kid',h:'/h/ · hot',r:'/r/ · rat',l:'/l/ · log',w:'/w/ · web',j:'/dʒ/ · jam',y:'/j/ · yes',x:'/ks/ · fox'};
 const LETTER_KIND={a:'short_vowel',e:'short_vowel',i:'short_vowel',o:'short_vowel',u:'short_vowel',c:'hard_consonant'};
 function letterKind(L){ return LETTER_KIND[String(L||'').toLowerCase()]||'consonant'; }
 function letterTitle(L){
@@ -191,7 +201,7 @@ function soundLine(id){
   const b=(lib&&lib.books||[]).find(x=>x.id===id);
   return (b&&b.sound)||'';
 }
-const NEW_LETTERS={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['p'],mlr_dec_003:['i'],mlr_dec_004:['n'],mlr_dec_005:['f'],mlr_dec_006:['o'],mlr_dec_007:['d'],mlr_dec_008:['c'],mlr_dec_009:['u'],mlr_dec_010:['g']};
+const NEW_LETTERS={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['p'],mlr_dec_003:['i'],mlr_dec_004:['n'],mlr_dec_005:['f'],mlr_dec_006:['o'],mlr_dec_007:['d'],mlr_dec_008:['c'],mlr_dec_009:['u'],mlr_dec_010:['g'],mlr_dec_011:['b'],mlr_dec_012:['e'],mlr_dec_013:['k'],mlr_dec_014:['h'],mlr_dec_015:['r'],mlr_dec_016:['l'],mlr_dec_017:['w'],mlr_dec_018:['j'],mlr_dec_019:['y'],mlr_dec_020:['x']};
 const TAUGHT={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['a','m','s','t','p'],mlr_dec_003:['a','m','s','t','p','i'],mlr_dec_004:['a','m','s','t','p','i','n'],mlr_dec_005:['a','m','s','t','p','i','n','f'],mlr_dec_006:['a','m','s','t','p','i','n','f','o'],mlr_dec_007:['a','m','s','t','p','i','n','f','o','d'],mlr_dec_008:['a','m','s','t','p','i','n','f','o','d','c'],mlr_dec_009:['a','m','s','t','p','i','n','f','o','d','c','u'],mlr_dec_010:['a','m','s','t','p','i','n','f','o','d','c','u','g']};
 let lib=null, i18n=null, pack=null, pageIndex=0, mode='library', audio=null, listenGen=0, hlRaf=0;
 let introStep='mode', cousinIdx=0;
@@ -403,6 +413,7 @@ function showIntro(){
     $('modeBadge').textContent='Famous word';
     const word=String(famous||'a').toLowerCase();
     const clips={a:'decodable/famous_carpet/famous_a_steps_out.mp4',is:'decodable/famous_carpet/famous_is_steps_out.mp4',go:'decodable/famous_carpet/famous_go_steps_out.mp4',no:'decodable/famous_carpet/famous_no_steps_out.mp4',see:'decodable/famous_carpet/famous_see_steps_out.mp4',he:'decodable/famous_carpet/famous_he_steps_out.mp4',me:'decodable/famous_carpet/famous_me_steps_out.mp4',we:'decodable/famous_carpet/famous_we_steps_out.mp4',be:'decodable/famous_carpet/famous_be_steps_out.mp4',my:'decodable/famous_carpet/famous_my_steps_out.mp4'};
+    Object.assign(clips,{she:'decodable/famous_carpet/famous_she_steps_out.mp4',all:'decodable/famous_carpet/famous_all_steps_out.mp4',look:'decodable/famous_carpet/famous_look_steps_out.mp4',this:'decodable/famous_carpet/famous_this_steps_out.mp4',that:'decodable/famous_carpet/famous_that_steps_out.mp4',with:'decodable/famous_carpet/famous_with_steps_out.mp4',will:'decodable/famous_carpet/famous_will_steps_out.mp4',when:'decodable/famous_carpet/famous_when_steps_out.mp4',make:'decodable/famous_carpet/famous_make_steps_out.mp4',like:'decodable/famous_carpet/famous_like_steps_out.mp4'});
     const crowds={a:'decodable/famous_carpet/famous_a_crowd10.mp3',is:'decodable/famous_carpet/famous_is_crowd10.mp3',go:'decodable/famous_carpet/famous_go_crowd10.mp3',no:'decodable/famous_carpet/famous_no_crowd10.mp3',see:'decodable/famous_carpet/famous_see_crowd10.mp3',he:'decodable/famous_carpet/famous_he_crowd10.mp3',me:'decodable/famous_carpet/famous_me_crowd10.mp3',we:'decodable/famous_carpet/famous_we_crowd10.mp3',be:'decodable/famous_carpet/famous_be_crowd10.mp3',my:'decodable/famous_carpet/famous_my_crowd10.mp3'};
     Object.assign(crowds,{she:'decodable/famous_carpet/famous_she_crowd10.mp3',all:'decodable/famous_carpet/famous_all_crowd10.mp3',look:'decodable/famous_carpet/famous_look_crowd10.mp3',this:'decodable/famous_carpet/famous_this_crowd10.mp3',that:'decodable/famous_carpet/famous_that_crowd10.mp3',with:'decodable/famous_carpet/famous_with_crowd10.mp3',will:'decodable/famous_carpet/famous_will_crowd10.mp3',when:'decodable/famous_carpet/famous_when_crowd10.mp3',make:'decodable/famous_carpet/famous_make_crowd10.mp3',like:'decodable/famous_carpet/famous_like_crowd10.mp3'});
     const label=word==='a'?'uh':word;
@@ -433,6 +444,7 @@ function showIntro(){
     const vid=asset('decodable/lawbreaker/chase.mp4');
     $('introBody').innerHTML=`<div class="scene" id="chaseScene">
       <video class="carpetVid" id="chaseVid" src="${vid}" autoplay playsinline webkit-playsinline></video>
+      <div class="catchLine">Can you catch the lawbreaker<span class="bigq">?</span></div>
     </div>
     <div class="g-lbl">Police chase</div>`;
     $('introGo').textContent='Start Listen';
@@ -686,6 +698,8 @@ function dictSpeaker(){
   const name=names[raw]||raw;
   const face=raw==='Harper'
     ? `<img src="${asset('decodable/harper.png')}" alt="Miss Harper">`
+    : raw==='Coach'
+    ? `<img src="${asset('decodable/coach.png')}" alt="Coach Ray">`
     : `<div class="label" style="font-size:2rem;margin-bottom:6px">${name}</div>`;
   return `<div class="speaker">${face}<div class="label">${name} · says the sentence</div></div>`;
 }
@@ -716,11 +730,15 @@ function showSheriff(){
   $('mDict').classList.add('active');
   $('mSay').classList.remove('active');
   const vid=asset('decodable/lawbreaker/sheriff.mp4');
-  $('workBody').innerHTML=`<div class="scene" style="min-height:46vh">
+  $('workBody').innerHTML=`<div class="sheriffBan">
+      <div class="hey">Hey</div>
+      <div class="lb">Lawbreaker!</div>
+      <div class="ask">Hey Lawbreaker, what's your name?</div>
+    </div>
+    <div class="scene" style="min-height:46vh">
       <video class="carpetVid" id="sheriffVid" src="${vid}" playsinline webkit-playsinline></video>
     </div>
     <div class="g-lbl">Sheriff</div>
-    <div style="font-size:1.45rem;font-weight:900;text-align:center;margin:8px 0">What's your name?</div>
     <input id="sheriffName" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go" style="width:100%;padding:14px;border-radius:14px;border:0;font-size:1.5rem;font-weight:900;text-align:center;background:#1b2740;color:#fff">
     <button id="sheriffGo" style="width:100%;margin-top:10px">That's my name</button>
     <div id="sheriffMsg" class="status"></div>`;
@@ -735,8 +753,8 @@ function checkSheriff(){
   const typed=String(($('sheriffName')||{}).value||'').trim().toLowerCase().replace(/[^a-z]/g,'');
   const want=lawWord().replace(/[^a-z]/g,'');
   if(!typed) return;
-  if(typed===want){ sheriffOk=true; playJailThenDict(); return; }
-  const msg=$('sheriffMsg'); if(msg) msg.textContent="Don't lie to me, boy.";
+  if(typed===want){ sheriffOk=true; playNervousThenJail(); return; }
+  const msg=$('sheriffMsg'); if(msg) msg.innerHTML="Don't lie to <span class=\"me\">me</span>.";
   const inp=$('sheriffName'); if(inp){ inp.value=''; inp.focus(); }
   const v=$('sheriffVid'); if(v){ try{v.pause();}catch(e){} }
   playPath('decodable/lawbreaker/dont_lie.mp3', ()=>{
@@ -744,7 +762,33 @@ function checkSheriff(){
     if(vv){ vv.currentTime=0; vv.play().catch(()=>{}); }
   }, 1);
 }
-function playJailThenDict(){
+function playNervousThenJail(){
+  mode='nervous'; stopA(); hideAll();
+  $('workStage').classList.remove('hidden');
+  $('modeBadge').textContent='Lawbreaker';
+  const word=lawWord();
+  const safe=String(word).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const vid=asset('decodable/lawbreaker/end_'+word+'.mp4');
+  $('workBody').innerHTML=`<div class="scene" style="min-height:52vh">
+      <video class="carpetVid" id="nervVid" src="${vid}" autoplay playsinline webkit-playsinline></video>
+    </div>
+    <div class="nervousWord">${safe}</div>
+    <div class="nervousLine">I am ${safe}.</div>`;
+  const v=$('nervVid');
+  const done=()=>{ if(mode==='nervous') setMode('dictation'); };
+  if(!v){ done(); return; }
+  v.onended=done;
+  v.onerror=()=>{
+    if(mode!=='nervous') return;
+    playPath('decodable/lawbreaker/nervous_'+word+'.mp3', ()=>{ if(mode==='nervous') playJailVideo(); }, 1);
+  };
+  v.play().catch(()=>{
+    if($('nervSkip')) return;
+    $('workBody').insertAdjacentHTML('beforeend','<button id="nervSkip" style="width:100%;margin-top:10px">Next</button>');
+    $('nervSkip').onclick=done;
+  });
+}
+function playJailVideo(){
   mode='jail'; stopA(); hideAll();
   $('workStage').classList.remove('hidden');
   $('modeBadge').textContent='Jail';
@@ -1149,6 +1193,10 @@ function testGo(d){
   if(mode==='sheriff'){
     if(d<0){ pageIndex=pack.pages.length-1; setMode('read'); return; }
     return;
+  }
+  if(mode==='nervous'){
+    if(d<0){ sheriffOk=false; showSheriff(); return; }
+    playJailVideo(); return;
   }
   if(mode==='jail'){
     if(d<0){ sheriffOk=false; showSheriff(); return; }
