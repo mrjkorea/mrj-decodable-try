@@ -149,7 +149,7 @@ body.test-on .app{padding-bottom:196px}
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260924v5';
+const ASSET_V='dec20260927v7';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -660,6 +660,15 @@ function dictEasyJoin(arr){
 }
 function dictDisplayWords(s){ return dictEasyTokens(s).filter(w=>/[A-Za-z]/.test(w)); }
 function shuffle(a){ const b=a.slice(); for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+function dictSpeaker(){
+  const raw=((pack.voices||{}).dictation_label)||'Harper';
+  const names={Harper:'Miss Harper',Coach:'Coach Ray',Grandma:'Grandma June',Grandpa:'Grandpa Walt',Maya:'Maya',Leo:'Leo',Cowboy:'Cowboy',Nia:'Nia',Pirate:'Pirate',Car:'the Car'};
+  const name=names[raw]||raw;
+  const face=raw==='Harper'
+    ? `<img src="${asset('decodable/harper.png')}" alt="Miss Harper">`
+    : `<div class="label" style="font-size:2rem;margin-bottom:6px">${name}</div>`;
+  return `<div class="speaker">${face}<div class="label">${name} · says the sentence</div></div>`;
+}
 function dictItems(){
   const locked=(pack.dictation&&pack.dictation.items)||[];
   if(locked.length>=DICT_N) return locked.slice(0,DICT_N);
@@ -737,7 +746,7 @@ function nextDict(){
   }
   $('workBody').innerHTML=`
     <div class="choice" style="margin-bottom:10px"><button id="pickEasy" class="${hard?'':'active'}">Easy</button><button id="pickHard" class="${hard?'active':''}">Hard</button></div>
-    <div class="speaker"><img src="${asset('decodable/harper.png')}" alt="Miss Harper"><div class="label">Miss Harper · says the sentence</div></div>
+    ${dictSpeaker()}
     <div class="g-lbl">Dictation ${dictIdx+1} / ${dictQueue.length} · ${hard?'Hard · letters only. Punctuation already there.':'Easy · words. Punctuation already there.'}</div>
     <div class="${hard?'tpl':'tpl'}" id="built">${hard?renderDictTpl(item.text,[]):renderEasyTpl(item.text,[])}</div>
     ${tilesHtml}
