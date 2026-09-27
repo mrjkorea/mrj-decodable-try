@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>MRJ Decodables — Books 1–10</title>
+<title>MRJ Decodables — Books 1–20</title>
 <style>
 :root{--bg:#070d18;--card:#101a2e;--text:#f4f7ff;--muted:#a9b7d6;--hl:#ffd84a;--ok:#3ecf8e}
 *{box-sizing:border-box}body{margin:0;font-family:ui-rounded,"Nunito","Avenir Next",system-ui,sans-serif;background:#070d18;color:var(--text);min-height:100vh}
@@ -149,7 +149,7 @@ body.test-on .app{padding-bottom:196px}
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260927v7';
+const ASSET_V='dec20260928v1';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -196,6 +196,7 @@ const TAUGHT={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['a','m','s','t','p'],ml
 let lib=null, i18n=null, pack=null, pageIndex=0, mode='library', audio=null, listenGen=0, hlRaf=0;
 let introStep='mode', cousinIdx=0;
 let tapped=new Set(), heardListen=new Set(), heardSong=new Set();
+let sheriffOk=false;
 let clipDone=false, showLang=true, lang='ko';
 let dictBuilt=[], dictQueue=[], dictIdx=0, dictRight=0, dictRate=0.8;
 let speakRec=null, sayPage=0, micCtx=null, lastYouBlob=null, lastTestBook=null;
@@ -334,7 +335,7 @@ function showLib(){
 async function openBook(id){
   if(!TEST && !unlocked(id)) return;
   pack=await (await fetch(BASE+'assets/align_'+id+'.json?v='+ASSET_V)).json();
-  pageIndex=0; tapped=new Set(); heardListen=new Set(); heardSong=new Set(); clipDone=false;
+  pageIndex=0; tapped=new Set(); heardListen=new Set(); heardSong=new Set(); clipDone=false; sheriffOk=false;
   const bp=bookProg(pack.book_id);
   if(bp.readPages){ Object.keys(bp.readPages).forEach(k=>{ if(bp.readPages[k]){ const n=tokens((pack.pages[+k]||{}).text).length; for(let i=0;i<n;i++) tapped.add((+k)+':'+i); } }); }
   $('bookTitle').textContent=pack.title;
@@ -403,6 +404,7 @@ function showIntro(){
     const word=String(famous||'a').toLowerCase();
     const clips={a:'decodable/famous_carpet/famous_a_steps_out.mp4',is:'decodable/famous_carpet/famous_is_steps_out.mp4',go:'decodable/famous_carpet/famous_go_steps_out.mp4',no:'decodable/famous_carpet/famous_no_steps_out.mp4',see:'decodable/famous_carpet/famous_see_steps_out.mp4',he:'decodable/famous_carpet/famous_he_steps_out.mp4',me:'decodable/famous_carpet/famous_me_steps_out.mp4',we:'decodable/famous_carpet/famous_we_steps_out.mp4',be:'decodable/famous_carpet/famous_be_steps_out.mp4',my:'decodable/famous_carpet/famous_my_steps_out.mp4'};
     const crowds={a:'decodable/famous_carpet/famous_a_crowd10.mp3',is:'decodable/famous_carpet/famous_is_crowd10.mp3',go:'decodable/famous_carpet/famous_go_crowd10.mp3',no:'decodable/famous_carpet/famous_no_crowd10.mp3',see:'decodable/famous_carpet/famous_see_crowd10.mp3',he:'decodable/famous_carpet/famous_he_crowd10.mp3',me:'decodable/famous_carpet/famous_me_crowd10.mp3',we:'decodable/famous_carpet/famous_we_crowd10.mp3',be:'decodable/famous_carpet/famous_be_crowd10.mp3',my:'decodable/famous_carpet/famous_my_crowd10.mp3'};
+    Object.assign(crowds,{she:'decodable/famous_carpet/famous_she_crowd10.mp3',all:'decodable/famous_carpet/famous_all_crowd10.mp3',look:'decodable/famous_carpet/famous_look_crowd10.mp3',this:'decodable/famous_carpet/famous_this_crowd10.mp3',that:'decodable/famous_carpet/famous_that_crowd10.mp3',with:'decodable/famous_carpet/famous_with_crowd10.mp3',will:'decodable/famous_carpet/famous_will_crowd10.mp3',when:'decodable/famous_carpet/famous_when_crowd10.mp3',make:'decodable/famous_carpet/famous_make_crowd10.mp3',like:'decodable/famous_carpet/famous_like_crowd10.mp3'});
     const label=word==='a'?'uh':word;
     const vid=asset(clips[word]||'decodable/famous_carpet/base_limo_door.mp4');
     $('introBody').innerHTML=`<div class="scene" id="famousScene">
@@ -426,16 +428,25 @@ function showIntro(){
     $('introGo').textContent='Next';
     return;
   }
-  const n=(pack.law_breaker||[]).length;
-  if(!n){ setMode('listen'); return; }
-  $('modeBadge').textContent=n+' law breakers';
-  $('introBody').innerHTML=`<div class="cops">
-    <div class="faces">👮 👮</div>
-    <div class="g-lbl">One lawbreaker</div>
-    <div class="zero">${n}</div>
-    <div style="font-size:1.4rem;font-weight:900">to catch</div>
-  </div>`;
-  $('introGo').textContent='Start Listen';
+  if(introStep==='chase'){
+    $('modeBadge').textContent='Chase';
+    const vid=asset('decodable/lawbreaker/chase.mp4');
+    $('introBody').innerHTML=`<div class="scene" id="chaseScene">
+      <video class="carpetVid" id="chaseVid" src="${vid}" autoplay playsinline webkit-playsinline></video>
+    </div>
+    <div class="g-lbl">Police chase</div>`;
+    $('introGo').textContent='Start Listen';
+    const v=$('chaseVid');
+    if(v){
+      v.volume=1;
+      const kick=()=>v.play().catch(()=>{});
+      v.onloadedmetadata=kick;
+      kick();
+      v.onended=()=>{ if(introStep==='chase') setMode('listen'); };
+    }
+    return;
+  }
+  setMode('listen');
 }
 function chooseDiff(d){ setBookProg(pack.book_id,{difficulty:d}); startDictation(); }
 function introAdvance(){
@@ -447,7 +458,16 @@ function introAdvance(){
   if(introStep==='famous'){
     const n=(pack.law_breaker||[]).length;
     if(!n){ setMode('listen'); return; }
-    introStep='jail'; showIntro(); return;
+    introStep='chase'; showIntro(); return;
+  }
+  if(introStep==='chase'){
+    const v=$('chaseVid');
+    if(v && v.paused && v.currentTime<0.4){
+      v.muted=false; v.volume=1; v.play().catch(()=>{ setMode('listen'); });
+      $('introGo').textContent='Start Listen';
+      return;
+    }
+    setMode('listen'); return;
   }
   setMode('listen');
 }
@@ -487,7 +507,7 @@ function setMode(m){
   $('mDict').classList.toggle('active', m==='dictation');
   $('mSay').classList.toggle('active', m==='speak');
   if(m==='listen-end'){ $('workStage').classList.remove('hidden'); renderListenEnd(); }
-  else if(m==='dictation'){ $('workStage').classList.remove('hidden'); startDictation(); }
+  else if(m==='dictation'){ if(needsSheriff()){ showSheriff(); return; } $('workStage').classList.remove('hidden'); startDictation(); }
   else if(m==='speak'){ $('workStage').classList.remove('hidden'); startSpeak(); }
   else if(m==='pass'){ $('workStage').classList.remove('hidden'); renderPass(); }
   else { $('bookStage').classList.remove('hidden'); renderPage(); }
@@ -680,6 +700,69 @@ function fillerWords(targetTokens){
   const have=new Set(targetTokens.map(w=>w.toLowerCase()));
   const bank=unique(pack.pages.flatMap(p=>dictDisplayWords(p.text))).filter(w=>!have.has(w.toLowerCase()));
   return shuffle(bank).slice(0,3);
+}
+function lawWord(){
+  const w=(pack&&pack.law_breaker&&pack.law_breaker[0])||'';
+  return String(w).trim().toLowerCase();
+}
+function needsSheriff(){ return !!lawWord() && !sheriffOk; }
+function showSheriff(){
+  mode='sheriff'; stopA(); hideAll();
+  $('workStage').classList.remove('hidden');
+  $('modeBadge').textContent='Sheriff';
+  $('mListen').classList.remove('active');
+  $('mSong').classList.remove('active');
+  $('mRead').classList.remove('active');
+  $('mDict').classList.add('active');
+  $('mSay').classList.remove('active');
+  const vid=asset('decodable/lawbreaker/sheriff.mp4');
+  $('workBody').innerHTML=`<div class="scene" style="min-height:46vh">
+      <video class="carpetVid" id="sheriffVid" src="${vid}" playsinline webkit-playsinline></video>
+    </div>
+    <div class="g-lbl">Sheriff</div>
+    <div style="font-size:1.45rem;font-weight:900;text-align:center;margin:8px 0">What's your name?</div>
+    <input id="sheriffName" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go" style="width:100%;padding:14px;border-radius:14px;border:0;font-size:1.5rem;font-weight:900;text-align:center;background:#1b2740;color:#fff">
+    <button id="sheriffGo" style="width:100%;margin-top:10px">That's my name</button>
+    <div id="sheriffMsg" class="status"></div>`;
+  const v=$('sheriffVid');
+  if(v){ v.volume=1; v.play().catch(()=>playPath('decodable/lawbreaker/ask.mp3', null, 1)); }
+  const go=()=>checkSheriff();
+  $('sheriffGo').onclick=go;
+  $('sheriffName').onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } };
+  setTimeout(()=>{ const i=$('sheriffName'); if(i) i.focus(); }, 300);
+}
+function checkSheriff(){
+  const typed=String(($('sheriffName')||{}).value||'').trim().toLowerCase().replace(/[^a-z]/g,'');
+  const want=lawWord().replace(/[^a-z]/g,'');
+  if(!typed) return;
+  if(typed===want){ sheriffOk=true; playJailThenDict(); return; }
+  const msg=$('sheriffMsg'); if(msg) msg.textContent="Don't lie to me, boy.";
+  const inp=$('sheriffName'); if(inp){ inp.value=''; inp.focus(); }
+  const v=$('sheriffVid'); if(v){ try{v.pause();}catch(e){} }
+  playPath('decodable/lawbreaker/dont_lie.mp3', ()=>{
+    const vv=$('sheriffVid');
+    if(vv){ vv.currentTime=0; vv.play().catch(()=>{}); }
+  }, 1);
+}
+function playJailThenDict(){
+  mode='jail'; stopA(); hideAll();
+  $('workStage').classList.remove('hidden');
+  $('modeBadge').textContent='Jail';
+  const word=lawWord();
+  const vid=asset('decodable/lawbreaker/jail_'+word+'.mp4');
+  $('workBody').innerHTML=`<div class="scene" style="min-height:52vh">
+      <video class="carpetVid" id="jailVid" src="${vid}" playsinline webkit-playsinline></video>
+    </div>`;
+  const v=$('jailVid');
+  const done=()=>{ if(mode==='jail') setMode('dictation'); };
+  if(!v){ done(); return; }
+  v.onended=done;
+  const kick=()=>v.play().catch(()=>{
+    if($('jailSkip')) return;
+    $('workBody').insertAdjacentHTML('beforeend','<button id="jailSkip" style="width:100%;margin-top:10px">Next</button>');
+    $('jailSkip').onclick=done;
+  });
+  kick();
 }
 function startDictation(){
   if(!bookProg(pack.book_id).difficulty){
@@ -1047,7 +1130,7 @@ function testGo(d){
     const nxt=pageIndex+d;
     if(nxt<0){
       if(mode==='listen'){
-        introStep=(pack.law_breaker||[]).length ? 'jail' : 'famous';
+        introStep=(pack.law_breaker||[]).length ? 'chase' : 'famous';
         showIntro();
         return;
       }
@@ -1057,10 +1140,19 @@ function testGo(d){
     if(nxt>=pack.pages.length){
       if(mode==='listen'){ setMode('listen-end'); return; }
       if(mode==='song'){ pageIndex=0; setMode('read'); return; }
+      if(needsSheriff()){ showSheriff(); return; }
       jumpDict(0); return;
     }
     pageIndex=nxt; clipDone=true; renderPage();
     return;
+  }
+  if(mode==='sheriff'){
+    if(d<0){ pageIndex=pack.pages.length-1; setMode('read'); return; }
+    return;
+  }
+  if(mode==='jail'){
+    if(d<0){ sheriffOk=false; showSheriff(); return; }
+    setMode('dictation'); return;
   }
   if(mode==='listen-end'){
     if(d<0){ pageIndex=pack.pages.length-1; setMode('listen'); return; }
@@ -1106,7 +1198,7 @@ function testBackIntro(){
     showLib(); return;
   }
   if(introStep==='famous'){ introStep='famous-card'; showIntro(); return; }
-  if(introStep==='jail'){ introStep='famous'; showIntro(); return; }
+  if(introStep==='chase' || introStep==='jail'){ introStep='famous'; showIntro(); return; }
   showLib();
 }
 function jumpDict(idx){
