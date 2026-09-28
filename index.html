@@ -159,7 +159,7 @@ body.test-on .app{padding-bottom:196px}
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260928v3';
+const ASSET_V='dec20260929v1';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -178,7 +178,7 @@ const GRADE_PATH='/api/grade';
 const $=id=>document.getElementById(id);
 const asset=p=>BASE+'assets/'+String(p||'').replace(/^assets\//,'')+'?v='+ASSET_V;
 const SAVE='mrj_dec_progress_v4';
-const MAX_BOOKS=20;
+const MAX_BOOKS=40;
 const SPEAK_DEFAULT=50;
 const DICT_N=5;
 const DICT_PASS=80;
@@ -202,6 +202,28 @@ function soundLine(id){
   return (b&&b.sound)||'';
 }
 const NEW_LETTERS={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['p'],mlr_dec_003:['i'],mlr_dec_004:['n'],mlr_dec_005:['f'],mlr_dec_006:['o'],mlr_dec_007:['d'],mlr_dec_008:['c'],mlr_dec_009:['u'],mlr_dec_010:['g'],mlr_dec_011:['b'],mlr_dec_012:['e'],mlr_dec_013:['k'],mlr_dec_014:['h'],mlr_dec_015:['r'],mlr_dec_016:['l'],mlr_dec_017:['w'],mlr_dec_018:['j'],mlr_dec_019:['y'],mlr_dec_020:['x']};
+const SOUND_CARD={
+  mlr_dec_021:{show:'QU', sub:'', hint:'/kw/ · squid', mouth:'qu', say:'qu'},
+  mlr_dec_022:{show:'V', sub:'', hint:'/v/ · van', mouth:'v', say:'v'},
+  mlr_dec_023:{show:'Z', sub:'', hint:'/z/ · zip', mouth:'z', say:'z'},
+  mlr_dec_024:{show:'S', sub:'cats · dogs', hint:'/s/ and /z/', mouth:'s', say:'s'},
+  mlr_dec_025:{show:'FF LL SS ZZ', sub:'', hint:'double letters', mouth:'ff', say:'ff'},
+  mlr_dec_026:{show:'ALL', sub:'', hint:'ball · call', mouth:'all', say:'all'},
+  mlr_dec_027:{show:'CK', sub:'', hint:'/k/ · duck', mouth:'ck', say:'ck'},
+  mlr_dec_028:{show:'L blends', sub:'bl · cl · fl · gl · pl', hint:'blend with L', mouth:'lblends', say:'lblends'},
+  mlr_dec_029:{show:'R blends', sub:'br · cr · dr · fr · gr · pr · tr', hint:'blend with R', mouth:'rblends', say:'rblends'},
+  mlr_dec_030:{show:'S blends', sub:'st · sp · sn · sm · sk · sl', hint:'blend with S', mouth:'sblends', say:'sblends'},
+  mlr_dec_031:{show:'End blends', sub:'nd · nt · mp · ft', hint:'blend at the end', mouth:'endblends', say:'endblends'},
+  mlr_dec_032:{show:'SH', sub:'', hint:'/ʃ/ · ship', mouth:'sh', say:'sh'},
+  mlr_dec_033:{show:'CH', sub:'', hint:'/tʃ/ · chip', mouth:'ch', say:'ch'},
+  mlr_dec_034:{show:'TH', sub:'thin', hint:'/θ/ · thin', mouth:'th', say:'th'},
+  mlr_dec_035:{show:'TH', sub:'this', hint:'/ð/ · this', mouth:'dh', say:'dh'},
+  mlr_dec_036:{show:'WH', sub:'', hint:'/w/ · whip', mouth:'wh', say:'wh'},
+  mlr_dec_037:{show:'NG', sub:'', hint:'/ŋ/ · song', mouth:'ng', say:'ng'},
+  mlr_dec_038:{show:'NK', sub:'', hint:'/ŋk/ · bank', mouth:'nk', say:'nk'},
+  mlr_dec_039:{show:'TCH', sub:'', hint:'/tʃ/ · match', mouth:'tch', say:'tch'},
+  mlr_dec_040:{show:'DGE', sub:'', hint:'/dʒ/ · bridge', mouth:'dge', say:'dge'}
+};
 const TAUGHT={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['a','m','s','t','p'],mlr_dec_003:['a','m','s','t','p','i'],mlr_dec_004:['a','m','s','t','p','i','n'],mlr_dec_005:['a','m','s','t','p','i','n','f'],mlr_dec_006:['a','m','s','t','p','i','n','f','o'],mlr_dec_007:['a','m','s','t','p','i','n','f','o','d'],mlr_dec_008:['a','m','s','t','p','i','n','f','o','d','c'],mlr_dec_009:['a','m','s','t','p','i','n','f','o','d','c','u'],mlr_dec_010:['a','m','s','t','p','i','n','f','o','d','c','u','g']};
 let lib=null, i18n=null, pack=null, pageIndex=0, mode='library', audio=null, listenGen=0, hlRaf=0;
 let introStep='mode', cousinIdx=0;
@@ -328,7 +350,7 @@ function showLib(){
   mode='library'; pack=null; stopA(); hideAll();
   $('libStage').classList.remove('hidden');
   $('bookTitle').textContent='MRJ Decodables';
-  $('modeBadge').textContent='Books 1–20';
+  $('modeBadge').textContent='Books 1–40';
   $('libList').innerHTML=bookOrder().map(id=>{
     const b=lib.books.find(x=>x.id===id);
     const open=TEST || unlocked(b.id), done=bookProg(b.id).passed;
@@ -378,6 +400,21 @@ function showIntro(){
   const famous=(pack.famous||[])[0]||'';
   if(introStep==='cousin'){
     const letters=cousinLetters();
+    const card=SOUND_CARD[pack.book_id];
+    if(card){
+      $('modeBadge').textContent=card.show;
+      const sub=card.sub?`<div class="hint">${card.sub}</div>`:'';
+      $('introBody').innerHTML=`<div class="onelet">
+        <div class="g-lbl">Main sound</div>
+        <div class="en" style="font-size:clamp(2.4rem,10vw,4.2rem)">${card.show}</div>
+        <img src="${asset('decodable/mouth/'+card.mouth+'.svg')}" alt="Mouth diagram for ${card.show}" style="max-height:160px;width:auto;object-fit:contain;margin:10px auto;display:block">
+        ${sub}
+        <div class="hint">${card.hint||''}</div>
+      </div>`;
+      playPath('decodable/letter_names/'+card.say+'.mp3', null, 1);
+      $('introGo').textContent='Next';
+      return;
+    }
     if(!letters.length){ introStep='famous-card'; showIntro(); return; }
     const L=letters[cousinIdx];
     const cu=cousinGlyph(L);
@@ -414,8 +451,10 @@ function showIntro(){
     const word=String(famous||'a').toLowerCase();
     const clips={a:'decodable/famous_carpet/famous_a_steps_out.mp4',is:'decodable/famous_carpet/famous_is_steps_out.mp4',go:'decodable/famous_carpet/famous_go_steps_out.mp4',no:'decodable/famous_carpet/famous_no_steps_out.mp4',see:'decodable/famous_carpet/famous_see_steps_out.mp4',he:'decodable/famous_carpet/famous_he_steps_out.mp4',me:'decodable/famous_carpet/famous_me_steps_out.mp4',we:'decodable/famous_carpet/famous_we_steps_out.mp4',be:'decodable/famous_carpet/famous_be_steps_out.mp4',my:'decodable/famous_carpet/famous_my_steps_out.mp4'};
     Object.assign(clips,{she:'decodable/famous_carpet/famous_she_steps_out.mp4',all:'decodable/famous_carpet/famous_all_steps_out.mp4',look:'decodable/famous_carpet/famous_look_steps_out.mp4',this:'decodable/famous_carpet/famous_this_steps_out.mp4',that:'decodable/famous_carpet/famous_that_steps_out.mp4',with:'decodable/famous_carpet/famous_with_steps_out.mp4',will:'decodable/famous_carpet/famous_will_steps_out.mp4',when:'decodable/famous_carpet/famous_when_steps_out.mp4',make:'decodable/famous_carpet/famous_make_steps_out.mp4',like:'decodable/famous_carpet/famous_like_steps_out.mp4'});
+    Object.assign(clips,{day:'decodable/famous_carpet/famous_day_steps_out.mp4',way:'decodable/famous_carpet/famous_way_steps_out.mp4',out:'decodable/famous_carpet/famous_out_steps_out.mp4',down:'decodable/famous_carpet/famous_down_steps_out.mp4',now:'decodable/famous_carpet/famous_now_steps_out.mp4',how:'decodable/famous_carpet/famous_how_steps_out.mp4',play:'decodable/famous_carpet/famous_play_steps_out.mp4',take:'decodable/famous_carpet/famous_take_steps_out.mp4',came:'decodable/famous_carpet/famous_came_steps_out.mp4',time:'decodable/famous_carpet/famous_time_steps_out.mp4',here:'decodable/famous_carpet/famous_here_steps_out.mp4',more:'decodable/famous_carpet/famous_more_steps_out.mp4',three:'decodable/famous_carpet/famous_three_steps_out.mp4',right:'decodable/famous_carpet/famous_right_steps_out.mp4',night:'decodable/famous_carpet/famous_night_steps_out.mp4',too:'decodable/famous_carpet/famous_too_steps_out.mp4',soon:'decodable/famous_carpet/famous_soon_steps_out.mp4',good:'decodable/famous_carpet/famous_good_steps_out.mp4',book:'decodable/famous_carpet/famous_book_steps_out.mp4',rain:'decodable/famous_carpet/famous_rain_steps_out.mp4'});
     const crowds={a:'decodable/famous_carpet/famous_a_crowd10.mp3',is:'decodable/famous_carpet/famous_is_crowd10.mp3',go:'decodable/famous_carpet/famous_go_crowd10.mp3',no:'decodable/famous_carpet/famous_no_crowd10.mp3',see:'decodable/famous_carpet/famous_see_crowd10.mp3',he:'decodable/famous_carpet/famous_he_crowd10.mp3',me:'decodable/famous_carpet/famous_me_crowd10.mp3',we:'decodable/famous_carpet/famous_we_crowd10.mp3',be:'decodable/famous_carpet/famous_be_crowd10.mp3',my:'decodable/famous_carpet/famous_my_crowd10.mp3'};
     Object.assign(crowds,{she:'decodable/famous_carpet/famous_she_crowd10.mp3',all:'decodable/famous_carpet/famous_all_crowd10.mp3',look:'decodable/famous_carpet/famous_look_crowd10.mp3',this:'decodable/famous_carpet/famous_this_crowd10.mp3',that:'decodable/famous_carpet/famous_that_crowd10.mp3',with:'decodable/famous_carpet/famous_with_crowd10.mp3',will:'decodable/famous_carpet/famous_will_crowd10.mp3',when:'decodable/famous_carpet/famous_when_crowd10.mp3',make:'decodable/famous_carpet/famous_make_crowd10.mp3',like:'decodable/famous_carpet/famous_like_crowd10.mp3'});
+    Object.assign(crowds,{day:'decodable/famous_carpet/famous_day_crowd10.mp3',way:'decodable/famous_carpet/famous_way_crowd10.mp3',out:'decodable/famous_carpet/famous_out_crowd10.mp3',down:'decodable/famous_carpet/famous_down_crowd10.mp3',now:'decodable/famous_carpet/famous_now_crowd10.mp3',how:'decodable/famous_carpet/famous_how_crowd10.mp3',play:'decodable/famous_carpet/famous_play_crowd10.mp3',take:'decodable/famous_carpet/famous_take_crowd10.mp3',came:'decodable/famous_carpet/famous_came_crowd10.mp3',time:'decodable/famous_carpet/famous_time_crowd10.mp3',here:'decodable/famous_carpet/famous_here_crowd10.mp3',more:'decodable/famous_carpet/famous_more_crowd10.mp3',three:'decodable/famous_carpet/famous_three_crowd10.mp3',right:'decodable/famous_carpet/famous_right_crowd10.mp3',night:'decodable/famous_carpet/famous_night_crowd10.mp3',too:'decodable/famous_carpet/famous_too_crowd10.mp3',soon:'decodable/famous_carpet/famous_soon_crowd10.mp3',good:'decodable/famous_carpet/famous_good_crowd10.mp3',book:'decodable/famous_carpet/famous_book_crowd10.mp3',rain:'decodable/famous_carpet/famous_rain_crowd10.mp3'});
     const label=word==='a'?'uh':word;
     const vid=asset(clips[word]||'decodable/famous_carpet/base_limo_door.mp4');
     $('introBody').innerHTML=`<div class="scene" id="famousScene">
@@ -700,6 +739,10 @@ function dictSpeaker(){
     ? `<img src="${asset('decodable/harper.png')}" alt="Miss Harper">`
     : raw==='Coach'
     ? `<img src="${asset('decodable/coach.png')}" alt="Coach Ray">`
+    : raw==='Grandma'
+    ? `<img src="${asset('decodable/grandma.png')}" alt="Grandma June">`
+    : raw==='Grandpa'
+    ? `<img src="${asset('decodable/grandpa.png')}" alt="Grandpa Walt">`
     : `<div class="label" style="font-size:2rem;margin-bottom:6px">${name}</div>`;
   return `<div class="speaker">${face}<div class="label">${name} · says the sentence</div></div>`;
 }
