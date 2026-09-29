@@ -109,9 +109,28 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 .who{font-size:clamp(2rem,4.2vh,3.2rem);font-weight:900;text-align:center;margin:6px 0 14px}
 .name-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
 .name-grid button{font-size:clamp(1.05rem,1.7vw,1.5rem);padding:14px 4px}
-.name-form{display:flex;gap:10px;margin-top:14px}
-.name-form input{flex:1;min-width:0;padding:14px 16px;border-radius:14px;border:0;background:#1b2740;color:#fff;font-weight:800;font-size:1.15rem}
+.name-form{display:flex;flex-direction:column;gap:10px;margin-top:14px;max-width:420px}
+.name-form input{width:100%;padding:14px 16px;border-radius:14px;border:0;background:#1b2740;color:#fff;font-weight:800;font-size:1.15rem}
 .name-form button{min-width:96px}
+.sign-err{min-height:1.2em;color:#ffb4b4;font-weight:800}
+#workStage.dict-fit{overflow:hidden;padding:8px 12px;height:100%}
+#workStage.dict-fit #workBody{height:100%;min-height:0}
+.dict-layout{display:grid;grid-template-columns:minmax(150px,210px) minmax(0,1fr);gap:14px;height:100%;min-height:0;align-items:center}
+.dict-main{min-height:0;display:flex;flex-direction:column;justify-content:center;gap:4px}
+#workStage.dict-fit .speaker{width:100%;height:min(26vh,200px);aspect-ratio:auto;border-radius:16px}
+#workStage.dict-fit .speaker img{object-fit:cover;object-position:top center}
+#workStage.dict-fit .speaker .label{font-size:.8rem;bottom:6px}
+#workStage.dict-fit .tpl{font-size:clamp(1.05rem,2.3vh,1.55rem);line-height:1.25;padding:2px}
+#workStage.dict-fit .az{grid-template-columns:repeat(14,minmax(0,1fr));gap:4px;margin:4px 0}
+#workStage.dict-fit .az button{padding:5px 0;font-size:clamp(.8rem,1.5vh,1rem)}
+#workStage.dict-fit .tiles{margin:4px 0;gap:6px}
+#workStage.dict-fit .tile{min-width:0;font-size:clamp(.95rem,1.8vh,1.2rem);padding:7px 8px}
+#workStage.dict-fit .g-lbl{margin-top:2px}
+#workStage.dict-fit .repeat{margin:2px 0}
+#workStage.dict-fit .repeat.spd{grid-template-columns:repeat(6,minmax(0,1fr))}
+#workStage.dict-fit .repeat button{font-size:.9rem;padding:7px 4px}
+#workStage.dict-fit .choice{margin:0}
+#workStage.dict-fit #clearWord{padding:7px}
 .passed-mark{color:#3ecf8e;font-weight:900;font-size:1.5rem;line-height:1}
 #bookStage{
   overflow:hidden;
@@ -167,11 +186,14 @@ body.student-desk #bookStage #play{
     <button id="btnSwitch" type="button">Switch</button>
   </header>
   <div id="signStage" class="stage panel hidden">
-    <h2 class="who">Who are you?</h2>
-    <div class="name-grid" id="nameGrid"></div>
+    <h2 class="who">Sign in</h2>
     <form id="nameForm" class="name-form" autocomplete="off">
-      <input id="nameBox" type="text" maxlength="40" placeholder="Type your name" autocomplete="off" enterkeyhint="go">
-      <button type="submit" id="nameGo">OK</button>
+      <label for="nameBox">Login ID</label>
+      <input id="nameBox" type="text" maxlength="24" placeholder="Login ID" autocomplete="username" enterkeyhint="next">
+      <label for="passBox">Password</label>
+      <input id="passBox" type="password" inputmode="numeric" maxlength="4" placeholder="4-number password" autocomplete="current-password" enterkeyhint="go">
+      <p id="signErr" class="sign-err"></p>
+      <button type="submit" id="nameGo">Sign in</button>
     </form>
   </div>
   <div id="libStage" class="stage panel hidden">
@@ -211,10 +233,11 @@ body.student-desk #bookStage #play{
 <script src="pronounce/grade-browser.js"></script>
 <script>
 const TEST=false;
-const ASSET_V='dec20260929lb1';
+const ASSET_V='dec20260929dict1';
 const STUDENT_KEY='mrj-dec-student';
-const PROGRESS_URL='https://script.google.com/macros/s/AKfycbzLpwxbiWLSVKD1-KSv8MzV1yEqq4OlOhQMhhFGeXtUs2qeG_rw-mZq9nF7JICIexotiQ/exec';
-const STUDENT_NAMES=['가윤','가은','규빈','동건','민건','성현','세음','수빈','승유','승현','신우','윤호','제이수','찬영','태연','호준','효원'];
+const PIN_KEY='mrj-dec-pin';
+const SHEET_URL='https://script.google.com/macros/s/AKfycbwIBPzcmJYkJP-uURVzyt8_7iF3mzGBTCp-omNA2sF3Hk5oGusHfOlPyhEnDl2XAJu82w/exec';
+const LOGIN_PROGRAMS=['decodable','word-master','skill-builder','mrj'];
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -304,29 +327,67 @@ function setBookProg(id, patch){
   all.byStudent[name]=all.byStudent[name]||{};
   all.byStudent[name][id]=Object.assign(blankProg(), all.byStudent[name][id]||{}, patch);
   saveAll(all);
+  saveSheetProgress();
 }
 function settings(){ return Object.assign({parentLock:false,showLang:true,lang:'ko'}, loadAll()._settings||{}); }
 function setSettings(patch){ const all=loadAll(); all._settings=Object.assign(settings(), patch); saveAll(all); }
 function bookOrder(){ return (lib.books||[]).slice(0, MAX_BOOKS).map(b=>b.id); }
 function unlocked(id){ const o=bookOrder(); const i=o.indexOf(id); return i===0 || (i>0 && !!bookProg(o[i-1]).passed); }
 function studentName(){ try{ return String(localStorage.getItem(STUDENT_KEY)||'').trim(); }catch(e){ return ''; } }
+function studentPin(){ try{ return String(localStorage.getItem(PIN_KEY)||'').replace(/\D/g,'').slice(0,4); }catch(e){ return ''; } }
+function progressBlob(){
+  const name=studentName();
+  const all=loadAll();
+  const books=(all.byStudent&&all.byStudent[name])||{};
+  return JSON.stringify({v:1, books:books});
+}
+function applySheetProgress(raw){
+  const name=studentName();
+  if(!name) return;
+  let data={};
+  try{ data=JSON.parse(raw||'{}'); }catch(e){ return; }
+  if(!data.books || typeof data.books!=='object') return;
+  const all=loadAll();
+  all.byStudent=all.byStudent||{};
+  all.byStudent[name]=data.books;
+  saveAll(all);
+}
+function sheetPost(body){
+  return fetch(SHEET_URL,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(body)
+  }).then(function(r){ return r.json(); }).catch(function(){ return null; });
+}
+function saveSheetProgress(){
+  const name=studentName();
+  const pin=studentPin();
+  if(!name || pin.length!==4) return;
+  sheetPost({action:'save', name:name, pin:pin, program:'decodable', progress_json:progressBlob()});
+}
 function reportProgress(bookId, itemId, completed, scorePct){
   const name=studentName();
   if(!name || !bookId || !itemId) return;
-  const payload={
-    student_email:name+'@students.mrjayenglish.com',
-    source:'decodable',
+  const event={
+    event_id:'dec-'+bookId+'-'+itemId+'-'+Date.now().toString(36),
     event_kind:'decodable_progress',
+    source:'decodable',
+    app_name:'MRJ Decodables',
+    curriculum_program:'decodable',
     book_title:bookId,
     item_id:itemId,
-    completed:completed===true
+    item_type:'section',
+    completed:completed===true,
+    metadata_json:JSON.stringify({student:name, section:itemId})
   };
-  if(scorePct!=null && isFinite(+scorePct)) payload.score_pct=Math.round(+scorePct);
-  const body=JSON.stringify(payload);
-  const opt={method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body};
-  fetch(PROGRESS_URL, Object.assign({mode:'cors'}, opt)).catch(function(){
-    return fetch(PROGRESS_URL, Object.assign({mode:'no-cors'}, opt));
-  }).catch(function(){});
+  if(scorePct!=null && isFinite(+scorePct)) event.score_pct=Math.round(+scorePct);
+  sheetPost({
+    student_email:'unknown',
+    student_name:name,
+    session_id:'decodable-'+name,
+    events:[event]
+  });
+  saveSheetProgress();
 }
 function speakScorePct(){
   const sp=bookProg(pack.book_id).speakPages||{};
@@ -342,23 +403,36 @@ function syncModeLocks(){
   $('mDict').disabled=!(bp && bp.read);
   $('mSay').disabled=!(bp && bp.dictation);
 }
-function commitStudent(name){
-  const n=String(name||'').trim();
-  if(!n) return;
-  localStorage.setItem(STUDENT_KEY, n);
-  showLib();
-}
 function showSign(){
   mode='sign'; pack=null; stopA(); hideAll();
+  $('workStage').classList.remove('dict-fit');
   $('signStage').classList.remove('hidden');
-  $('bookTitle').textContent='Who are you?';
+  $('bookTitle').textContent='Sign in';
   $('modeBadge').textContent='';
-  $('nameGrid').innerHTML=STUDENT_NAMES.map(n=>`<button type="button" data-name="${n}">${n}</button>`).join('');
-  $('nameGrid').querySelectorAll('button').forEach(b=>{
-    b.onclick=()=>commitStudent(b.getAttribute('data-name'));
-  });
-  $('nameForm').onsubmit=e=>{ e.preventDefault(); commitStudent($('nameBox').value); };
-  syncModeLocks();
+  const err=$('signErr');
+  if(err) err.textContent='';
+  $('nameForm').onsubmit=async function(e){
+    e.preventDefault();
+    const name=String($('nameBox').value||'').trim().slice(0,24);
+    const pin=String($('passBox').value||'').replace(/\D/g,'').slice(0,4);
+    if(!name){ if(err) err.textContent='Type your login ID.'; return; }
+    if(pin.length!==4){ if(err) err.textContent='Password is 4 numbers.'; return; }
+    const btn=$('nameGo');
+    btn.disabled=true;
+    let hit=null;
+    for(const program of LOGIN_PROGRAMS){
+      const res=await sheetPost({action:'load', name:name, pin:pin, program:program});
+      if(!res){ btn.disabled=false; if(err) err.textContent='Could not reach the sheet. Try again.'; return; }
+      if(res.error==='wrong_pin'){ btn.disabled=false; if(err) err.textContent='Wrong password.'; return; }
+      if(res.found){ hit=res; break; }
+    }
+    localStorage.setItem(STUDENT_KEY, name);
+    localStorage.setItem(PIN_KEY, pin);
+    if(hit && hit.progress_json && String(hit.progress_json).indexOf('"books"')>=0) applySheetProgress(hit.progress_json);
+    else sheetPost({action:'save', name:name, pin:pin, program:'decodable', progress_json:progressBlob()});
+    btn.disabled=false;
+    showLib();
+  };
 }
 function gloss(lem){ return ((pack&&pack.glossary&&pack.glossary.entries)||[]).find(x=>x.lemma===lem); }
 function sayTarget(text){
@@ -658,6 +732,7 @@ function setMode(m){
     else m='pass';
   }
   mode=m; stopA(); listenGen++; hideAll(); clipDone=false;
+  $('workStage').classList.remove('dict-fit');
   $('modeBadge').textContent=m+' · '+(soundLine(pack.book_id)||pack.sound||'');
   $('mListen').classList.toggle('active', m==='listen');
   $('mSong').classList.toggle('active', m==='song');
@@ -682,7 +757,7 @@ function arrowsFree(){
   if(!pack) return false;
   if(mode!=='listen' && mode!=='song' && mode!=='read') return false;
   const bp=bookProg(pack.book_id);
-  return !!(bp.listen && bp.read);
+  return !!(bp.listen && bp.song && bp.read);
 }
 function syncArrows(){
   const prev=$('prev'), next=$('next');
@@ -971,6 +1046,7 @@ function playJailVideo(){
   kick();
 }
 function startDictation(){
+  $('workStage').classList.add('dict-fit');
   if(!bookProg(pack.book_id).difficulty){
     $('workBody').innerHTML=`<div class="g-lbl">Dictation</div>
       <div style="font-weight:800;margin:10px 0 16px">Easy = put the words in order. Hard = type the letters. Punctuation is already there.</div>
@@ -1035,24 +1111,27 @@ function nextDict(){
     tilesHtml=`<div class="tiles">${tiles.map(t=>`<button class="tile" data-id="${t.id}" data-word="${encodeURIComponent(t.word)}">${t.word.replace(/</g,'&lt;')}</button>`).join('')}</div>`;
   }
   $('workBody').innerHTML=`
-    <div class="choice" style="margin-bottom:10px"><button id="pickEasy" class="${hard?'':'active'}">Easy</button><button id="pickHard" class="${hard?'active':''}">Hard</button></div>
-    ${dictSpeaker()}
-    <div class="g-lbl">Dictation ${dictIdx+1} / ${dictQueue.length} · ${hard?'Hard · letters only. Punctuation already there.':'Easy · words. Punctuation already there.'}</div>
-    <div class="${hard?'tpl':'tpl'}" id="built">${hard?renderDictTpl(item.text,[]):renderEasyTpl(item.text,[])}</div>
-    ${tilesHtml}
-    <div class="g-lbl">Speed</div>
-    <div class="repeat spd">
-      <button id="spd100" type="button">100%</button>
-      <button id="spd80" type="button">80%</button>
-      <button id="spd50" type="button">50%</button>
-    </div>
-    <div class="repeat">
-      <button id="hear1x" type="button">1x</button>
-      <button id="hear3x" type="button">3x</button>
-      <button id="hear5x" type="button">5x</button>
-    </div>
-    <button id="clearWord" style="width:100%">Clear</button>
-    <div class="status" id="dictStatus">Need 4 of 5. Right so far: ${dictRight}</div>`;
+    <div class="dict-layout">
+      <div class="dict-side">
+        ${dictSpeaker()}
+        <div class="choice"><button id="pickEasy" class="${hard?'':'active'}">Easy</button><button id="pickHard" class="${hard?'active':''}">Hard</button></div>
+      </div>
+      <div class="dict-main">
+        <div class="g-lbl">Dictation ${dictIdx+1} / ${dictQueue.length} · ${hard?'Hard · letters':'Easy · words'}</div>
+        <div class="tpl" id="built">${hard?renderDictTpl(item.text,[]):renderEasyTpl(item.text,[])}</div>
+        ${tilesHtml}
+        <div class="repeat spd">
+          <button id="spd100" type="button">100%</button>
+          <button id="spd80" type="button">80%</button>
+          <button id="spd50" type="button">50%</button>
+          <button id="hear1x" type="button">1x</button>
+          <button id="hear3x" type="button">3x</button>
+          <button id="hear5x" type="button">5x</button>
+        </div>
+        <button id="clearWord">Clear</button>
+        <div class="status" id="dictStatus">Need 4 of 5. Right so far: ${dictRight}</div>
+      </div>
+    </div>`;
   const hearN=n=>playTimes(item.audio, n, dictRate);
   paintSpeedBtns();
   const pe=$('pickEasy'), ph=$('pickHard');
