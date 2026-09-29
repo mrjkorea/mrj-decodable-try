@@ -185,7 +185,7 @@ body.student-desk #bookStage #play{
     <button id="btnLibrary">📚 Books</button>
     <button id="btnSwitch" type="button">Switch</button>
   </header>
-  <div id="signStage" class="stage panel hidden">
+  <div id="signStage" class="stage panel hidden" hidden>
     <h2 class="who">Sign in</h2>
     <form id="nameForm" class="name-form" autocomplete="off">
       <label for="nameBox">Login ID</label>
@@ -231,13 +231,16 @@ body.student-desk #bookStage #play{
 <script src="pronounce/engine.js"></script>
 <script src="pronounce/audio.js"></script>
 <script src="pronounce/grade-browser.js"></script>
+<link rel="stylesheet" href="https://mrjkorea.github.io/mrj-signin/mrj-auth.css">
+<script src="https://mrjkorea.github.io/mrj-signin/mrj-auth.js"></script>
+<script src="https://mrjkorea.github.io/mrj-signin/mrj-auth-boot.js" data-mrj-app="mrj-decodable-try"></script>
 <script>
 const TEST=false;
 const ASSET_V='dec20260929dict1';
 const STUDENT_KEY='mrj-dec-student';
 const PIN_KEY='mrj-dec-pin';
-const SHEET_URL='https://script.google.com/macros/s/AKfycbwIBPzcmJYkJP-uURVzyt8_7iF3mzGBTCp-omNA2sF3Hk5oGusHfOlPyhEnDl2XAJu82w/exec';
-const LOGIN_PROGRAMS=['decodable','word-master','skill-builder','mrj'];
+const AUTH_URL='https://script.google.com/macros/s/AKfycbwtJTUO3gbcMrlAwsn1feWxyp7Rw2cxpfe1bOT9v2rxmQHa2Tlc6pFNWAjU6ZAdlD6kFQ/exec';
+const SCORE_URL='https://script.google.com/macros/s/AKfycbwIBPzcmJYkJP-uURVzyt8_7iF3mzGBTCp-omNA2sF3Hk5oGusHfOlPyhEnDl2XAJu82w/exec';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -333,7 +336,12 @@ function settings(){ return Object.assign({parentLock:false,showLang:true,lang:'
 function setSettings(patch){ const all=loadAll(); all._settings=Object.assign(settings(), patch); saveAll(all); }
 function bookOrder(){ return (lib.books||[]).slice(0, MAX_BOOKS).map(b=>b.id); }
 function unlocked(id){ const o=bookOrder(); const i=o.indexOf(id); return i===0 || (i>0 && !!bookProg(o[i-1]).passed); }
-function studentName(){ try{ return String(localStorage.getItem(STUDENT_KEY)||'').trim(); }catch(e){ return ''; } }
+function studentName(){
+  try {
+    if (window.MRJ_AUTH && MRJ_AUTH.student()) return String(MRJ_AUTH.student()).trim();
+    return String(localStorage.getItem(STUDENT_KEY)||'').trim();
+  } catch(e) { return ''; }
+}
 function studentPin(){ try{ return String(localStorage.getItem(PIN_KEY)||'').replace(/\D/g,'').slice(0,4); }catch(e){ return ''; } }
 function progressBlob(){
   const name=studentName();
@@ -352,8 +360,8 @@ function applySheetProgress(raw){
   all.byStudent[name]=data.books;
   saveAll(all);
 }
-function sheetPost(body){
-  return fetch(SHEET_URL,{
+function sheetPost(url, body){
+  return fetch(url,{
     method:'POST',
     headers:{'Content-Type':'text/plain;charset=utf-8'},
     body:JSON.stringify(body)
@@ -361,9 +369,9 @@ function sheetPost(body){
 }
 function saveSheetProgress(){
   const name=studentName();
-  const pin=studentPin();
-  if(!name || pin.length!==4) return;
-  sheetPost({action:'save', name:name, pin:pin, program:'decodable', progress_json:progressBlob()});
+  const token=window.MRJ_AUTH && MRJ_AUTH.token();
+  if(!name || !token) return;
+  sheetPost(AUTH_URL, {action:'save_pack', id:name, token:token, program:'decodable', progress_json:progressBlob()});
 }
 function reportProgress(bookId, itemId, completed, scorePct){
   const name=studentName();
@@ -381,7 +389,7 @@ function reportProgress(bookId, itemId, completed, scorePct){
     metadata_json:JSON.stringify({student:name, section:itemId})
   };
   if(scorePct!=null && isFinite(+scorePct)) event.score_pct=Math.round(+scorePct);
-  sheetPost({
+  sheetPost(SCORE_URL, {
     student_email:'unknown',
     student_name:name,
     session_id:'decodable-'+name,
@@ -404,6 +412,7 @@ function syncModeLocks(){
   $('mSay').disabled=!(bp && bp.dictation);
 }
 function showSign(){
+  if (window.MRJ_AUTH) return;
   mode='sign'; pack=null; stopA(); hideAll();
   $('workStage').classList.remove('dict-fit');
   $('signStage').classList.remove('hidden');
@@ -503,15 +512,18 @@ async function boot(){
   $('langPick').onchange=e=>{
     lang=e.target.value;
     setSettings({lang});
-    if(!studentName() || mode==='sign'){ showSign(); return; }
+    if(!studentName() || mode==='sign'){ return; }
     if(mode==='library' || !pack) showLib();
     else if(mode==='intro') showIntro();
     else if(mode==='listen'||mode==='song'||mode==='read') renderPage();
     else if(mode==='dictation') startDictation();
     else if(mode==='speak') renderSay();
   };
-  $('btnLibrary').onclick=()=>{ if(!studentName()) showSign(); else showLib(); };
-  $('btnSwitch').onclick=()=>{ localStorage.removeItem(STUDENT_KEY); showSign(); };
+  $('btnLibrary').onclick=()=>{ if(studentName()) showLib(); };
+  $('btnSwitch').onclick=()=>{
+    localStorage.removeItem(STUDENT_KEY);
+    if (window.MRJ_AUTH && MRJ_AUTH.signOut) MRJ_AUTH.signOut();
+  };
   $('mListen').onclick=()=>setMode('listen');
   $('mSong').onclick=()=>setMode('song');
   $('mRead').onclick=()=>setMode('read');
@@ -527,12 +539,20 @@ async function boot(){
   $('next').onclick=()=>go(1);
   $('play').onclick=()=>playPage(true);
   $('introGo').onclick=()=>introAdvance();
-  if(studentName()) showLib();
-  else showSign();
+  window.addEventListener('mrj-auth-ready', function(ev){
+    const id=(ev.detail && ev.detail.id) || studentName();
+    if(!id) return;
+    localStorage.setItem(STUDENT_KEY, id);
+    const token=window.MRJ_AUTH && MRJ_AUTH.token();
+    sheetPost(AUTH_URL, {action:'load_pack', id:id, token:token, program:'decodable'}).then(function(res){
+      if(res && res.found && res.progress_json) applySheetProgress(res.progress_json);
+      showLib();
+    });
+  });
 }
 function hideAll(){ ['signStage','libStage','introStage','bookStage','workStage'].forEach(id=>$(id).classList.add('hidden')); }
 function showLib(){
-  if(!studentName()){ showSign(); return; }
+  if(!studentName()) return;
   if(pack && pack.book_id) lastTestBook=pack.book_id;
   mode='library'; pack=null; stopA(); hideAll();
   $('libStage').classList.remove('hidden');
@@ -553,7 +573,7 @@ function showLib(){
   syncModeLocks();
 }
 async function openBook(id){
-  if(!studentName()){ showSign(); return; }
+  if(!studentName()) return;
   if(!unlocked(id)) return;
   pack=await (await fetch(BASE+'assets/align_'+id+'.json?v='+ASSET_V)).json();
   pageIndex=0; tapped=new Set(); heardListen=new Set(); heardSong=new Set(); clipDone=false; sheriffOk=false;
