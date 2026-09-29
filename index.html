@@ -185,17 +185,7 @@ body.student-desk #bookStage #play{
     <button id="btnLibrary">📚 Books</button>
     <button id="btnSwitch" type="button">Switch</button>
   </header>
-  <div id="signStage" class="stage panel hidden" hidden>
-    <h2 class="who">Sign in</h2>
-    <form id="nameForm" class="name-form" autocomplete="off">
-      <label for="nameBox">Login ID</label>
-      <input id="nameBox" type="text" maxlength="24" placeholder="Login ID" autocomplete="username" enterkeyhint="next">
-      <label for="passBox">Password</label>
-      <input id="passBox" type="password" inputmode="numeric" maxlength="4" placeholder="4-number password" autocomplete="current-password" enterkeyhint="go">
-      <p id="signErr" class="sign-err"></p>
-      <button type="submit" id="nameGo">Sign in</button>
-    </form>
-  </div>
+  <div id="signStage" hidden></div>
   <div id="libStage" class="stage panel hidden">
     <div class="library" id="libList"></div>
   </div>
@@ -411,38 +401,7 @@ function syncModeLocks(){
   $('mDict').disabled=!(bp && bp.read);
   $('mSay').disabled=!(bp && bp.dictation);
 }
-function showSign(){
-  if (window.MRJ_AUTH) return;
-  mode='sign'; pack=null; stopA(); hideAll();
-  $('workStage').classList.remove('dict-fit');
-  $('signStage').classList.remove('hidden');
-  $('bookTitle').textContent='Sign in';
-  $('modeBadge').textContent='';
-  const err=$('signErr');
-  if(err) err.textContent='';
-  $('nameForm').onsubmit=async function(e){
-    e.preventDefault();
-    const name=String($('nameBox').value||'').trim().slice(0,24);
-    const pin=String($('passBox').value||'').replace(/\D/g,'').slice(0,4);
-    if(!name){ if(err) err.textContent='Type your login ID.'; return; }
-    if(pin.length!==4){ if(err) err.textContent='Password is 4 numbers.'; return; }
-    const btn=$('nameGo');
-    btn.disabled=true;
-    let hit=null;
-    for(const program of LOGIN_PROGRAMS){
-      const res=await sheetPost({action:'load', name:name, pin:pin, program:program});
-      if(!res){ btn.disabled=false; if(err) err.textContent='Could not reach the sheet. Try again.'; return; }
-      if(res.error==='wrong_pin'){ btn.disabled=false; if(err) err.textContent='Wrong password.'; return; }
-      if(res.found){ hit=res; break; }
-    }
-    localStorage.setItem(STUDENT_KEY, name);
-    localStorage.setItem(PIN_KEY, pin);
-    if(hit && hit.progress_json && String(hit.progress_json).indexOf('"books"')>=0) applySheetProgress(hit.progress_json);
-    else sheetPost({action:'save', name:name, pin:pin, program:'decodable', progress_json:progressBlob()});
-    btn.disabled=false;
-    showLib();
-  };
-}
+function showSign(){ return; }
 function gloss(lem){ return ((pack&&pack.glossary&&pack.glossary.entries)||[]).find(x=>x.lemma===lem); }
 function sayTarget(text){
   const words=String(text||'').match(/[A-Za-z']+/g)||[];
