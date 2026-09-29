@@ -6,22 +6,17 @@
 <title>MRJ Decodables — Books 1–20</title>
 <style>
 :root{--bg:#070d18;--card:#101a2e;--text:#f4f7ff;--muted:#a9b7d6;--hl:#ffd84a;--ok:#3ecf8e}
-*{box-sizing:border-box}
-html,body{height:100%;overflow:hidden}
-body{margin:0;font-family:ui-rounded,"Nunito","Avenir Next",system-ui,sans-serif;background:#070d18;color:var(--text);height:100%;overflow:hidden}
-body.student-desk{display:flex;flex-direction:column;height:100vh;height:100dvh;max-height:100dvh}
-.app{width:100%;max-width:none;margin:0;padding:8px 16px 0;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex:0 0 auto}
-.app>.stage{flex:1 1 auto;min-height:0}
-#libStage,#introStage,#workStage,#signStage{overflow:auto}
+*{box-sizing:border-box}body{margin:0;font-family:ui-rounded,"Nunito","Avenir Next",system-ui,sans-serif;background:#070d18;color:var(--text);min-height:100vh}
+.app{max-width:520px;margin:0 auto;padding:8px 12px 118px}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
 h1{font-size:1rem;margin:0}
 button{border:0;border-radius:14px;padding:11px;font-weight:800;color:#fff;background:#24324f;cursor:pointer}
 button.active{background:linear-gradient(135deg,#4d7dff,#7a5cff)}
 button:disabled{opacity:.38;cursor:not-allowed}
 .stage{background:var(--card);border-radius:22px;overflow:hidden}
-.art{position:relative;background:#050a12;height:100%;min-height:0;max-height:none}
+.art{position:relative;aspect-ratio:3/4;background:#050a12;max-height:78vh}
 .art img,.art video{width:100%;height:100%;object-fit:contain;position:absolute;inset:0}
-.sentence{font-size:clamp(1.7rem,2.5vw,3rem);font-weight:900;line-height:1.3;text-align:center;padding:8px 16px 4px;min-height:0}
+.sentence{font-size:clamp(1.7rem,6.8vw,2.6rem);font-weight:900;line-height:1.3;text-align:center;padding:12px 12px 4px;min-height:2.2em}
 .sentence .w{display:inline-block;padding:.02em .08em;border-radius:.18em;cursor:pointer}
 .sentence .w.on{background:#ffd84a;color:#1a1400;box-shadow:0 0 0 3px #ffe27a}
 .sentence .w.done{outline:3px solid var(--ok);background:rgba(62,207,142,.18)}
@@ -29,15 +24,15 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .status{text-align:center;color:var(--muted);font-size:.84rem;padding:0 12px 10px}
 .nav{display:flex;gap:8px;padding:0 12px 12px}
 .nav button{flex:1}
-.library{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;align-content:start}
+.library{display:grid;gap:10px}
 .card{display:flex;gap:12px;align-items:center;background:#1b2740;border-radius:16px;padding:10px;color:#fff;text-align:left;width:100%}
 .card img{width:64px;height:86px;object-fit:cover;border-radius:8px}
 .card.lock{opacity:.55}
 .g-lbl{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-top:10px}
 .g-en{font-size:clamp(1.5rem,6vw,2.1rem);font-weight:900;line-height:1.28;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);margin:6px 0}
-.bar{position:relative;flex:0 0 auto;background:rgba(7,13,24,.94);padding:8px 16px calc(8px + env(safe-area-inset-bottom));z-index:5}
-.bar-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:none;width:100%;margin:0}
-.bar-row button{font-size:clamp(.95rem,1.25vw,1.2rem);padding:12px 6px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(7,13,24,.94);padding:8px 12px calc(8px + env(safe-area-inset-bottom))}
+.bar-row{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:520px;margin:0 auto}
+.bar-row button{font-size:.78rem;padding:10px 4px}
 .hidden{display:none!important}
 .panel{padding:14px}
 .onelet{min-height:58vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
@@ -96,6 +91,9 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 .loadbar-track{height:10px;background:#1b2740;border-radius:8px;overflow:hidden}
 #loadbarFill{height:100%;width:0;background:linear-gradient(90deg,#4d7dff,#3ecf8e);transition:width .18s ease;border-radius:8px}
 #loadbarLbl{text-align:center;font-size:.72rem;color:var(--muted);margin-top:6px;font-weight:800}
+.testnav{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;max-width:520px;margin:0 auto 8px}
+.testnav button{font-size:1.05rem;padding:14px 4px;background:#16356e}
+body.test-on .app{padding-bottom:196px}
 .catchLine{position:absolute;left:0;right:0;top:10%;text-align:center;font-size:clamp(1.35rem,5.2vw,1.95rem);font-weight:900;color:#ffe27a;text-shadow:0 0 14px #000,0 3px 10px #000;z-index:2;pointer-events:none;line-height:1.2;letter-spacing:.02em;animation:pulse 1.1s ease-in-out infinite}
 .catchLine .bigq{font-size:clamp(4.2rem,20vw,7rem);display:inline-block;line-height:.75;vertical-align:middle;color:#fff;text-shadow:0 0 22px #ffd84a}
 .sheriffBan{text-align:center;font-weight:900;margin:0 0 12px;line-height:1.12}
@@ -106,56 +104,9 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 .nervousWord{font-size:clamp(3.2rem,15vw,5.8rem);font-weight:900;text-align:center;color:#ffe27a;text-shadow:0 0 20px #ffd84a;animation:shake .45s ease-in-out infinite}
 .nervousLine{font-size:clamp(1.5rem,5.5vw,2rem);font-weight:900;text-align:center;margin-top:16px}
 @keyframes shake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-4px) rotate(-1.2deg)}75%{transform:translateX(4px) rotate(1.2deg)}}
-.who{font-size:clamp(2rem,4.2vh,3.2rem);font-weight:900;text-align:center;margin:6px 0 14px}
-.name-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
-.name-grid button{font-size:clamp(1.05rem,1.7vw,1.5rem);padding:14px 4px}
-.name-form{display:flex;gap:10px;margin-top:14px}
-.name-form input{flex:1;min-width:0;padding:14px 16px;border-radius:14px;border:0;background:#1b2740;color:#fff;font-weight:800;font-size:1.15rem}
-.name-form button{min-width:96px}
-.passed-mark{color:#3ecf8e;font-weight:900;font-size:1.5rem;line-height:1}
-#bookStage{
-  overflow:hidden;
-  display:grid;
-  grid-template-columns:minmax(0,1.22fr) minmax(320px,.88fr);
-  grid-template-rows:1fr auto auto auto auto 1fr;
-  grid-template-areas:
-    "pic ."
-    "pic sentence"
-    "pic lang"
-    "pic status"
-    "pic nav"
-    "pic .";
-  column-gap:8px;
-  align-items:stretch;
-}
-#bookStage.hidden{display:none!important}
-#bookStage .art{grid-area:pic;height:100%;align-self:stretch}
-#bookStage .sentence{grid-area:sentence}
-#bookStage .langline{grid-area:lang}
-#bookStage .status{grid-area:status}
-#bookStage .nav{
-  grid-area:nav;
-  display:grid;
-  grid-template-columns:1.25fr 1.1fr 1.25fr;
-  gap:12px;
-  padding:8px 18px 14px;
-}
-body.student-desk #bookStage:not(.hidden) #prev,
-body.student-desk #bookStage:not(.hidden) #next{
-  display:block!important;
-  font-size:clamp(2.8rem,7.2vh,4.8rem);
-  line-height:1;
-  min-height:clamp(84px,14vh,136px);
-  padding:0;
-}
-body.student-desk #bookStage #play{
-  font-size:clamp(1.15rem,2.5vh,1.85rem);
-  min-height:clamp(84px,14vh,136px);
-}
 </style>
 </head>
-<body class="student-desk">
-<!-- STUDENT-DESK-ARROWS-20260929 -->
+<body>
 <div class="app">
   <header>
     <div>
@@ -164,17 +115,8 @@ body.student-desk #bookStage #play{
     </div>
     <select id="langPick" style="max-width:42%;margin:0 6px"></select>
     <button id="btnLibrary">📚 Books</button>
-    <button id="btnSwitch" type="button">Switch</button>
   </header>
-  <div id="signStage" class="stage panel hidden">
-    <h2 class="who">Who are you?</h2>
-    <div class="name-grid" id="nameGrid"></div>
-    <form id="nameForm" class="name-form" autocomplete="off">
-      <input id="nameBox" type="text" maxlength="40" placeholder="Type your name" autocomplete="off" enterkeyhint="go">
-      <button type="submit" id="nameGo">OK</button>
-    </form>
-  </div>
-  <div id="libStage" class="stage panel hidden">
+  <div id="libStage" class="stage panel">
     <div class="library" id="libList"></div>
   </div>
   <div id="introStage" class="stage panel hidden">
@@ -197,6 +139,11 @@ body.student-desk #bookStage #play{
   </div>
 </div>
 <div class="bar">
+  <div class="testnav hidden" id="testNav">
+    <button id="testBack" type="button">◀ Back</button>
+    <button id="testLib" type="button">📚 Library</button>
+    <button id="testNext" type="button">Next ▶</button>
+  </div>
   <div class="bar-row">
     <button id="mListen">Listen</button>
     <button id="mSong">Song</button>
@@ -210,11 +157,9 @@ body.student-desk #bookStage #play{
 <script src="pronounce/audio.js"></script>
 <script src="pronounce/grade-browser.js"></script>
 <script>
-const TEST=false;
-const ASSET_V='dec20260929desk2';
-const STUDENT_KEY='mrj-dec-student';
-const PROGRESS_URL='https://script.google.com/macros/s/AKfycbzLpwxbiWLSVKD1-KSv8MzV1yEqq4OlOhQMhhFGeXtUs2qeG_rw-mZq9nF7JICIexotiQ/exec';
-const STUDENT_NAMES=['가윤','가은','규빈','동건','민건','성현','세음','수빈','승유','승현','신우','윤호','제이수','찬영','태연','호준','효원'];
+const QS=new URLSearchParams(location.search);
+const TEST=true;
+const ASSET_V='teach20260929';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -291,75 +236,12 @@ let speakRec=null, sayPage=0, micCtx=null, lastYouBlob=null, lastTestBook=null;
 function blankProg(){ return {passed:false,listen:false,song:false,read:false,dictation:false,speak:false,readPages:{},difficulty:null,dictScore:null,speakPages:{}}; }
 function loadAll(){ try{return JSON.parse(localStorage.getItem(SAVE)||'{}');}catch(e){return{};} }
 function saveAll(p){ localStorage.setItem(SAVE, JSON.stringify(p)); }
-function bookProg(id){
-  const all=loadAll();
-  const name=studentName();
-  const bag=(all.byStudent&&name&&all.byStudent[name])||{};
-  return Object.assign(blankProg(), bag[id]||{});
-}
-function setBookProg(id, patch){
-  const all=loadAll();
-  const name=studentName()||'_';
-  all.byStudent=all.byStudent||{};
-  all.byStudent[name]=all.byStudent[name]||{};
-  all.byStudent[name][id]=Object.assign(blankProg(), all.byStudent[name][id]||{}, patch);
-  saveAll(all);
-}
+function bookProg(id){ return Object.assign(blankProg(), (loadAll()[id]||{})); }
+function setBookProg(id, patch){ const all=loadAll(); all[id]=Object.assign(blankProg(), bookProg(id), patch); saveAll(all); }
 function settings(){ return Object.assign({parentLock:false,showLang:true,lang:'ko'}, loadAll()._settings||{}); }
 function setSettings(patch){ const all=loadAll(); all._settings=Object.assign(settings(), patch); saveAll(all); }
 function bookOrder(){ return (lib.books||[]).slice(0, MAX_BOOKS).map(b=>b.id); }
 function unlocked(id){ const o=bookOrder(); const i=o.indexOf(id); return i===0 || (i>0 && !!bookProg(o[i-1]).passed); }
-function studentName(){ try{ return String(localStorage.getItem(STUDENT_KEY)||'').trim(); }catch(e){ return ''; } }
-function reportProgress(bookId, itemId, completed, scorePct){
-  const name=studentName();
-  if(!name || !bookId || !itemId) return;
-  const payload={
-    student_email:name+'@students.mrjayenglish.com',
-    source:'decodable',
-    event_kind:'decodable_progress',
-    book_title:bookId,
-    item_id:itemId,
-    completed:completed===true
-  };
-  if(scorePct!=null && isFinite(+scorePct)) payload.score_pct=Math.round(+scorePct);
-  const body=JSON.stringify(payload);
-  const opt={method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body};
-  fetch(PROGRESS_URL, Object.assign({mode:'cors'}, opt)).catch(function(){
-    return fetch(PROGRESS_URL, Object.assign({mode:'no-cors'}, opt));
-  }).catch(function(){});
-}
-function speakScorePct(){
-  const sp=bookProg(pack.book_id).speakPages||{};
-  const vals=Object.keys(sp).map(k=>+sp[k]).filter(n=>isFinite(n));
-  if(!vals.length) return null;
-  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
-}
-function syncModeLocks(){
-  const bp=pack?bookProg(pack.book_id):null;
-  $('mListen').disabled=!bp;
-  $('mSong').disabled=!(bp && bp.listen);
-  $('mRead').disabled=!(bp && bp.song);
-  $('mDict').disabled=!(bp && bp.read);
-  $('mSay').disabled=!(bp && bp.dictation);
-}
-function commitStudent(name){
-  const n=String(name||'').trim();
-  if(!n) return;
-  localStorage.setItem(STUDENT_KEY, n);
-  showLib();
-}
-function showSign(){
-  mode='sign'; pack=null; stopA(); hideAll();
-  $('signStage').classList.remove('hidden');
-  $('bookTitle').textContent='Who are you?';
-  $('modeBadge').textContent='';
-  $('nameGrid').innerHTML=STUDENT_NAMES.map(n=>`<button type="button" data-name="${n}">${n}</button>`).join('');
-  $('nameGrid').querySelectorAll('button').forEach(b=>{
-    b.onclick=()=>commitStudent(b.getAttribute('data-name'));
-  });
-  $('nameForm').onsubmit=e=>{ e.preventDefault(); commitStudent($('nameBox').value); };
-  syncModeLocks();
-}
 function gloss(lem){ return ((pack&&pack.glossary&&pack.glossary.entries)||[]).find(x=>x.lemma===lem); }
 function sayTarget(text){
   const words=String(text||'').match(/[A-Za-z']+/g)||[];
@@ -429,15 +311,13 @@ async function boot(){
   $('langPick').onchange=e=>{
     lang=e.target.value;
     setSettings({lang});
-    if(!studentName() || mode==='sign'){ showSign(); return; }
     if(mode==='library' || !pack) showLib();
     else if(mode==='intro') showIntro();
     else if(mode==='listen'||mode==='song'||mode==='read') renderPage();
     else if(mode==='dictation') startDictation();
     else if(mode==='speak') renderSay();
   };
-  $('btnLibrary').onclick=()=>{ if(!studentName()) showSign(); else showLib(); };
-  $('btnSwitch').onclick=()=>{ localStorage.removeItem(STUDENT_KEY); showSign(); };
+  $('btnLibrary').onclick=()=>showLib();
   $('mListen').onclick=()=>setMode('listen');
   $('mSong').onclick=()=>setMode('song');
   $('mRead').onclick=()=>setMode('read');
@@ -453,39 +333,52 @@ async function boot(){
   $('next').onclick=()=>go(1);
   $('play').onclick=()=>playPage(true);
   $('introGo').onclick=()=>introAdvance();
-  if(studentName()) showLib();
-  else showSign();
+  if(TEST){
+    document.body.classList.add('test-on');
+    $('testNav').classList.remove('hidden');
+    $('testBack').onclick=()=>testGo(-1);
+    $('testLib').onclick=()=>showLib();
+    $('testNext').onclick=()=>testGo(1);
+  }
+  const want=QS.get('book');
+  if(want && bookOrder().includes(want) && (TEST || unlocked(want))) openBook(want);
+  else showLib();
 }
-function hideAll(){ ['signStage','libStage','introStage','bookStage','workStage'].forEach(id=>$(id).classList.add('hidden')); }
+function hideAll(){ ['libStage','introStage','bookStage','workStage'].forEach(id=>$(id).classList.add('hidden')); }
 function showLib(){
-  if(!studentName()){ showSign(); return; }
   if(pack && pack.book_id) lastTestBook=pack.book_id;
   mode='library'; pack=null; stopA(); hideAll();
   $('libStage').classList.remove('hidden');
   $('bookTitle').textContent='MRJ Decodables';
   $('modeBadge').textContent='Books 1–40';
-  const nextId=bookOrder().find(id=>unlocked(id) && !bookProg(id).passed)||'';
   $('libList').innerHTML=bookOrder().map(id=>{
     const b=lib.books.find(x=>x.id===id);
-    const open=unlocked(b.id), done=!!bookProg(b.id).passed;
-    const flag=done?'<span class="passed-mark">✓</span>':(b.id===nextId?'Next':'🔒 Pass the book before this');
-    return `<button class="card${open?'':' lock'}${done?' is-passed':''}" data-id="${b.id}" ${open?'':'disabled'}>
+    const open=TEST || unlocked(b.id), done=bookProg(b.id).passed;
+    return `<button class="card${open?'':' lock'}" data-id="${b.id}" ${open?'':'disabled'}>
       <img src="${asset(b.cover)}" alt="">
       <div><b>${b.title}</b>
       <div style="color:#a9b7d6;font-size:.85rem">${b.level} · ${soundLine(b.id)}</div>
-      <div class="card-flag" style="font-size:.95rem;margin-top:4px;font-weight:900">${flag}</div></div></button>`;
-  }).join('');
+      <div style="font-size:.8rem;margin-top:4px">${done?'✅ Passed':(open?'Ready':'🔒 Pass the book before this')}</div></div></button>`;
+  }).join('')+(TEST?`<button id="tryDict" style="width:100%">Try dictation (skip to test)</button><button id="resetProg" style="width:100%">Reset progress</button>`:'');
   document.querySelectorAll('.card').forEach(el=>{ if(!el.disabled) el.onclick=()=>openBook(el.dataset.id); });
-  syncModeLocks();
+  const rst=$('resetProg'); if(rst) rst.onclick=()=>{ localStorage.removeItem(SAVE); showLib(); };
+  const td=$('tryDict'); if(td) td.onclick=()=>{ location.search='?test=1&mode=dictation&book='+(bookOrder()[0]||'mlr_dec_001'); };
 }
 async function openBook(id){
-  if(!studentName()){ showSign(); return; }
-  if(!unlocked(id)) return;
+  if(!TEST && !unlocked(id)) return;
   pack=await (await fetch(BASE+'assets/align_'+id+'.json?v='+ASSET_V)).json();
   pageIndex=0; tapped=new Set(); heardListen=new Set(); heardSong=new Set(); clipDone=false; sheriffOk=false;
   const bp=bookProg(pack.book_id);
   if(bp.readPages){ Object.keys(bp.readPages).forEach(k=>{ if(bp.readPages[k]){ const n=tokens((pack.pages[+k]||{}).text).length; for(let i=0;i<n;i++) tapped.add((+k)+':'+i); } }); }
   $('bookTitle').textContent=pack.title;
+  if(TEST && (QS.get('mode')==='dictation' || QS.get('mode')==='speak')){
+    const diff=QS.get('diff')==='hard'?'hard':'easy';
+    const patch={difficulty:diff,listen:true,song:true,read:true};
+    if(QS.get('mode')==='speak') patch.dictation=true;
+    setBookProg(pack.book_id,patch);
+    setMode(QS.get('mode'));
+    return;
+  }
   introStep = 'cousin';
   cousinIdx=0;
   showIntro();
@@ -504,7 +397,6 @@ function showIntro(){
   mode='intro'; stopA(); hideAll();
   $('introStage').classList.remove('hidden');
   $('introGo').classList.remove('hidden');
-  syncModeLocks();
   const famous=(pack.famous||[])[0]||'';
   if(introStep==='cousin'){
     const letters=cousinLetters();
@@ -634,12 +526,13 @@ function introAdvance(){
 function canEnter(m){
   if(!pack) return false;
   const bp=bookProg(pack.book_id);
+  if(TEST) return true;
   if(m==='listen') return true;
-  if(m==='song') return !!bp.listen;
-  if(m==='read') return !!bp.song;
-  if(m==='dictation') return !!bp.read;
-  if(m==='speak') return !!bp.dictation;
-  if(m==='pass') return !!bp.speak;
+  if(m==='song') return bp.listen || mode==='song' || mode==='listen-end';
+  if(m==='read') return bp.song || mode==='read';
+  if(m==='dictation') return bp.read;
+  if(m==='speak') return bp.dictation;
+  if(m==='pass') return bp.speak;
   return false;
 }
 function setMode(m){
@@ -664,7 +557,6 @@ function setMode(m){
   $('mRead').classList.toggle('active', m==='read');
   $('mDict').classList.toggle('active', m==='dictation');
   $('mSay').classList.toggle('active', m==='speak');
-  syncModeLocks();
   if(m==='listen-end'){ $('workStage').classList.remove('hidden'); renderListenEnd(); }
   else if(m==='dictation'){ if(needsSheriff()){ showSheriff(); return; } $('workStage').classList.remove('hidden'); startDictation(); }
   else if(m==='speak'){ $('workStage').classList.remove('hidden'); startSpeak(); }
@@ -678,33 +570,18 @@ function allTapped(){
   for(let i=0;i<n;i++){ if(!tapped.has(pageIndex+':'+i)) return false; }
   return n>0;
 }
-function arrowsFree(){
-  if(!pack) return false;
-  if(mode!=='listen' && mode!=='song' && mode!=='read') return false;
-  const bp=bookProg(pack.book_id);
-  return !!(bp.listen && bp.read);
-}
-function syncArrows(){
-  const prev=$('prev'), next=$('next');
-  prev.classList.remove('hidden');
-  next.classList.remove('hidden');
-  prev.textContent='◀';
-  next.textContent='▶';
-  prev.disabled=pageIndex<=0;
-  next.disabled=nextLocked();
-}
 function nextLocked(){
-  if(arrowsFree()) return false;
+  if(TEST) return false;
   if(mode==='read') return !allTapped();
-  if(mode==='listen') return !(clipDone || heardListen.has(pageIndex));
-  if(mode==='song') return !(clipDone || heardSong.has(pageIndex));
+  if(mode==='listen' || mode==='song'){
+    if(TEST) return false;
+    return !(clipDone || (mode==='listen'?heardListen:heardSong).has(pageIndex));
+  }
   return false;
 }
 function go(d){
-  if(d<0){
-    if(pageIndex<=0) return;
-  } else if(nextLocked()){
-    $('status').textContent = mode==='read' ? 'Tap every word first.' : (mode==='listen' ? 'Listen to this page 3 times first.' : 'Listen to the end of this page first.');
+  if(d>0 && nextLocked()){
+    $('status').textContent = mode==='read' ? 'Tap every word first.' : 'Listen to the end of this page first.';
     return;
   }
   const nxt=pageIndex+d;
@@ -712,9 +589,9 @@ function go(d){
   listenGen++;
   stopA();
   if(nxt>=pack.pages.length){
-    if(mode==='listen'){ setBookProg(pack.book_id,{listen:true}); reportProgress(pack.book_id,'listen',true); setMode('listen-end'); return; }
-    if(mode==='song'){ setBookProg(pack.book_id,{song:true}); reportProgress(pack.book_id,'song',true); pageIndex=0; setMode('read'); return; }
-    if(mode==='read'){ setBookProg(pack.book_id,{read:true}); reportProgress(pack.book_id,'read',true); setMode('dictation'); return; }
+    if(mode==='listen'){ setBookProg(pack.book_id,{listen:true}); setMode('listen-end'); return; }
+    if(mode==='song'){ setBookProg(pack.book_id,{song:true}); pageIndex=0; setMode('read'); return; }
+    if(mode==='read'){ setBookProg(pack.book_id,{read:true}); setMode('dictation'); return; }
     return;
   }
   pageIndex=nxt; clipDone=false; renderPage();
@@ -747,9 +624,13 @@ function renderPage(){
   if(mode==='read') need=allTapped()?'All words tapped.':'Tap every word.';
   if(mode==='listen'||mode==='song') need=(clipDone|| (mode==='listen'?heardListen:heardSong).has(pageIndex))?'Page heard.':'Play to the end.';
   $('status').textContent=`${pageIndex+1} / ${pack.pages.length}`+(need?' · '+need:'');
-  $('play').classList.remove('hidden');
-  $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen';
-  syncArrows();
+  if(mode==='read' && !TEST){ $('play').classList.add('hidden'); $('next').classList.add('hidden'); }
+  else {
+    $('play').classList.remove('hidden'); $('next').classList.remove('hidden');
+    $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen';
+    $('next').textContent = TEST ? 'Next' : '▶';
+  }
+  $('next').disabled = nextLocked();
   if(mode==='listen' || mode==='song') playPage(false);
 }
 function playPage(manual){
@@ -774,7 +655,7 @@ function playPage(manual){
         document.querySelectorAll('.w').forEach(e=>e.classList.remove('on'));
         $('next').disabled=nextLocked();
         $('status').textContent=`${pageIndex+1} / ${pack.pages.length} · Page heard.`;
-        if(manual) return;
+        if(manual || TEST) return;
         go(1);
       }, rate);
     };
@@ -788,7 +669,7 @@ function playPage(manual){
     document.querySelectorAll('.w').forEach(e=>e.classList.remove('on'));
     $('next').disabled=nextLocked();
     $('status').textContent=`${pageIndex+1} / ${pack.pages.length} · Page heard.`;
-    if(manual) return;
+    if(manual || TEST) return;
     go(1);
   }, rate);
 }
@@ -802,7 +683,7 @@ function onWordTap(el){
     if(allTapped()){
       const rp=Object.assign({}, bookProg(pack.book_id).readPages||{});
       rp[pageIndex]=true; setBookProg(pack.book_id,{readPages:rp});
-      playWord(lem, ()=>{ if(mode==='read' && !wasDone) go(1); });
+      playWord(lem, ()=>{ if(mode==='read' && !wasDone && !TEST) go(1); });
       return;
     }
   }
@@ -1009,9 +890,8 @@ function paintSpeedBtns(){
 function nextDict(){
   if(dictIdx>=dictQueue.length){
     const pct=Math.round(100*dictRight/dictQueue.length);
-    if(pct>=DICT_PASS){ setBookProg(pack.book_id,{dictation:true,dictScore:pct}); reportProgress(pack.book_id,'dictation',true,pct); setMode('speak'); }
+    if(pct>=DICT_PASS){ setBookProg(pack.book_id,{dictation:true,dictScore:pct}); setMode('speak'); }
     else {
-      reportProgress(pack.book_id,'dictation',false,pct);
       $('workBody').innerHTML=`<div class="pass">${pct}%</div>
         <div style="text-align:center">Need 80% on 5 sentences. Try again.</div>
         <button id="retryD" style="width:100%;margin-top:14px">Try dictation again</button>`;
@@ -1165,16 +1045,14 @@ function paintSayChips(text, words){
   }).join('');
 }
 function startSpeak(){
-  const bp=bookProg(pack.book_id);
-  sayPage = Object.keys(bp.speakPages||{}).length;
-  if(sayPage>=pack.pages.length){
-    if(!bp.speak){
-      setBookProg(pack.book_id,{speak:true});
-      reportProgress(pack.book_id,'speak',true,speakScorePct());
-    }
-    setMode('pass');
+  if(TEST){
+    if(sayPage<0) sayPage=0;
+    if(sayPage>=pack.pages.length) sayPage=Math.max(0, pack.pages.length-1);
+    renderSay();
     return;
   }
+  sayPage = Object.keys(bookProg(pack.book_id).speakPages||{}).length;
+  if(sayPage>=pack.pages.length){ setBookProg(pack.book_id,{speak:true}); setMode('pass'); return; }
   renderSay();
 }
 function renderSay(){
@@ -1306,18 +1184,12 @@ function finishSayPage(score){
   const sp=Object.assign({}, bookProg(pack.book_id).speakPages||{});
   sp[sayPage]=score; setBookProg(pack.book_id,{speakPages:sp});
   sayPage++;
-  if(sayPage>=pack.pages.length){
-    setBookProg(pack.book_id,{speak:true});
-    reportProgress(pack.book_id,'speak',true,speakScorePct());
-    setMode('pass');
-  }
+  if(sayPage>=pack.pages.length){ setBookProg(pack.book_id,{speak:true}); setMode('pass'); }
   else renderSay();
 }
 function renderPass(){
   const bp=bookProg(pack.book_id);
-  const firstPass=!bp.passed;
   setBookProg(pack.book_id,{passed:true,listen:true,song:true,read:true,dictation:true,speak:true});
-  if(firstPass) reportProgress(pack.book_id,'passed',true);
   const order=bookOrder(); const i=order.indexOf(pack.book_id); const nxt=order[i+1];
   $('workBody').innerHTML=`<div class="pass">✅ ${pack.title} passed</div>
     <div style="text-align:center;color:var(--muted)">Listen → button → Song → tap every word → 5 sentences (80%) → say every page.</div>
