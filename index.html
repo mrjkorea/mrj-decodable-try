@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-marker="dec20260930intro1">
+<html lang="en" data-marker="dec20261004fix1">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -227,7 +227,7 @@ body.student-desk #bookStage #play{
 <script src="https://mrjkorea.github.io/mrj-signin/mrj-auth-boot.js" data-mrj-app="mrj-decodable-try"></script>
 <script>
 const TEST=false;
-const ASSET_V='dec20261001mov1';
+const ASSET_V='dec20261004fix1';
 const STUDENT_KEY='mrj-dec-student';
 const PIN_KEY='mrj-dec-pin';
 const AUTH_URL='https://script.google.com/macros/s/AKfycbwtJTUO3gbcMrlAwsn1feWxyp7Rw2cxpfe1bOT9v2rxmQHa2Tlc6pFNWAjU6ZAdlD6kFQ/exec';
@@ -304,10 +304,90 @@ let preVideoDone=false;   // this book's start video (lawbreaker chase) played t
 let tapped=new Set(), heardListen=new Set(), heardSong=new Set();
 let sheriffOk=false;
 let clipDone=false, showLang=true, lang='ko';
-let dictBuilt=[], dictQueue=[], dictIdx=0, dictRight=0, dictRate=0.8;
+let dictBuilt=[], dictQueue=[], dictIdx=0, dictRight=0, dictRate=0.8, dictMisses=[];
 let speakRec=null, sayPage=0, micCtx=null, lastYouBlob=null, lastTestBook=null;
 
-function blankProg(){ return {passed:false,listen:false,song:false,read:false,dictation:false,speak:false,readPages:{},difficulty:null,dictScore:null,speakPages:{}}; }
+function blankProg(){ return {passed:false,listen:false,song:false,read:false,dictation:false,speak:false,readPages:{},difficulty:null,dictScore:null,speakPages:{},speakFails:[],reported:[]}; }
+function toNum(n){ const x=+n; return isFinite(x)?x:0; }
+function higherNum(x, y){
+  const ax=(x==null||x===''||!isFinite(+x))?null:+x;
+  const ay=(y==null||y===''||!isFinite(+y))?null:+y;
+  if(ax==null) return ay;
+  if(ay==null) return ax;
+  return Math.max(ax, ay);
+}
+function mergeSpeakPages(a, b){
+  const out={};
+  [a,b].forEach(m=>{
+    if(!m || typeof m!=='object') return;
+    Object.keys(m).forEach(k=>{
+      const n=+m[k];
+      if(!isFinite(n)) return;
+      if(out[k]==null || n>out[k]) out[k]=n;
+    });
+  });
+  return out;
+}
+function unionList(a, b){
+  const out=[], seen={};
+  [a,b].forEach(list=>{
+    if(!Array.isArray(list)) return;
+    list.forEach(x=>{
+      const s=String(x);
+      if(!s || seen[s]) return;
+      seen[s]=1; out.push(s);
+    });
+  });
+  return out;
+}
+function startsWithList(full, prefix){
+  if(!Array.isArray(prefix) || !prefix.length) return true;
+  if(!Array.isArray(full) || prefix.length>full.length) return false;
+  for(let i=0;i<prefix.length;i++) if(JSON.stringify(full[i])!==JSON.stringify(prefix[i])) return false;
+  return true;
+}
+function concatLast(a, b, n){
+  const aa=Array.isArray(a)?a:[];
+  const bb=Array.isArray(b)?b:[];
+  let merged;
+  if(startsWithList(bb, aa)) merged=bb;
+  else if(startsWithList(aa, bb)) merged=aa;
+  else merged=aa.concat(bb);
+  return merged.slice(-n);
+}
+function unionTrueMap(a, b){
+  const out={};
+  [a,b].forEach(m=>{
+    if(!m || typeof m!=='object') return;
+    Object.keys(m).forEach(k=>{ if(m[k]) out[k]=true; });
+  });
+  return out;
+}
+function mergeBookFlags(stored, incoming){
+  const a=(stored && typeof stored==='object')?stored:{};
+  const b=(incoming && typeof incoming==='object')?incoming:{};
+  const out={};
+  ['passed','listen','song','read','dictation','speak'].forEach(k=>{ out[k]=!!(a[k]||b[k]); });
+  out.dictScore=higherNum(a.dictScore, b.dictScore);
+  out.speakPages=mergeSpeakPages(a.speakPages, b.speakPages);
+  out.reported=unionList(a.reported, b.reported);
+  out.speakFails=concatLast(a.speakFails, b.speakFails, 40);
+  out.readPages=unionTrueMap(a.readPages, b.readPages);
+  out.difficulty=(b.difficulty!=null && b.difficulty!=='')?b.difficulty:((a.difficulty!=null && a.difficulty!=='')?a.difficulty:null);
+  out._rev=Math.max(toNum(a._rev), toNum(b._rev));
+  return out;
+}
+function mergeBookBag(stored, incoming){
+  const a=(stored && typeof stored==='object')?stored:{};
+  const b=(incoming && typeof incoming==='object')?incoming:{};
+  const out={}, seen={};
+  Object.keys(a).concat(Object.keys(b)).forEach(id=>{
+    if(seen[id]) return;
+    seen[id]=1;
+    out[id]=mergeBookFlags(a[id], b[id]);
+  });
+  return out;
+}
 function loadAll(){ try{return JSON.parse(localStorage.getItem(SAVE)||'{}');}catch(e){return{};} }
 function saveAll(p){ localStorage.setItem(SAVE, JSON.stringify(p)); }
 function bookProg(id){
@@ -321,7 +401,12 @@ function setBookProg(id, patch){
   const name=studentName()||'_';
   all.byStudent=all.byStudent||{};
   all.byStudent[name]=all.byStudent[name]||{};
-  all.byStudent[name][id]=Object.assign(blankProg(), all.byStudent[name][id]||{}, patch);
+  const prev=all.byStudent[name][id]||{};
+  const merged=mergeBookFlags(prev, patch||{});
+  merged._rev=(+merged._rev||0)+1;
+  all.byStudent[name][id]=merged;
+  all.packRev=all.packRev||{};
+  all.packRev[name]=(+all.packRev[name]||0)+1;
   saveAll(all);
   saveSheetProgress();
 }
@@ -340,7 +425,8 @@ function progressBlob(){
   const name=studentName();
   const all=loadAll();
   const books=(all.byStudent&&all.byStudent[name])||{};
-  return JSON.stringify({v:1, books:books});
+  const rev=(all.packRev&&+all.packRev[name])||0;
+  return JSON.stringify({v:2, rev:rev, books:books});
 }
 function applySheetProgress(raw){
   const name=studentName();
@@ -350,7 +436,9 @@ function applySheetProgress(raw){
   if(!data.books || typeof data.books!=='object') return;
   const all=loadAll();
   all.byStudent=all.byStudent||{};
-  all.byStudent[name]=data.books;
+  all.byStudent[name]=mergeBookBag(all.byStudent[name]||{}, data.books);
+  all.packRev=all.packRev||{};
+  all.packRev[name]=Math.max(+all.packRev[name]||0, +data.rev||0);
   saveAll(all);
 }
 function sheetPost(url, body){
@@ -360,15 +448,23 @@ function sheetPost(url, body){
     body:JSON.stringify(body)
   }).then(function(r){ return r.json(); }).catch(function(){ return null; });
 }
+let sheetSaveFlight=null, sheetSaveQueued=false;
 function saveSheetProgress(){
   const name=studentName();
   const token=window.MRJ_AUTH && MRJ_AUTH.token();
   if(!name || !token) return;
-  sheetPost(AUTH_URL, {action:'save_pack', id:name, token:token, program:'decodable', progress_json:progressBlob()});
+  if(sheetSaveFlight){ sheetSaveQueued=true; return; }
+  const body={action:'save_pack', id:name, token:token, program:'decodable', progress_json:progressBlob()};
+  sheetSaveFlight=sheetPost(AUTH_URL, body).then(function(){
+    sheetSaveFlight=null;
+    if(sheetSaveQueued){ sheetSaveQueued=false; saveSheetProgress(); }
+  });
 }
-function reportProgress(bookId, itemId, completed, scorePct){
+function reportProgress(bookId, itemId, completed, scorePct, extra){
   const name=studentName();
   if(!name || !bookId || !itemId) return;
+  const meta={student:name, section:itemId};
+  if(extra && typeof extra==='object') Object.keys(extra).forEach(k=>{ meta[k]=extra[k]; });
   const event={
     event_id:'dec-'+bookId+'-'+itemId+'-'+Date.now().toString(36),
     event_kind:'decodable_progress',
@@ -379,7 +475,7 @@ function reportProgress(bookId, itemId, completed, scorePct){
     item_id:itemId,
     item_type:'section',
     completed:completed===true,
-    metadata_json:JSON.stringify({student:name, section:itemId})
+    metadata_json:JSON.stringify(meta)
   };
   if(scorePct!=null && isFinite(+scorePct)) event.score_pct=Math.round(+scorePct);
   sheetPost(SCORE_URL, {
@@ -389,6 +485,20 @@ function reportProgress(bookId, itemId, completed, scorePct){
     events:[event]
   });
   saveSheetProgress();
+}
+function sectionAlready(bookId, flag, itemId){
+  const bp=bookProg(bookId);
+  return !!(bp[flag] || (bp.reported||[]).indexOf(itemId)>=0);
+}
+function markSection(bookId, flag, itemId, scorePct){
+  if(sectionAlready(bookId, flag, itemId)) return;
+  const patch={reported:[itemId]};
+  patch[flag]=true;
+  setBookProg(bookId, patch);
+  reportProgress(bookId, itemId, true, scorePct);
+}
+function speakPageItem(pageIdx){
+  return 'speak-p'+String(pageIdx+1).padStart(2,'0');
 }
 function speakScorePct(){
   const sp=bookProg(pack.book_id).speakPages||{};
@@ -801,9 +911,9 @@ function go(d){
   listenGen++;
   stopA();
   if(nxt>=pack.pages.length){
-    if(mode==='listen'){ setBookProg(pack.book_id,{listen:true}); reportProgress(pack.book_id,'listen',true); pageIndex=0; setMode('read'); return; }
-    if(mode==='read'){ setBookProg(pack.book_id,{read:true}); reportProgress(pack.book_id,'read',true); pageIndex=0; setMode('song'); return; }
-    if(mode==='song'){ setBookProg(pack.book_id,{song:true}); reportProgress(pack.book_id,'song',true); setMode('dictation'); return; }
+    if(mode==='listen'){ markSection(pack.book_id,'listen','listen'); pageIndex=0; setMode('read'); return; }
+    if(mode==='read'){ markSection(pack.book_id,'read','read'); pageIndex=0; setMode('song'); return; }
+    if(mode==='song'){ markSection(pack.book_id,'song','song'); setMode('dictation'); return; }
     return;
   }
   pageIndex=nxt; clipDone=false; renderPage();
@@ -1069,10 +1179,12 @@ function startDictation(){
     $('pickHard').onclick=()=>chooseDiff('hard');
     return;
   }
+  dictMisses=[];
   dictQueue=dictItems(); dictIdx=0; dictRight=0; nextDict();
 }
 function markDict(ok){
   if(ok) dictRight++;
+  else if(dictQueue[dictIdx]) dictMisses.push(dictQueue[dictIdx].text);
   dictIdx++;
   setTimeout(nextDict, 380);
 }
@@ -1099,11 +1211,17 @@ function paintSpeedBtns(){
 function nextDict(){
   if(dictIdx>=dictQueue.length){
     const pct=Math.round(100*dictRight/dictQueue.length);
-    if(pct>=DICT_PASS){ setBookProg(pack.book_id,{dictation:true,dictScore:pct}); reportProgress(pack.book_id,'dictation',true,pct); setMode('speak'); }
+    const missed=dictMisses.slice();
+    const meta={missed:missed};
+    if(pct>=DICT_PASS){ setBookProg(pack.book_id,{dictation:true,dictScore:pct}); reportProgress(pack.book_id,'dictation',true,pct,meta); setMode('speak'); }
     else {
-      reportProgress(pack.book_id,'dictation',false,pct);
+      reportProgress(pack.book_id,'dictation',false,pct,meta);
+      $('workStage').classList.remove('dict-fit');
+      const missedHtml=missed.map(s=>`<div class="g-en">${String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`).join('');
       $('workBody').innerHTML=`<div class="pass">${pct}%</div>
         <div style="text-align:center">Need 80% on 5 sentences. Try again.</div>
+        <div class="g-lbl">Missed sentences</div>
+        ${missedHtml}
         <button id="retryD" style="width:100%;margin-top:14px">Try dictation again</button>`;
       $('retryD').onclick=()=>startDictation();
     }
@@ -1261,10 +1379,7 @@ function startSpeak(){
   const bp=bookProg(pack.book_id);
   sayPage = Object.keys(bp.speakPages||{}).length;
   if(sayPage>=pack.pages.length){
-    if(!bp.speak){
-      setBookProg(pack.book_id,{speak:true});
-      reportProgress(pack.book_id,'speak',true,speakScorePct());
-    }
+    markSection(pack.book_id,'speak','speak',speakScorePct());
     setMode('pass');
     return;
   }
@@ -1393,24 +1508,32 @@ async function gradeBlob(line, blob){
       nextBtn.classList.remove('hidden');
       nextBtn.onclick=()=>finishSayPage(sc);
     }
-  }else $('speakStatus').textContent=sc+'% — need '+SPEAK_DEFAULT+'%. Listen, then tap 🎙️ and say it again.';
+  }else{
+    $('speakStatus').textContent=sc+'% — need '+SPEAK_DEFAULT+'%. Listen, then tap 🎙️ and say it again.';
+    setBookProg(pack.book_id,{speakFails:[{page:sayPage+1, score:sc}]});
+    reportProgress(pack.book_id, speakPageItem(sayPage), false, sc);
+  }
 }
 function finishSayPage(score){
+  const pageItem=speakPageItem(sayPage);
   const sp=Object.assign({}, bookProg(pack.book_id).speakPages||{});
   sp[sayPage]=score; setBookProg(pack.book_id,{speakPages:sp});
+  reportProgress(pack.book_id, pageItem, true, score);
   sayPage++;
   if(sayPage>=pack.pages.length){
-    setBookProg(pack.book_id,{speak:true});
-    reportProgress(pack.book_id,'speak',true,speakScorePct());
+    markSection(pack.book_id,'speak','speak',speakScorePct());
     setMode('pass');
   }
   else renderSay();
 }
 function renderPass(){
   const bp=bookProg(pack.book_id);
-  const firstPass=!bp.passed;
+  const already=sectionAlready(pack.book_id,'passed','passed');
   setBookProg(pack.book_id,{passed:true,listen:true,song:true,read:true,dictation:true,speak:true});
-  if(firstPass) reportProgress(pack.book_id,'passed',true);
+  if(!already){
+    setBookProg(pack.book_id,{reported:['passed']});
+    reportProgress(pack.book_id,'passed',true);
+  }
   const order=bookOrder(); const i=order.indexOf(pack.book_id); const nxt=order[i+1];
   $('workBody').innerHTML=`<div class="pass">✅ ${pack.title} passed</div>
     <div style="text-align:center;color:var(--muted)">Listen → button → Song → tap every word → 5 sentences (80%) → say every page.</div>
