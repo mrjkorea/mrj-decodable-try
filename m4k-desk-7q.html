@@ -159,7 +159,7 @@ body.test-on .app{padding-bottom:196px}
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=true;
-const ASSET_V='teach20261001mov1';
+const ASSET_V='teach20261006say5';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -180,6 +180,7 @@ const asset=p=>BASE+'assets/'+String(p||'').replace(/^assets\//,'')+'?v='+ASSET_
 const SAVE='mrj_dec_progress_v4';
 const MAX_BOOKS=40;
 const SPEAK_DEFAULT=50;
+const SAY_MAX_TRIES=5;
 const DICT_N=5;
 const DICT_PASS=80;
 const COUSIN_META={no_latin_script:['ko','ja','zh-Hans','hi','ar'],latin_letters:{vi:'aăâbcdđeêghiklmnoôơpqrstuưvxy',es:'abcdefghijklmnñopqrstuvwxyz','pt-BR':'abcdefghijklmnopqrstuvwxyz',fr:'abcdefghijklmnopqrstuvwxyz',de:'abcdefghijklmnopqrstuvwxyzäöüß',id:'abcdefghijklmnopqrstuvwxyz',tr:'abcçdefgğhıijklmnoöprsştuüvyz',it:'abcdefghijklmnopqrstuvwxyz',pl:'aąbcćdeęfghijklłmnńoóprsśtuwyzźż'}};
@@ -232,6 +233,7 @@ let sheriffOk=false;
 let clipDone=false, showLang=true, lang='ko';
 let dictBuilt=[], dictQueue=[], dictIdx=0, dictRight=0, dictRate=0.8;
 let speakRec=null, sayPage=0, micCtx=null, lastYouBlob=null, lastTestBook=null;
+let sayTries=0, sayBest=0, sayAdvanceTimer=0;
 
 function blankProg(){ return {passed:false,listen:false,song:false,read:false,dictation:false,speak:false,readPages:{},difficulty:null,dictScore:null,speakPages:{}}; }
 function loadAll(){ try{return JSON.parse(localStorage.getItem(SAVE)||'{}');}catch(e){return{};} }
@@ -1044,6 +1046,36 @@ function paintSayChips(text, words){
     return `<span class="word-chip ${b}">${tok.replace(/</g,'&lt;')}<span class="wsub">${ws}%</span></span>`;
   }).join('');
 }
+function sayWho(){
+  try{ if(typeof studentName==='function') return studentName()||'_'; }catch(e){}
+  return '_';
+}
+function saySlot(){
+  return 'mrj_say5_'+sayWho()+'_'+((pack&&pack.book_id)||'')+'_'+sayPage;
+}
+function sayTriesLoad(){
+  sayBest=0;
+  try{
+    const raw=JSON.parse(localStorage.getItem(saySlot())||'null');
+    if(!raw) return 0;
+    sayBest=+raw.best||0;
+    return +raw.tries||0;
+  }catch(e){ return 0; }
+}
+function sayTriesSave(){
+  try{ localStorage.setItem(saySlot(), JSON.stringify({tries:sayTries, best:sayBest})); }catch(e){}
+}
+function sayTriesClear(){
+  try{ localStorage.removeItem(saySlot()); }catch(e){}
+}
+function armSayAdvance(bestNow){
+  const pageNow=sayPage;
+  if(sayAdvanceTimer) clearTimeout(sayAdvanceTimer);
+  sayAdvanceTimer=setTimeout(()=>{
+    sayAdvanceTimer=0;
+    if(mode==='speak' && sayPage===pageNow) finishSayPage(bestNow, false);
+  }, 900);
+}
 function startSpeak(){
   if(TEST){
     if(sayPage<0) sayPage=0;
@@ -1056,6 +1088,14 @@ function startSpeak(){
   renderSay();
 }
 function renderSay(){
+  if(sayAdvanceTimer){ clearTimeout(sayAdvanceTimer); sayAdvanceTimer=0; }
+  sayTries=sayTriesLoad();
+  if(sayTries>=SAY_MAX_TRIES){
+    const best=sayBest;
+    sayTriesClear();
+    finishSayPage(best, false);
+    return;
+  }
   const p=pack.pages[sayPage];
   const sayText=sayTarget(p.text);
   const triple=sayText!==p.text;
@@ -1065,7 +1105,7 @@ function renderSay(){
     <div class="g-en" id="sayLineText"></div>
     <div class="langline">${showLang? sayTr : ''}</div>
     <div class="loadbar hidden" id="loadbar"><div class="loadbar-track"><div id="loadbarFill"></div></div><div id="loadbarLbl"></div></div>
-    <div class="status" id="speakStatus">${triple? 'One word. Say it 3 times, with a little pause. Pass is '+SPEAK_DEFAULT+'%.' : 'Listen, then tap the mic and say it. Pass is '+SPEAK_DEFAULT+'%.'}</div>
+    <div class="status" id="speakStatus">${triple? 'One word. Say it 3 times, with a little pause. You get '+SAY_MAX_TRIES+' tries. Pass is '+SPEAK_DEFAULT+'%.' : 'Listen, then tap the mic and say it. You get '+SAY_MAX_TRIES+' tries. Pass is '+SPEAK_DEFAULT+'%.'}</div>
     <div class="say-controls">
       <button id="hearLine" type="button" title="Listen" aria-label="Listen">🔊</button>
       <button id="sayLine" class="btn-rec" type="button" title="Speak" aria-label="Speak">🎙️</button>
@@ -1178,9 +1218,19 @@ async function gradeBlob(line, blob){
       nextBtn.classList.remove('hidden');
       nextBtn.onclick=()=>finishSayPage(sc);
     }
-  }else $('speakStatus').textContent=sc+'% — need '+SPEAK_DEFAULT+'%. Listen, then tap 🎙️ and say it again.';
+  }else{
+    sayTries++;
+    if(sc>sayBest) sayBest=sc;
+    sayTriesSave();
+    if(sayTries>=SAY_MAX_TRIES){
+      $('speakStatus').textContent=sc+'% — 5 tries. Next page.';
+      const mic=$('sayLine'); if(mic) mic.disabled=true;
+      armSayAdvance(sayBest);
+    }else $('speakStatus').textContent=sc+'% — try '+sayTries+' of '+SAY_MAX_TRIES+'. Say it again.';
+  }
 }
 function finishSayPage(score){
+  sayTriesClear();
   const sp=Object.assign({}, bookProg(pack.book_id).speakPages||{});
   sp[sayPage]=score; setBookProg(pack.book_id,{speakPages:sp});
   sayPage++;
