@@ -159,7 +159,7 @@ body.test-on .app{padding-bottom:196px}
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=true;
-const ASSET_V='teach20261008b25';
+const ASSET_V='teach20261008band20';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -178,7 +178,7 @@ const GRADE_PATH='/api/grade';
 const $=id=>document.getElementById(id);
 const asset=p=>BASE+'assets/'+String(p||'').replace(/^assets\//,'')+'?v='+ASSET_V;
 const SAVE='mrj_dec_progress_v4';
-const MAX_BOOKS=40;
+const MAX_BOOKS=20;
 const SPEAK_DEFAULT=50;
 const SAY_MAX_TRIES=5;
 const DICT_N=5;
@@ -352,7 +352,7 @@ function showLib(){
   mode='library'; pack=null; stopA(); hideAll();
   $('libStage').classList.remove('hidden');
   $('bookTitle').textContent='MRJ Decodables';
-  $('modeBadge').textContent='Books 1–40';
+  $('modeBadge').textContent='Books 1-20';
   $('libList').innerHTML=bookOrder().map(id=>{
     const b=lib.books.find(x=>x.id===id);
     const open=TEST || unlocked(b.id), done=bookProg(b.id).passed;
