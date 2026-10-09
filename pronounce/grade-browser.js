@@ -1,20 +1,22 @@
-/* MRJ Pronounce — in-page grader (no /api/grade). Same wav2vec2 GOP engine. */
+/* MRJ Pronounce — in-page grader. Live Citrinet trial from pronounce-try. */
 (function (global) {
-  const PARTS = [
-    'model_int8.onnx.part00',
-    'model_int8.onnx.part01',
-    'model_int8.onnx.part02',
-    'model_int8.onnx.part03',
-    'model_int8.onnx.part04'
+  const ORIGIN = 'https://mrjkorea.github.io/pronounce-try/';
+  const ORT_SRC = ORIGIN + 'vendor/ort/ort.wasm.min.js';
+  const NEEDLE_SRC = ORIGIN + 'vendor/needle/needle.js';
+  const TRIAL_SRC = ORIGIN + 'src/trial.js?v=20261010-citrinet';
+  const WASM_PATHS = ORIGIN + 'vendor/ort/';
+  const MODEL_PATHS = [
+    ORIGIN + 'models/whistle/whistle.cact',
+    ORIGIN + 'models/citrinet/model.int8.onnx',
+    ORIGIN + 'models/citrinet/sp_pieces.json',
+    ORIGIN + 'models/zipa/model.int8.onnx',
+    ORIGIN + 'models/zipa/tokens.txt'
   ];
-  const PART_PCTS = [10, 30, 50, 70, 85];
-  let session = null;
-  let ready = null;
-  let base = '';
 
-  function setBase(b) {
-    base = b.endsWith('/') ? b : b + '/';
-  }
+  let booted = null;
+  let trialApi = null;
+
+  function setBase() {}
 
   function emitProgress(onProgress, stage, pct) {
     if (typeof onProgress === 'function') {
@@ -22,98 +24,74 @@
     }
   }
 
-  function isGithubIo() {
-    try { return /\.github\.io$/i.test(location.hostname); } catch (_) { return false; }
-  }
-
-  async function fetchPartResponse(url, timeoutMs) {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), timeoutMs);
-    try {
-      const r = await fetch(url, { signal: ctrl.signal });
-      if (!r.ok) {
-        try { if (r.body && r.body.cancel) r.body.cancel(); } catch (_) {}
-        return null;
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const nodes = document.getElementsByTagName('script');
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].src === src && nodes[i].dataset.mrjReady === '1') {
+          resolve();
+          return;
+        }
       }
-      return r;
-    } catch (_) {
-      return null;
-    } finally {
-      clearTimeout(t);
-    }
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = () => { s.dataset.mrjReady = '1'; resolve(); };
+      s.onerror = () => reject(new Error('failed to load ' + src));
+      document.head.appendChild(s);
+    });
   }
 
-  async function concatParts(onProgress) {
-    const bufs = [];
-    let total = 0;
-    const raw = 'https://raw.githubusercontent.com/mrjkorea/mrj-decodable-try/main/pronounce/model_parts/';
-    const githubIo = isGithubIo();
-    const localTimeout = githubIo ? 8000 : 20000;
-    for (let i = 0; i < PARTS.length; i++) {
-      const name = PARTS[i];
-      let r = await fetchPartResponse(base + 'model_parts/' + name, localTimeout);
-      if (!r) r = await fetchPartResponse(raw + name, 60000);
-      if (!r) throw new Error('missing model part ' + name);
-      const u8 = new Uint8Array(await r.arrayBuffer());
-      bufs.push(u8);
-      total += u8.length;
-      emitProgress(onProgress, 'download', PART_PCTS[i] ?? 85);
-    }
-    const out = new Uint8Array(total);
-    let o = 0;
-    for (const b of bufs) { out.set(b, o); o += b.length; }
-    return out.buffer;
+  function pageResult(result) {
+    const doorFail = !!(result && result.doorFail);
+    const rawWords = doorFail ? [] : ((result && result.words) || []);
+    const words = rawWords.map((w) => ({
+      word: w.word,
+      score: (Number(w.score) || 0) / 100,
+      hint: typeof w.hint === 'string' ? w.hint : ''
+    }));
+    const score = doorFail ? 0 : (Number(result && result.score) || 0);
+    const pass = doorFail ? false : !!(result && result.pass);
+    const scorePct = doorFail ? 0 : Math.round(Number(result && result.scorePct) || score * 100);
+    return Object.assign({}, result, {
+      words,
+      overall: { score, band: pass ? 'pass' : 'fail' },
+      scorePct,
+      pass,
+      doorFail,
+      reason: (result && result.reason) || '',
+      model_id: 'citrinet-trial',
+      meta: { scoring_mode: 'citrinet-trial' }
+    });
   }
 
   async function load(onProgress) {
-    if (session) {
+    if (booted) {
+      const done = await booted;
       emitProgress(onProgress, 'done', 100);
-      return ready || Promise.resolve(true);
+      return done;
     }
-    if (ready) {
-      return ready.then((r) => {
-        emitProgress(onProgress, 'done', 100);
-        return r;
+    booted = (async () => {
+      emitProgress(onProgress, 'download', 8);
+      await loadScript(ORT_SRC);
+      if (typeof global.createNeedle !== 'function') await loadScript(NEEDLE_SRC);
+      emitProgress(onProgress, 'download', 24);
+      trialApi = await import(TRIAL_SRC);
+      emitProgress(onProgress, 'session', 40);
+      await trialApi.bootTrialInPage({
+        wasmPaths: WASM_PATHS,
+        paths: MODEL_PATHS
       });
-    }
-    ready = (async () => {
-      if (typeof ort === 'undefined') throw new Error('onnxruntime missing');
-      ort.env.wasm.wasmPaths = base + 'ort/';
-      await loadG2P(base);
-      const bytes = await concatParts(onProgress);
-      emitProgress(onProgress, 'session', 90);
-      session = await ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] });
-      try {
-        const warm = new Float32Array(1600);
-        await session.run({ input_values: new ort.Tensor('float32', warm, [1, 1600]) });
-      } catch (_) {}
       emitProgress(onProgress, 'done', 100);
       return true;
-    })().catch((e) => { ready = null; throw e; });
-    return ready;
+    })().catch((e) => { booted = null; trialApi = null; throw e; });
+    return booted;
   }
 
   async function grade(blob, text) {
     await load();
-    const samples = await decodeAudioToMono(blob, 16000);
-    const stats = audioStats(samples, 16000);
-    if (stats.durationMs < 80) throw new Error('too_short');
-    const trimmed = capSpeechWindow(trimSilence(samples, 16000, 0.006, 80), 16000, 4500);
-    const trimmedStats = audioStats(trimmed, 16000);
-    const input = normalizeForModel(trimmed);
-    const feeds = { input_values: new ort.Tensor('float32', input, [1, input.length]) };
-    const results = await session.run(feeds);
-    const logitsArr = results.logits.data;
-    const T = results.logits.dims[1];
-    const V = results.logits.dims[2];
-    const logits = new Array(T);
-    for (let t = 0; t < T; t++) logits[t] = logitsArr.subarray(t * V, (t + 1) * V);
-    const { phones, words } = expectedPhoneSequence(text);
-    return aggregate(text, words, forcedAlignGop(logits, phones, 0), trimmedStats.durationMs, 16000,
-      'wav2vec2-lv-60-espeak-cv-ft-onnx-int8', 0, {
-        clipping: stats.clipping, too_quiet: stats.tooQuiet, snr_est: stats.snrEst,
-        warnings: stats.tooQuiet ? ['audio_too_quiet'] : []
-      });
+    const samples = await global.decodeAudioToMono(blob, 16000);
+    const graded = await trialApi.gradeTrialSamples(samples, text, 60);
+    return pageResult(graded.result);
   }
 
   global.MRJPronounce = { setBase, load, grade };

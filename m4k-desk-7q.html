@@ -155,11 +155,11 @@ body.test-on .app{padding-bottom:196px}
 <script src="pronounce/ort/ort.all.min.js"></script>
 <script src="pronounce/engine.js"></script>
 <script src="pronounce/audio.js"></script>
-<script src="pronounce/grade-browser.js"></script>
+<script src="pronounce/grade-browser.js?v=20261010-saycitrinet"></script>
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=true;
-const ASSET_V='teach20261008band20';
+const ASSET_V='teach20261010saycitrinet';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -179,7 +179,7 @@ const $=id=>document.getElementById(id);
 const asset=p=>BASE+'assets/'+String(p||'').replace(/^assets\//,'')+'?v='+ASSET_V;
 const SAVE='mrj_dec_progress_v4';
 const MAX_BOOKS=20;
-const SPEAK_DEFAULT=50;
+const SPEAK_DEFAULT=60;
 const SAY_MAX_TRIES=5;
 const DICT_N=5;
 const DICT_PASS=80;
@@ -1042,8 +1042,10 @@ function paintSayChips(text, words){
       return `<span class="word-chip pending">${tok.replace(/</g,'&lt;')}<span class="wsub">·</span></span>`;
     }
     const ws=Math.round(100*(w.score||0));
-    const b=ws>=80?'good':(ws>=65?'ok':'needs_work');
-    return `<span class="word-chip ${b}">${tok.replace(/</g,'&lt;')}<span class="wsub">${ws}%</span></span>`;
+    const b=ws>=60?'good':'needs_work';
+    const hint=(b==='needs_work' && typeof w.hint==='string' && w.hint.trim())
+      ? `<span class="wsub">${w.hint.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>` : '';
+    return `<span class="word-chip ${b}">${tok.replace(/</g,'&lt;')}<span class="wsub">${ws}%</span>${hint}</span>`;
   }).join('');
 }
 function sayWho(){
@@ -1204,6 +1206,11 @@ async function gradeBlob(line, blob){
   hideLoadbar();
   if(j.meta && String(j.meta.scoring_mode||'').startsWith('stub')){
     $('speakStatus').textContent='Grader came back stub. Real model did not load.';
+    return;
+  }
+  if(j.doorFail){
+    hideLoadbar();
+    $('speakStatus').textContent=j.reason||'';
     return;
   }
   const sc=Math.round(100*(j.overall&&j.overall.score||0));
