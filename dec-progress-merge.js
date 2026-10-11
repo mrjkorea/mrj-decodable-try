@@ -205,6 +205,98 @@
     };
   }
 
+  function localDate(when) {
+    when = when || new Date();
+    var y = when.getFullYear();
+    var m = String(when.getMonth() + 1).padStart(2, '0');
+    var d = String(when.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + d;
+  }
+
+  function idKey(student) {
+    return String(student == null ? '' : student).trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  function metricStudentEmail(student) {
+    student = String(student || '').trim();
+    var key = idKey(student);
+    return student.indexOf('@') > 0 ? student : key;
+  }
+
+  /**
+   * Build and send ClassroomMetrics + optional StudentScoreIndex (via env hooks).
+   * opts.noteScore === false → CM only (failed speak try).
+   */
+  function reportDecodableScore(env, bookId, section, raw, max, extra, opts) {
+    opts = opts || {};
+    env = env || {};
+    var student = env.getStudent ? String(env.getStudent() || '').trim() : '';
+    if (!student || !bookId || !section) {
+      return { status: 'skipped', reason: 'no student or ids' };
+    }
+    var rawN = +raw;
+    var maxN = +max;
+    if (!isFinite(rawN) || !isFinite(maxN) || maxN <= 0) {
+      return { status: 'skipped', reason: 'bad scores' };
+    }
+    var sectionId = String(section);
+    var itemId = decodableScoreItemId(bookId, sectionId);
+    var scorePct = Math.round(100 * rawN / maxN);
+    var when = opts.when || new Date();
+    var ld = localDate(when);
+    var key = idKey(student);
+    var email = metricStudentEmail(student);
+    var meta = { student: student, section: sectionId, book_id: bookId };
+    if (extra && typeof extra === 'object') {
+      Object.keys(extra).forEach(function (k) { meta[k] = extra[k]; });
+    }
+    var itemType = opts.itemType;
+    if (!itemType) {
+      if (opts.noteScore === false) itemType = 'attempt';
+      else if (rawN === 1 && maxN === 1) itemType = 'completion';
+      else itemType = 'section';
+    }
+    var event = {
+      event_id: 'dec-' + itemId + '-' + when.getTime().toString(36),
+      event_kind: 'decodable_progress',
+      source: 'decodable',
+      app_name: opts.appName || 'MRJ Decodables',
+      curriculum_program: 'decodable',
+      book_title: bookId,
+      item_id: itemId,
+      item_type: itemType,
+      completed: opts.completed !== undefined ? opts.completed === true : true,
+      score_value: rawN,
+      score_max: maxN,
+      score_pct: scorePct,
+      local_date: ld,
+      identity_method: 'mrj_signin',
+      identity_confidence: 'high',
+      metadata_json: JSON.stringify(meta)
+    };
+    var cmBody = {
+      student_email: email,
+      student_name: student,
+      session_id: 'decodable-' + key + '-' + ld,
+      events: [event]
+    };
+    var ssi = null;
+    if (opts.noteScore !== false) {
+      ssi = {
+        program: 'decodable',
+        itemId: itemId,
+        scoreValue: rawN,
+        scoreMax: maxN,
+        scorePct: scorePct,
+        localDate: ld
+      };
+    }
+    if (env.postMetrics) env.postMetrics(cmBody);
+    if (ssi && env.noteScore) env.noteScore(ssi);
+    if (env.afterReport) env.afterReport();
+    return { status: 'ok', cmBody: cmBody, ssi: ssi, event: event };
+  }
+
   /** Metrics item_id for decodable section scores (books 1–20 band). */
   function decodableScoreItemId(bookId, section) {
     bookId = String(bookId == null ? '' : bookId).trim();
@@ -254,6 +346,10 @@
     progressUploadJson: progressUploadJson,
     createPackSaveGate: createPackSaveGate,
     createLibraryBootCoordinator: createLibraryBootCoordinator,
-    decodableScoreItemId: decodableScoreItemId
+    decodableScoreItemId: decodableScoreItemId,
+    localDate: localDate,
+    idKey: idKey,
+    metricStudentEmail: metricStudentEmail,
+    reportDecodableScore: reportDecodableScore
   };
 });
