@@ -1,22 +1,33 @@
-/* MRJ Pronounce — in-page grader. Live Citrinet trial from pronounce-try. */
+/* MRJ Pronounce — Citrinet-only in-page grader (int8 ONNX, onnxruntime-web WASM). */
 (function (global) {
-  const ORIGIN = 'https://mrjkorea.github.io/pronounce-try/';
-  const ORT_SRC = ORIGIN + 'vendor/ort/ort.wasm.min.js';
-  const NEEDLE_SRC = ORIGIN + 'vendor/needle/needle.js';
-  const TRIAL_SRC = ORIGIN + 'src/trial.js?v=20261010-citrinet';
-  const WASM_PATHS = ORIGIN + 'vendor/ort/';
-  const MODEL_PATHS = [
-    ORIGIN + 'models/whistle/whistle.cact',
-    ORIGIN + 'models/citrinet/model.int8.onnx',
-    ORIGIN + 'models/citrinet/sp_pieces.json',
-    ORIGIN + 'models/zipa/model.int8.onnx',
-    ORIGIN + 'models/zipa/tokens.txt'
-  ];
+  const DEFAULT_ORIGIN = 'https://mrjkorea.github.io/pronounce-try/';
+  let origin = DEFAULT_ORIGIN;
+  const TRIAL_VER = '20261013-citrinet';
 
   let booted = null;
   let trialApi = null;
 
-  function setBase() {}
+  function ortSrc() {
+    return origin + 'vendor/ort/ort.wasm.min.js';
+  }
+  function trialSrc() {
+    return origin + 'src/trial.js?v=' + TRIAL_VER;
+  }
+  function wasmPaths() {
+    return origin + 'vendor/ort/';
+  }
+  function modelPaths() {
+    return [
+      origin + 'models/citrinet/model.int8.onnx',
+      origin + 'models/citrinet/sp_pieces.json',
+    ];
+  }
+
+  function setBase(url) {
+    if (url && typeof url === 'string') {
+      origin = url.endsWith('/') ? url : url + '/';
+    }
+  }
 
   function emitProgress(onProgress, stage, pct) {
     if (typeof onProgress === 'function') {
@@ -47,7 +58,7 @@
     const words = rawWords.map((w) => ({
       word: w.word,
       score: (Number(w.score) || 0) / 100,
-      hint: typeof w.hint === 'string' ? w.hint : ''
+      hint: typeof w.hint === 'string' ? w.hint : '',
     }));
     const score = doorFail ? 0 : (Number(result && result.score) || 0);
     const pass = doorFail ? false : !!(result && result.pass);
@@ -60,7 +71,7 @@
       doorFail,
       reason: (result && result.reason) || '',
       model_id: 'citrinet-trial',
-      meta: { scoring_mode: 'citrinet-trial' }
+      meta: { scoring_mode: 'citrinet-only' },
     });
   }
 
@@ -72,14 +83,13 @@
     }
     booted = (async () => {
       emitProgress(onProgress, 'download', 8);
-      await loadScript(ORT_SRC);
-      if (typeof global.createNeedle !== 'function') await loadScript(NEEDLE_SRC);
+      await loadScript(ortSrc());
       emitProgress(onProgress, 'download', 24);
-      trialApi = await import(TRIAL_SRC);
+      trialApi = await import(trialSrc());
       emitProgress(onProgress, 'session', 40);
       await trialApi.bootTrialInPage({
-        wasmPaths: WASM_PATHS,
-        paths: MODEL_PATHS
+        wasmPaths: wasmPaths(),
+        paths: modelPaths(),
       });
       emitProgress(onProgress, 'done', 100);
       return true;
@@ -89,10 +99,28 @@
 
   async function grade(blob, text) {
     await load();
-    const samples = await global.decodeAudioToMono(blob, 16000);
+    const decode = global.decodeAudioToMono;
+    if (typeof decode !== 'function') throw new Error('decodeAudioToMono is not on the page');
+    const samples = await decode(blob, 16000);
     const graded = await trialApi.gradeTrialSamples(samples, text, 60);
     return pageResult(graded.result);
   }
 
+  async function bench(blob, text) {
+    const t0 = typeof performance !== 'undefined' ? performance.now() : 0;
+    await load();
+    const decode = global.decodeAudioToMono;
+    const samples = await decode(blob, 16000);
+    const graded = await trialApi.gradeTrialSamples(samples, text, 60);
+    const ms = typeof performance !== 'undefined' ? performance.now() - t0 : 0;
+    return {
+      ms,
+      perf: graded.perf,
+      trialMode: 'citrinet-only',
+      result: pageResult(graded.result),
+    };
+  }
+
   global.MRJPronounce = { setBase, load, grade };
+  global.__mrjDecodablePronounceBench = bench;
 })(window);

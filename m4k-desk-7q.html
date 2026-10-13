@@ -156,7 +156,7 @@ body.test-on .app{padding-bottom:196px}
 <script src="pronounce/ort/ort.all.min.js"></script>
 <script src="pronounce/engine.js"></script>
 <script src="pronounce/audio.js"></script>
-<script src="pronounce/grade-browser.js?v=20261010-saycitrinet"></script>
+<script src="pronounce/grade-browser.js?v=dec20-20261013-citrinetonly"></script>
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=true;
@@ -340,7 +340,7 @@ async function boot(){
   $('mSay').onclick=()=>setMode('speak');
   try{
     if(window.MRJPronounce){
-      MRJPronounce.setBase(BASE+'pronounce/');
+      MRJPronounce.setBase('https://mrjkorea.github.io/pronounce-try/');
       MRJPronounce.load().then(()=>{pronounceLoaded=true;}).catch(()=>{});
     }
   }catch(e){}
