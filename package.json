@@ -2,8 +2,7 @@
   "name": "mrj-decodable-try",
   "private": true,
   "scripts": {
-    "test": "node test/dec-progress-merge.test.js && node test/score-report.test.js && node test/index-html-script-syntax.test.js",
-    "test:say5": "node test/say-max-tries.playwright.mjs",
-    "test:bench": "node test/citrinet-bench.playwright.mjs"
+    "test": "node test/dec-progress-merge.test.js && node test/score-report.test.js && node test/index-html-script-syntax.test.js && node test/hubert-shared.test.js",
+    "test:say5": "node test/say-max-tries.playwright.mjs"
   }
 }

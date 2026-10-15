@@ -110,7 +110,7 @@ async function runScenario(browser, base, scenario) {
               doorFail: true,
               reason: 'Say the sentence again, please. Say each word clearly.',
               overall: { score: 0, band: 'fail' },
-              meta: { scoring_mode: 'citrinet-only' },
+              meta: { scoring_mode: 'hubert-phoneme' },
               words: [],
             };
           }
@@ -119,7 +119,7 @@ async function runScenario(browser, base, scenario) {
               doorFail: false,
               overall: { score: 0.22, band: 'fail' },
               scorePct: 22,
-              meta: { scoring_mode: 'citrinet-only' },
+              meta: { scoring_mode: 'hubert-phoneme' },
               words: [{ word: 'test', score: 0.22 }],
               model_id: 'mock',
             };
@@ -127,7 +127,7 @@ async function runScenario(browser, base, scenario) {
           return {
             doorFail: false,
             overall: { score: 0.85, band: 'pass' },
-            meta: { scoring_mode: 'citrinet-only' },
+            meta: { scoring_mode: 'hubert-phoneme' },
             words: [],
             model_id: 'mock',
           };
