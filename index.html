@@ -142,14 +142,11 @@ body.test-on .app{padding-bottom:196px}
     <button id="mSay">Say</button>
   </div>
 </div>
-<script src="pronounce/ort/ort.all.min.js"></script>
-<script src="pronounce/engine.js"></script>
-<script src="pronounce/audio.js"></script>
-<script src="pronounce/grade-browser.js"></script>
+<script src="pronounce/grade-browser.js?v=20261016-hubert"></script>
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20260927v7';
+const ASSET_V='dec20261016hubert';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -169,7 +166,7 @@ const $=id=>document.getElementById(id);
 const asset=p=>BASE+'assets/'+String(p||'').replace(/^assets\//,'')+'?v='+ASSET_V;
 const SAVE='mrj_dec_progress_v4';
 const MAX_BOOKS=20;
-const SPEAK_DEFAULT=50;
+const SPEAK_DEFAULT=60; // PASS = line average >= 60 (shared MRJ rule)
 const DICT_N=5;
 const DICT_PASS=80;
 const COUSIN_META={no_latin_script:['ko','ja','zh-Hans','hi','ar'],latin_letters:{vi:'aăâbcdđeêghiklmnoôơpqrstuưvxy',es:'abcdefghijklmnñopqrstuvwxyz','pt-BR':'abcdefghijklmnopqrstuvwxyz',fr:'abcdefghijklmnopqrstuvwxyz',de:'abcdefghijklmnopqrstuvwxyzäöüß',id:'abcdefghijklmnopqrstuvwxyz',tr:'abcçdefgğhıijklmnoöprsştuüvyz',it:'abcdefghijklmnopqrstuvwxyz',pl:'aąbcćdeęfghijklłmnńoóprsśtuwyzźż'}};
@@ -870,7 +867,7 @@ function paintSayChips(text, words){
       return `<span class="word-chip pending">${tok.replace(/</g,'&lt;')}<span class="wsub">·</span></span>`;
     }
     const ws=Math.round(100*(w.score||0));
-    const b=ws>=80?'good':(ws>=65?'ok':'needs_work');
+    const b=ws>=75?'good':(ws>=50?'ok':'needs_work');
     return `<span class="word-chip ${b}">${tok.replace(/</g,'&lt;')}<span class="wsub">${ws}%</span></span>`;
   }).join('');
 }

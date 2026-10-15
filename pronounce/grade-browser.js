@@ -1,20 +1,16 @@
-/* MRJ Pronounce — in-page grader (no /api/grade). Same wav2vec2 GOP engine. */
+/* MRJ Decodable — shared MRJ HuBERT phoneme checker.
+ * Loads https://mrjkorea.github.io/pronounce/src/shared.js (model: pronounce/models/hubert/manifest.json,
+ * ron-jo/hubert-base-phoneme-en-onnx int8) so the model is cached once per browser for all MRJ apps.
+ * Colours: green 75+, yellow 50-74, red under 50. PASS = line average >= 60.
+ */
 (function (global) {
-  const PARTS = [
-    'model_int8.onnx.part00',
-    'model_int8.onnx.part01',
-    'model_int8.onnx.part02',
-    'model_int8.onnx.part03',
-    'model_int8.onnx.part04'
-  ];
-  const PART_PCTS = [10, 30, 50, 70, 85];
-  let session = null;
-  let ready = null;
-  let base = '';
+  const SHARED_URL = 'https://mrjkorea.github.io/pronounce/src/shared.js';
+  const APP_ID = 'decodables';
+  const THRESHOLDS = { green: 75, yellow: 50 };
+  const PASS_PCT = 60;
 
-  function setBase(b) {
-    base = b.endsWith('/') ? b : b + '/';
-  }
+  let booted = null;
+  let api = null;
 
   function emitProgress(onProgress, stage, pct) {
     if (typeof onProgress === 'function') {
@@ -22,99 +18,62 @@
     }
   }
 
-  function isGithubIo() {
-    try { return /\.github\.io$/i.test(location.hostname); } catch (_) { return false; }
+  function bandFor(pct) {
+    return pct >= THRESHOLDS.green ? 'green' : (pct >= THRESHOLDS.yellow ? 'yellow' : 'red');
   }
 
-  async function fetchPartResponse(url, timeoutMs) {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), timeoutMs);
-    try {
-      const r = await fetch(url, { signal: ctrl.signal });
-      if (!r.ok) {
-        try { if (r.body && r.body.cancel) r.body.cancel(); } catch (_) {}
-        return null;
-      }
-      return r;
-    } catch (_) {
-      return null;
-    } finally {
-      clearTimeout(t);
-    }
+  function pageResult(result) {
+    const doorFail = !!(result && result.doorFail);
+    const rawWords = doorFail ? [] : ((result && result.words) || []);
+    const words = rawWords.map(function (w) {
+      const pct = Number(w.score) || 0;
+      return { word: w.word, score: pct / 100, band: w.band || bandFor(pct), hint: typeof w.hint === 'string' ? w.hint : '' };
+    });
+    const scorePct = doorFail ? 0 : Math.round(Number(result && result.scorePct) || 0);
+    const pass = !doorFail && scorePct >= PASS_PCT;
+    return Object.assign({}, result, {
+      words: words,
+      overall: { score: scorePct / 100, band: bandFor(scorePct) },
+      scorePct: scorePct,
+      pass: pass,
+      doorFail: doorFail,
+      reason: (result && result.reason) || '',
+      model_id: 'hubert-phoneme',
+      meta: { scoring_mode: 'hubert-phoneme' },
+    });
   }
 
-  async function concatParts(onProgress) {
-    const bufs = [];
-    let total = 0;
-    const raw = 'https://raw.githubusercontent.com/mrjkorea/mrj-decodable-try/main/pronounce/model_parts/';
-    const githubIo = isGithubIo();
-    const localTimeout = githubIo ? 8000 : 20000;
-    for (let i = 0; i < PARTS.length; i++) {
-      const name = PARTS[i];
-      let r = await fetchPartResponse(base + 'model_parts/' + name, localTimeout);
-      if (!r) r = await fetchPartResponse(raw + name, 60000);
-      if (!r) throw new Error('missing model part ' + name);
-      const u8 = new Uint8Array(await r.arrayBuffer());
-      bufs.push(u8);
-      total += u8.length;
-      emitProgress(onProgress, 'download', PART_PCTS[i] ?? 85);
-    }
-    const out = new Uint8Array(total);
-    let o = 0;
-    for (const b of bufs) { out.set(b, o); o += b.length; }
-    return out.buffer;
-  }
+  function setBase() { /* kept for old pages; the shared engine always loads from the pronounce site */ }
 
   async function load(onProgress) {
-    if (session) {
+    if (booted) {
+      const done = await booted;
       emitProgress(onProgress, 'done', 100);
-      return ready || Promise.resolve(true);
+      return done;
     }
-    if (ready) {
-      return ready.then((r) => {
-        emitProgress(onProgress, 'done', 100);
-        return r;
+    booted = (async function () {
+      emitProgress(onProgress, 'download', 8);
+      api = await import(SHARED_URL);
+      emitProgress(onProgress, 'session', 20);
+      await api.bootShared({
+        onProgress: function (f) { emitProgress(onProgress, 'download', Math.round(20 + 75 * (Number(f) || 0))); },
       });
-    }
-    ready = (async () => {
-      if (typeof ort === 'undefined') throw new Error('onnxruntime missing');
-      ort.env.wasm.wasmPaths = base + 'ort/';
-      await loadG2P(base);
-      const bytes = await concatParts(onProgress);
-      emitProgress(onProgress, 'session', 90);
-      session = await ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] });
-      try {
-        const warm = new Float32Array(1600);
-        await session.run({ input_values: new ort.Tensor('float32', warm, [1, 1600]) });
-      } catch (_) {}
       emitProgress(onProgress, 'done', 100);
       return true;
-    })().catch((e) => { ready = null; throw e; });
-    return ready;
+    })().catch(function (e) {
+      booted = null;
+      api = null;
+      throw e;
+    });
+    return booted;
   }
 
   async function grade(blob, text) {
     await load();
-    const samples = await decodeAudioToMono(blob, 16000);
-    const stats = audioStats(samples, 16000);
-    if (stats.durationMs < 80) throw new Error('too_short');
-    const trimmed = capSpeechWindow(trimSilence(samples, 16000, 0.006, 80), 16000, 4500);
-    const trimmedStats = audioStats(trimmed, 16000);
-    const input = normalizeForModel(trimmed);
-    const feeds = { input_values: new ort.Tensor('float32', input, [1, input.length]) };
-    const results = await session.run(feeds);
-    const logitsArr = results.logits.data;
-    const T = results.logits.dims[1];
-    const V = results.logits.dims[2];
-    const logits = new Array(T);
-    for (let t = 0; t < T; t++) logits[t] = logitsArr.subarray(t * V, (t + 1) * V);
-    const { phones, words } = expectedPhoneSequence(text);
-    return aggregate(text, words, forcedAlignGop(logits, phones, 0), trimmedStats.durationMs, 16000,
-      'wav2vec2-lv-60-espeak-cv-ft-onnx-int8', 0, {
-        clipping: stats.clipping, too_quiet: stats.tooQuiet, snr_est: stats.snrEst,
-        warnings: stats.tooQuiet ? ['audio_too_quiet'] : []
-      });
+    const samples = await api.audio.decodeAudioToMono(blob, 16000);
+    const graded = await api.gradeTrialSamples(samples, text, PASS_PCT, null, { appId: APP_ID });
+    return pageResult(graded.result);
   }
 
-  global.MRJPronounce = { setBase, load, grade };
+  global.MRJPronounce = { setBase: setBase, load: load, grade: grade, thresholds: THRESHOLDS, passPct: PASS_PCT };
 })(window);
