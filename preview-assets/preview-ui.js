@@ -39,6 +39,10 @@
       else f.classList.add("pv-flag-done");
     });
   }
+  /* no brand marks on preview: "MRJ Decodables" -> "Decodables" (display text only) */
+  var bt = document.getElementById("bookTitle");
+  function unbrand() { if (bt && /^MRJ\s+/.test(bt.textContent)) bt.textContent = bt.textContent.replace(/^MRJ\s+/, ""); }
+  if (bt) { unbrand(); new MutationObserver(unbrand).observe(bt, { childList: true, characterData: true, subtree: true }); }
   var lib = document.getElementById("libList");
   if (lib) new MutationObserver(tidyCards).observe(lib, { childList: true });
   var n = 0;

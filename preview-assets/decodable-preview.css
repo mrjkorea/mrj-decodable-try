@@ -71,3 +71,4 @@ html[data-book] body { color: var(--ink); font-family: var(--font-ui); }
 .bar-row button:disabled { opacity: .45; box-shadow: none; }
 #mListen::before { content: "🎧"; font-size: 1.3rem; } #mRead::before { content: "📖"; font-size: 1.3rem; } #mSong::before { content: "🎵"; font-size: 1.3rem; } #mDict::before { content: "✏️"; font-size: 1.3rem; } #mSay::before { content: "🎤"; font-size: 1.3rem; }
 .bar-row { margin: 0 auto !important; width: 100%; } .bar { display: block !important; }
+html .mrj-auth .mrj-auth-door-login, html .mrj-auth .mrj-auth-submit { background: linear-gradient(180deg, #22a559, #137a3d) !important; }
