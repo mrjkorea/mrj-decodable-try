@@ -43,6 +43,9 @@
   var bt = document.getElementById("bookTitle");
   function unbrand() { if (bt && /^MRJ\s+/.test(bt.textContent)) bt.textContent = bt.textContent.replace(/^MRJ\s+/, ""); }
   if (bt) { unbrand(); new MutationObserver(unbrand).observe(bt, { childList: true, characterData: true, subtree: true }); }
+  /* "Switch" = the app's sign-out / change-student button. Clearer label only; onclick untouched. */
+  var sw = document.getElementById("btnSwitch");
+  if (sw) { sw.textContent = "🔄 Change student"; sw.title = "Sign out so another student can sign in"; }
   var lib = document.getElementById("libList");
   if (lib) new MutationObserver(tidyCards).observe(lib, { childList: true });
   var n = 0;
