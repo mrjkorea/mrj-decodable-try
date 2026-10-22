@@ -146,7 +146,7 @@ body.test-on .app{padding-bottom:196px}
 <script>
 const QS=new URLSearchParams(location.search);
 const TEST=QS.get('test')==='1';
-const ASSET_V='dec20261016hubert';
+const ASSET_V='dec20261022i18n100';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -217,7 +217,12 @@ function sayTarget(text){
 }
 function tokens(s){ return String(s||'').toLowerCase().replace(/[^a-z'\\s]/g,' ').split(/\s+/).filter(Boolean); }
 function page(){ return pack.pages[pageIndex]; }
-function pageTr(){ const b=i18n.books[pack.book_id]; return (b && b.l1[lang] && b.l1[lang][pageIndex]) || ''; }
+function pageTr(){
+  const b=i18n.books[pack.book_id];
+  const t=(b && b.l1[lang] && b.l1[lang][pageIndex]) || '';
+  if(showLang && pack && !t) console.warn('decodable i18n missing', pack.book_id, lang, 'page', pageIndex);
+  return t;
+}
 
 function stopWordHighlight(){ if(hlRaf){ cancelAnimationFrame(hlRaf); hlRaf=0; } }
 function syncWordHighlight(a, gen){
@@ -887,6 +892,7 @@ function renderSay(){
   const sayText=sayTarget(p.text);
   const triple=sayText!==p.text;
   const sayTr=(i18n.books[pack.book_id]&&i18n.books[pack.book_id].l1&&i18n.books[pack.book_id].l1[lang]&&i18n.books[pack.book_id].l1[lang][sayPage])||'';
+  if(showLang && pack && !sayTr) console.warn('decodable i18n missing', pack.book_id, lang, 'say', sayPage);
   $('workBody').innerHTML=`
     <div class="g-lbl">Say the page · ${sayPage+1} / ${pack.pages.length}</div>
     <div class="g-en" id="sayLineText"></div>

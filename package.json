@@ -1,0 +1,7 @@
+{
+  "name": "mrj-decodable-try",
+  "private": true,
+  "scripts": {
+    "test": "node test/hubert-shared.test.js && node test/decodable-i18n.test.js"
+  }
+}
