@@ -2,6 +2,6 @@
   "name": "mrj-decodable-try",
   "private": true,
   "scripts": {
-    "test": "node test/hubert-shared.test.js && node test/decodable-i18n.test.js"
+    "test": "node test/hubert-shared.test.js && node test/decodable-i18n.test.js && node test/dictation-ui.test.js && node test/index-html-script-syntax.test.js"
   }
 }
