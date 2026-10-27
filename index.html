@@ -1,22 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-marker="dec20261011savefix" data-book="blue">
 <head>
+<!-- READ-TAP-GATE-20261012 -->
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>MRJ Decodables — Books 1–10</title>
+<meta name="mrj-build" content="dec20-20261026-say-chip-contrast" />
+<title>MRJ Decodables — Books 1–20</title>
 <style>
 :root{--bg:#070d18;--card:#101a2e;--text:#f4f7ff;--muted:#a9b7d6;--hl:#ffd84a;--ok:#3ecf8e}
-*{box-sizing:border-box}body{margin:0;font-family:ui-rounded,"Nunito","Avenir Next",system-ui,sans-serif;background:#070d18;color:var(--text);min-height:100vh}
-.app{max-width:520px;margin:0 auto;padding:8px 12px 118px}
-header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{margin:0;font-family:ui-rounded,"Nunito","Avenir Next",system-ui,sans-serif;background:#070d18;color:var(--text);height:100%;overflow:hidden}
+body.student-desk{display:flex;flex-direction:column;height:100vh;height:100dvh;max-height:100dvh}
+.app{width:100%;max-width:none;margin:0;padding:8px 16px 0;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex:0 0 auto}
+.hdr-brand{min-width:0;flex:1 1 auto}
+#langPick{margin:0;flex:0 1 auto;max-width:42%}
+header .hdr-actions{display:flex;align-items:center;gap:6px;flex:0 1 auto;min-width:0}
+.student-pill{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding:8px 10px;
+  font-size:.82rem;
+  font-weight:800;
+  line-height:1.1;
+  background:#1b2740;
+  color:var(--text);
+  border-radius:14px;
+  flex:0 1 auto;
+  min-width:0;
+  max-width:150px;
+}
+@media (max-width:479px){
+  header{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:"brand lang" "actions actions";
+    column-gap:8px;
+    row-gap:6px;
+    align-items:center;
+  }
+  .hdr-brand{grid-area:brand}
+  #langPick{
+    grid-area:lang;
+    width:4.6rem;
+    max-width:4.6rem!important;
+    min-width:4.6rem;
+    padding:8px 4px;
+    font-size:.72rem;
+  }
+  header .hdr-actions{
+    grid-area:actions;
+    width:100%;
+    max-width:100%;
+    flex:1 1 100%;
+  }
+  #btnLibrary{padding:9px 10px;font-size:.85rem;flex:0 0 auto}
+  #btnSwitch{padding:9px 11px;font-size:.85rem;flex:0 0 auto}
+  .student-pill{
+    flex:1 1 auto;
+    min-width:7.5ch;
+    max-width:none;
+    font-size:.8rem;
+    padding:8px 8px;
+  }
+}
+@media (min-width:480px){
+  .student-pill{max-width:min(110px,22vw);font-size:.88rem}
+}
+.app>.stage{flex:1 1 auto;min-height:0}
+#libStage,#introStage,#workStage,#signStage{overflow:auto}
 h1{font-size:1rem;margin:0}
 button{border:0;border-radius:14px;padding:11px;font-weight:800;color:#fff;background:#24324f;cursor:pointer}
 button.active{background:linear-gradient(135deg,#4d7dff,#7a5cff)}
 button:disabled{opacity:.38;cursor:not-allowed}
 .stage{background:var(--card);border-radius:22px;overflow:hidden}
-.art{position:relative;aspect-ratio:3/4;background:#050a12;max-height:78vh}
+.art{position:relative;background:#050a12;height:100%;min-height:0;max-height:none}
 .art img,.art video{width:100%;height:100%;object-fit:contain;position:absolute;inset:0}
-.sentence{font-size:clamp(1.7rem,6.8vw,2.6rem);font-weight:900;line-height:1.3;text-align:center;padding:12px 12px 4px;min-height:2.2em}
+.sentence{font-size:clamp(1.7rem,2.5vw,3rem);font-weight:900;line-height:1.3;text-align:center;padding:8px 16px 4px;min-height:0}
 .sentence .w{display:inline-block;padding:.02em .08em;border-radius:.18em;cursor:pointer}
 .sentence .w.on{background:#ffd84a;color:#1a1400;box-shadow:0 0 0 3px #ffe27a}
 .sentence .w.done{outline:3px solid var(--ok);background:rgba(62,207,142,.18)}
@@ -24,15 +86,15 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .status{text-align:center;color:var(--muted);font-size:.84rem;padding:0 12px 10px}
 .nav{display:flex;gap:8px;padding:0 12px 12px}
 .nav button{flex:1}
-.library{display:grid;gap:10px}
+.library{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;align-content:start}
 .card{display:flex;gap:12px;align-items:center;background:#1b2740;border-radius:16px;padding:10px;color:#fff;text-align:left;width:100%}
 .card img{width:64px;height:86px;object-fit:cover;border-radius:8px}
 .card.lock{opacity:.55}
 .g-lbl{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-top:10px}
 .g-en{font-size:clamp(1.5rem,6vw,2.1rem);font-weight:900;line-height:1.28;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);margin:6px 0}
-.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(7,13,24,.94);padding:8px 12px calc(8px + env(safe-area-inset-bottom))}
-.bar-row{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:520px;margin:0 auto}
-.bar-row button{font-size:.78rem;padding:10px 4px}
+.bar{position:relative;flex:0 0 auto;background:rgba(7,13,24,.94);padding:8px 16px calc(8px + env(safe-area-inset-bottom));z-index:5}
+.bar-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:none;width:100%;margin:0}
+.bar-row button{font-size:clamp(.95rem,1.25vw,1.2rem);padding:12px 6px}
 .hidden{display:none!important}
 .panel{padding:14px}
 .onelet{min-height:58vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
@@ -40,7 +102,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .onelet .cu{font-size:5.2rem;font-weight:900;color:#ffd84a;margin-top:8px}
 .onelet .hint{color:var(--muted);margin-top:14px;font-weight:800}
 .sadface{font-size:6.4rem;line-height:1;margin-top:8px}
-.word-chip{display:inline-block;margin:4px 5px;padding:10px 12px;border-radius:14px;background:#1b2740;font-weight:900;font-size:1.45rem;text-align:center;min-width:2.2em}
+.word-chip{display:inline-block;margin:4px 5px;padding:10px 12px;border-radius:14px;background:#1b2740;color:var(--text);font-weight:900;font-size:1.45rem;text-align:center;min-width:2.2em}
 .word-chip.good{background:#1f6b48}.word-chip.ok{background:#6b5a1f}.word-chip.needs_work,.word-chip.invalid{background:#6b1f2c}
 .word-chip .wsub{display:block;font-size:.72rem;color:#ffd84a;font-weight:800}
 .tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
@@ -73,6 +135,12 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 .speaker{width:100%;aspect-ratio:3/4;border-radius:20px;background:#0b1220;display:flex;align-items:flex-end;justify-content:center;position:relative;overflow:hidden}
 .speaker img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .speaker .label{position:absolute;bottom:12px;font-weight:900;text-shadow:0 2px 8px #000}
+.speaker.dict-face .speaker-base{position:absolute;inset:0}
+.speaker-jaw{position:absolute;left:calc(var(--mx)*1%);top:calc(var(--my)*1%);width:calc(var(--mw)*1%);height:calc(var(--mh)*1%);overflow:hidden;transform-origin:50% 0%;pointer-events:none;opacity:0}
+.speaker.dict-talk .speaker-jaw{opacity:1;animation:dictJaw .15s ease-in-out infinite alternate}
+@keyframes dictJaw{from{transform:scaleY(1)}to{transform:scaleY(1.14) translateY(3%)}}
+.speaker-jaw img{position:absolute;width:calc(100%*100/var(--mw));height:calc(100%*100/var(--mh));max-width:none;left:calc(-1*var(--mx)/var(--mw)*100%);top:calc(-1*var(--my)/var(--mh)*100%);object-fit:cover}
+.speaker-fallback{min-height:120px;align-items:center;justify-content:center}
 .repeat{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
 .repeat button{font-size:1.15rem}
 .carpetVid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
@@ -91,24 +159,101 @@ select{width:100%;padding:10px;border-radius:12px;border:0;background:#1b2740;co
 .loadbar-track{height:10px;background:#1b2740;border-radius:8px;overflow:hidden}
 #loadbarFill{height:100%;width:0;background:linear-gradient(90deg,#4d7dff,#3ecf8e);transition:width .18s ease;border-radius:8px}
 #loadbarLbl{text-align:center;font-size:.72rem;color:var(--muted);margin-top:6px;font-weight:800}
-.testnav{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;max-width:520px;margin:0 auto 8px}
-.testnav button{font-size:1.05rem;padding:14px 4px;background:#16356e}
-body.test-on .app{padding-bottom:196px}
-body.mrj-teacher.test-on .app{padding-bottom:196px}
+.catchLine{position:absolute;left:0;right:0;top:10%;text-align:center;font-size:clamp(1.35rem,5.2vw,1.95rem);font-weight:900;color:#ffe27a;text-shadow:0 0 14px #000,0 3px 10px #000;z-index:2;pointer-events:none;line-height:1.2;letter-spacing:.02em;animation:pulse 1.1s ease-in-out infinite}
+.catchLine .bigq{font-size:clamp(4.2rem,20vw,7rem);display:inline-block;line-height:.75;vertical-align:middle;color:#fff;text-shadow:0 0 22px #ffd84a}
+.sheriffBan{text-align:center;font-weight:900;margin:0 0 12px;line-height:1.12}
+.sheriffBan .hey{font-size:2.4rem;color:#ffd84a;text-shadow:0 0 12px #ff9f1c}
+.sheriffBan .lb{font-size:clamp(2.2rem,9vw,3.2rem);color:#ff5c7a;text-shadow:0 0 18px #ff4d6d;margin:4px 0}
+.sheriffBan .ask{font-size:clamp(1.05rem,4.2vw,1.35rem);color:var(--muted);margin-top:6px}
+.me{color:#ff6b6b;font-weight:900;font-size:1.2em}
+.nervousWord{font-size:clamp(3.2rem,15vw,5.8rem);font-weight:900;text-align:center;color:#ffe27a;text-shadow:0 0 20px #ffd84a;animation:shake .45s ease-in-out infinite}
+.nervousLine{font-size:clamp(1.5rem,5.5vw,2rem);font-weight:900;text-align:center;margin-top:16px}
+@keyframes shake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-4px) rotate(-1.2deg)}75%{transform:translateX(4px) rotate(1.2deg)}}
+.who{font-size:clamp(2rem,4.2vh,3.2rem);font-weight:900;text-align:center;margin:6px 0 14px}
+.name-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.name-grid button{font-size:clamp(1.05rem,1.7vw,1.5rem);padding:14px 4px}
+.name-form{display:flex;flex-direction:column;gap:10px;margin-top:14px;max-width:420px}
+.name-form input{width:100%;padding:14px 16px;border-radius:14px;border:0;background:#1b2740;color:#fff;font-weight:800;font-size:1.15rem}
+.name-form button{min-width:96px}
+.sign-err{min-height:1.2em;color:#ffb4b4;font-weight:800}
+#workStage.dict-fit{overflow:hidden;padding:8px 12px;height:100%}
+#workStage.dict-fit #workBody{height:100%;min-height:0}
+.dict-layout{display:grid;grid-template-columns:minmax(168px,280px) minmax(0,1fr);gap:14px;height:100%;min-height:0;align-items:stretch}
+.dict-side{display:flex;flex-direction:column;gap:8px;min-height:0;justify-content:center}
+.dict-main{min-height:0;display:flex;flex-direction:column;justify-content:center;gap:4px}
+#workStage.dict-fit .speaker{width:100%;height:auto;max-height:min(40vh,300px);aspect-ratio:3/4;border-radius:16px;flex-shrink:0}
+#workStage.dict-fit .speaker img{object-fit:cover;object-position:top center}
+#workStage.dict-fit .tpl{font-size:clamp(1.05rem,2.3vh,1.55rem);line-height:1.25;padding:2px}
+#workStage.dict-fit .az{grid-template-columns:repeat(14,minmax(0,1fr));gap:4px;margin:4px 0}
+#workStage.dict-fit .az button{padding:5px 0;font-size:clamp(.8rem,1.5vh,1rem)}
+#workStage.dict-fit .tiles{margin:4px 0;gap:6px}
+#workStage.dict-fit .tile{min-width:0;font-size:clamp(.95rem,1.8vh,1.2rem);padding:7px 8px}
+#workStage.dict-fit .g-lbl{margin-top:2px}
+#workStage.dict-fit .repeat{margin:2px 0}
+#workStage.dict-fit .repeat.spd{grid-template-columns:repeat(6,minmax(0,1fr))}
+#workStage.dict-fit .repeat button{font-size:.9rem;padding:7px 4px}
+#workStage.dict-fit .choice{margin:0}
+#workStage.dict-fit #clearWord{padding:7px}
+.passed-mark{color:#3ecf8e;font-weight:900;font-size:1.5rem;line-height:1}
+#bookStage{
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(0,1.22fr) minmax(320px,.88fr);
+  grid-template-rows:1fr auto auto auto auto 1fr;
+  grid-template-areas:
+    "pic ."
+    "pic sentence"
+    "pic lang"
+    "pic status"
+    "pic nav"
+    "pic .";
+  column-gap:8px;
+  align-items:stretch;
+}
+#bookStage.hidden{display:none!important}
+#bookStage .art{grid-area:pic;height:100%;align-self:stretch}
+#bookStage .sentence{grid-area:sentence}
+#bookStage .langline{grid-area:lang}
+#bookStage .status{grid-area:status}
+#bookStage .nav{
+  grid-area:nav;
+  display:grid;
+  grid-template-columns:1.25fr 1.1fr 1.25fr;
+  gap:12px;
+  padding:8px 18px 14px;
+}
+body.student-desk #bookStage:not(.hidden) #prev,
+body.student-desk #bookStage:not(.hidden) #next{
+  display:block!important;
+  font-size:clamp(2.8rem,7.2vh,4.8rem);
+  line-height:1;
+  min-height:clamp(84px,14vh,136px);
+  padding:0;
+}
+body.student-desk #bookStage #play{
+  font-size:clamp(1.15rem,2.5vh,1.85rem);
+  min-height:clamp(84px,14vh,136px);
+}
 </style>
-<link rel="stylesheet" href="https://mrjkorea.github.io/mrj-signin/mrj-auth.css?v=20261027-teacher">
 </head>
-<body>
+<body class="student-desk">
+<!-- STUDENT-DESK-ARROWS-20260929 -->
+<!-- ORDER-LISTEN-READ-SONG-20260930 -->
 <div class="app">
   <header>
-    <div>
+    <div class="hdr-brand">
       <h1 id="bookTitle">MRJ Decodables</h1>
       <div id="modeBadge" style="font-size:.75rem;color:var(--muted)">Library</div>
     </div>
-    <select id="langPick" style="max-width:42%;margin:0 6px"></select>
+    <select id="langPick" aria-label="Language"></select>
+    <div class="hdr-actions">
     <button id="btnLibrary">📚 Books</button>
+    <button type="button" class="student-pill hidden" data-mrj-name-pill></button>
+    <button id="btnSwitch" type="button">Switch</button>
+    </div>
   </header>
-  <div id="libStage" class="stage panel">
+  <div id="signStage" hidden></div>
+  <div id="libStage" class="stage panel hidden">
     <div class="library" id="libList"></div>
   </div>
   <div id="introStage" class="stage panel hidden">
@@ -131,30 +276,37 @@ body.mrj-teacher.test-on .app{padding-bottom:196px}
   </div>
 </div>
 <div class="bar">
-  <div class="testnav hidden" id="testNav">
-    <button id="testBack" type="button">◀ Back</button>
-    <button id="testLib" type="button">📚 Library</button>
-    <button id="testNext" type="button">Next ▶</button>
-  </div>
   <div class="bar-row">
     <button id="mListen">Listen</button>
-    <button id="mSong">Song</button>
     <button id="mRead">Read</button>
+    <button id="mSong">Song</button>
     <button id="mDict">Dictation</button>
     <button id="mSay">Say</button>
   </div>
 </div>
+<script src="pronounce/grade-browser.js?v=dec20-20261016-cm510-hubert"></script>
+<link rel="stylesheet" href="https://mrjkorea.github.io/mrj-signin/mrj-auth.css?v=20261027-teacher">
+<link rel="stylesheet" href="preview-assets/mrj-theme.css?v=live1">
+<link rel="stylesheet" href="preview-assets/decodable-preview.css?v=live1">
+<script src="preview-assets/preview-ui.js?v=live1" defer></script>
 <script src="https://mrjkorea.github.io/mrj-signin/mrj-auth.js?v=20261027-teacher"></script>
 <script src="https://mrjkorea.github.io/mrj-signin/mrj-auth-boot.js?v=20261027-teacher" data-mrj-app="mrj-decodable-try"></script>
 <script src="js/mrj-teacher-unlock.js?v=20261027-teacher"></script>
-<script src="pronounce/grade-browser.js?v=20261027-teacher"></script>
+<script src="mrj-scores.js?v=dec20-20261016-cm510-hubert"></script>
+<script src="dec-progress-merge.js?v=dec20-20261016-cm510-hubert"></script>
 <script>
-const QS=new URLSearchParams(location.search);
-const TEST=QS.get('test')==='1';
-const ASSET_V='dec20261027-teacher';
+const MRJ_BUILD='dec20261027-teacher';
+const TEST=false;
+const ASSET_V='dec20261022dict2';
 function skipLocks(){
-  return TEST || (window.MRJTeacherUnlock && MRJTeacherUnlock.isMrjTeacher());
+  try{
+    return !!(window.MRJTeacherUnlock && MRJTeacherUnlock.isMrjTeacher());
+  }catch(e){ return false; }
 }
+const STUDENT_KEY='mrj-dec-student';
+const PIN_KEY='mrj-dec-pin';
+const AUTH_URL='https://script.google.com/macros/s/AKfycbwtJTUO3gbcMrlAwsn1feWxyp7Rw2cxpfe1bOT9v2rxmQHa2Tlc6pFNWAjU6ZAdlD6kFQ/exec';
+const SCORE_URL='https://script.google.com/macros/s/AKfycbx677Fg8Q0GpH13Fcrw9aRqsKt7Eo5i29dZRh5goDbTM3KpyYfs6HMJiIMYRx3sjvVG4A/exec';
 const BASE=(function(){
   const p=location.pathname;
   if(/\.html?$/i.test(p)) return p.replace(/[^/]+$/,'');
@@ -171,14 +323,41 @@ const GRADE_PATH='/api/grade';
   }
 })();
 const $=id=>document.getElementById(id);
+const MERGE=typeof DEC_PROGRESS_MERGE!=='undefined'?DEC_PROGRESS_MERGE:null;
 const asset=p=>BASE+'assets/'+String(p||'').replace(/^assets\//,'')+'?v='+ASSET_V;
 const SAVE='mrj_dec_progress_v4';
 const MAX_BOOKS=20;
 const SPEAK_DEFAULT=60; // PASS = line average >= 60 (shared MRJ rule)
+const SAY_MAX_TRIES=5;
 const DICT_N=5;
 const DICT_PASS=80;
+const DICT_SPEAKER_IMG={
+  Harper:'decodable/harper.png',Coach:'decodable/coach.png',Grandma:'decodable/grandma.png',Grandpa:'decodable/grandpa.png',
+  Maya:'decodable/maya.png',Leo:'decodable/leo.png',Cowboy:'decodable/cowboy.png',
+  Nia:'decodable/nia.png',Pirate:'decodable/pirate.png',Car:'decodable/car.png'
+};
+const DICT_MOUTH={
+  Harper:{x:46.7,y:33.1,w:14,h:7},Coach:{x:42.5,y:30.1,w:16,h:7},Grandma:{x:47.9,y:40.5,w:13,h:6},Grandpa:{x:40.9,y:39.2,w:14,h:7},
+  Maya:{x:45.8,y:43.5,w:12,h:7},Leo:{x:44.3,y:38.3,w:13,h:6},Cowboy:{x:45.9,y:45.0,w:14,h:6},
+  Nia:{x:46.4,y:37.5,w:13,h:6},Pirate:{x:45.2,y:42.8,w:13,h:6},Car:{x:35,y:64.5,w:30,h:7}
+};
+let dictTalkTimer=null;
+function dictTalk(on){
+  clearInterval(dictTalkTimer); dictTalkTimer=null;
+  const sp=document.querySelector('.speaker.dict-face');
+  if(sp) sp.classList.remove('dict-talk');
+  if(!on||!sp) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  dictTalkTimer=setInterval(()=>sp.classList.toggle('dict-talk'),150);
+}
+function wireDictAudio(a){
+  if(mode!=='dictation'||!a) return;
+  const stop=()=>dictTalk(false);
+  ['ended','pause','error'].forEach(ev=>a.addEventListener(ev,stop));
+  a.addEventListener('playing',()=>dictTalk(true));
+}
 const COUSIN_META={no_latin_script:['ko','ja','zh-Hans','hi','ar'],latin_letters:{vi:'aăâbcdđeêghiklmnoôơpqrstuưvxy',es:'abcdefghijklmnñopqrstuvwxyz','pt-BR':'abcdefghijklmnopqrstuvwxyz',fr:'abcdefghijklmnopqrstuvwxyz',de:'abcdefghijklmnopqrstuvwxyzäöüß',id:'abcdefghijklmnopqrstuvwxyz',tr:'abcçdefgğhıijklmnoöprsştuüvyz',it:'abcdefghijklmnopqrstuvwxyz',pl:'aąbcćdeęfghijklłmnńoóprsśtuwyzźż'}};
-const SOUND_HINT={a:'/æ/ · sat',m:'/m/ · mat',s:'/s/ · sat',t:'/t/ · sat',p:'/p/ · tap',i:'/ɪ/ · pit',n:'/n/ · ant',f:'/f/ · fan',o:'/ɑ/ · pot',d:'/d/ · dad',c:'/k/ · cat',u:'/ʌ/ · sun',g:'/g/ · dog',v:'/v/ · van'};
+const SOUND_HINT={a:'/æ/ · sat',m:'/m/ · mat',s:'/s/ · sat',t:'/t/ · sat',p:'/p/ · tap',i:'/ɪ/ · pit',n:'/n/ · ant',f:'/f/ · fan',o:'/ɑ/ · pot',d:'/d/ · dad',c:'/k/ · cat',u:'/ʌ/ · sun',g:'/g/ · dog',v:'/v/ · van',b:'/b/ · bug',e:'/ɛ/ · bed',k:'/k/ · kid',h:'/h/ · hot',r:'/r/ · rat',l:'/l/ · log',w:'/w/ · web',j:'/dʒ/ · jam',y:'/j/ · yes',x:'/ks/ · fox'};
 const LETTER_KIND={a:'short_vowel',e:'short_vowel',i:'short_vowel',o:'short_vowel',u:'short_vowel',c:'hard_consonant'};
 function letterKind(L){ return LETTER_KIND[String(L||'').toLowerCase()]||'consonant'; }
 function letterTitle(L){
@@ -196,34 +375,365 @@ function soundLine(id){
   const b=(lib&&lib.books||[]).find(x=>x.id===id);
   return (b&&b.sound)||'';
 }
-const NEW_LETTERS={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['p'],mlr_dec_003:['i'],mlr_dec_004:['n'],mlr_dec_005:['f'],mlr_dec_006:['o'],mlr_dec_007:['d'],mlr_dec_008:['c'],mlr_dec_009:['u'],mlr_dec_010:['g']};
+const NEW_LETTERS={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['p'],mlr_dec_003:['i'],mlr_dec_004:['n'],mlr_dec_005:['f'],mlr_dec_006:['o'],mlr_dec_007:['d'],mlr_dec_008:['c'],mlr_dec_009:['u'],mlr_dec_010:['g'],mlr_dec_011:['b'],mlr_dec_012:['e'],mlr_dec_013:['k'],mlr_dec_014:['h'],mlr_dec_015:['r'],mlr_dec_016:['l'],mlr_dec_017:['w'],mlr_dec_018:['j'],mlr_dec_019:['y'],mlr_dec_020:['x']};
+const SOUND_CARD={
+  mlr_dec_021:{show:'QU', sub:'', hint:'/kw/ · squid', mouth:'qu', say:'qu'},
+  mlr_dec_022:{show:'V', sub:'', hint:'/v/ · van', mouth:'v', say:'v'},
+  mlr_dec_023:{show:'Z', sub:'', hint:'/z/ · zip', mouth:'z', say:'z'},
+  mlr_dec_024:{show:'S', sub:'cats · dogs', hint:'/s/ and /z/', mouth:'s', say:'s'},
+  mlr_dec_025:{show:'FF LL SS ZZ', sub:'', hint:'double letters', mouth:'ff', say:'ff'},
+  mlr_dec_026:{show:'ALL', sub:'', hint:'ball · call', mouth:'all', say:'all'},
+  mlr_dec_027:{show:'CK', sub:'', hint:'/k/ · duck', mouth:'ck', say:'ck'},
+  mlr_dec_028:{show:'L blends', sub:'bl · cl · fl · gl · pl', hint:'blend with L', mouth:'lblends', say:'lblends'},
+  mlr_dec_029:{show:'R blends', sub:'br · cr · dr · fr · gr · pr · tr', hint:'blend with R', mouth:'rblends', say:'rblends'},
+  mlr_dec_030:{show:'S blends', sub:'st · sp · sn · sm · sk · sl', hint:'blend with S', mouth:'sblends', say:'sblends'},
+  mlr_dec_031:{show:'End blends', sub:'nd · nt · mp · ft', hint:'blend at the end', mouth:'endblends', say:'endblends'},
+  mlr_dec_032:{show:'SH', sub:'', hint:'/ʃ/ · ship', mouth:'sh', say:'sh'},
+  mlr_dec_033:{show:'CH', sub:'', hint:'/tʃ/ · chip', mouth:'ch', say:'ch'},
+  mlr_dec_034:{show:'TH', sub:'thin', hint:'/θ/ · thin', mouth:'th', say:'th'},
+  mlr_dec_035:{show:'TH', sub:'this', hint:'/ð/ · this', mouth:'dh', say:'dh'},
+  mlr_dec_036:{show:'WH', sub:'', hint:'/w/ · whip', mouth:'wh', say:'wh'},
+  mlr_dec_037:{show:'NG', sub:'', hint:'/ŋ/ · song', mouth:'ng', say:'ng'},
+  mlr_dec_038:{show:'NK', sub:'', hint:'/ŋk/ · bank', mouth:'nk', say:'nk'},
+  mlr_dec_039:{show:'TCH', sub:'', hint:'/tʃ/ · match', mouth:'tch', say:'tch'},
+  mlr_dec_040:{show:'DGE', sub:'', hint:'/dʒ/ · bridge', mouth:'dge', say:'dge'}
+};
 const TAUGHT={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['a','m','s','t','p'],mlr_dec_003:['a','m','s','t','p','i'],mlr_dec_004:['a','m','s','t','p','i','n'],mlr_dec_005:['a','m','s','t','p','i','n','f'],mlr_dec_006:['a','m','s','t','p','i','n','f','o'],mlr_dec_007:['a','m','s','t','p','i','n','f','o','d'],mlr_dec_008:['a','m','s','t','p','i','n','f','o','d','c'],mlr_dec_009:['a','m','s','t','p','i','n','f','o','d','c','u'],mlr_dec_010:['a','m','s','t','p','i','n','f','o','d','c','u','g']};
 let lib=null, i18n=null, pack=null, pageIndex=0, mode='library', audio=null, listenGen=0, hlRaf=0;
 let introStep='mode', cousinIdx=0;
+let introDone=false;      // sound + famous + any pre-video finished -> Listen opens
+let preVideoDone=false;   // this book's start video (lawbreaker chase) played through
+let famousVidEnded=false;
+let famousAudEnded=false;
 let tapped=new Set(), heardListen=new Set(), heardSong=new Set();
+let sheriffOk=false;
 let clipDone=false, showLang=true, lang='ko';
-let dictBuilt=[], dictQueue=[], dictIdx=0, dictRight=0, dictRate=0.8;
+let dictBuilt=[], dictQueue=[], dictIdx=0, dictRight=0, dictRate=0.8, dictMisses=[];
 let speakRec=null, sayPage=0, micCtx=null, lastYouBlob=null, lastTestBook=null;
+let sayTries=0, sayBest=0;
+const LIB_BOOT=MERGE && MERGE.createLibraryBootCoordinator ? MERGE.createLibraryBootCoordinator() : null;
 
-function blankProg(){ return {passed:false,listen:false,song:false,read:false,dictation:false,speak:false,readPages:{},difficulty:null,dictScore:null,speakPages:{}}; }
+function scoreItemId(bookId, section){
+  if(MERGE && MERGE.decodableScoreItemId) return MERGE.decodableScoreItemId(bookId, section);
+  return bookId && section ? (bookId+':'+section) : (section||bookId||'');
+}
+function studentNamePillEl(){
+  return document.querySelector('[data-mrj-name-pill]');
+}
+function syncStudentNamePill(){
+  const el=studentNamePillEl();
+  if(!el) return;
+  const id=studentName();
+  if(!id){
+    el.classList.add('hidden');
+    el.textContent='';
+    el.removeAttribute('title');
+    return;
+  }
+  el.classList.remove('hidden');
+  const compact=(window.innerWidth||800)<480;
+  const display=compact && id.length>7 ? id.slice(0,7)+'\u2026' : id;
+  if(el.textContent!==display) el.textContent=display;
+  const fullTitle='My scores for '+id;
+  if(compact && id.length>10){
+    if(el.title!==id) el.title=id;
+  } else if(el.title) el.removeAttribute('title');
+  if(el.getAttribute('aria-label')!==fullTitle) el.setAttribute('aria-label', fullTitle);
+}
+function openLibraryAfterAuth(){
+  const id=studentName();
+  const token=window.MRJ_AUTH && MRJ_AUTH.token();
+  sheetPost(AUTH_URL, {action:'load_pack', id:id, token:token, program:'decodable'}).then(function(res){
+    if(res && res.found && res.progress_json) applySheetProgress(res.progress_json);
+  }).finally(function(){ showLib(); });
+}
+function onAuthSessionReady(id){
+  const trimmed=String(id||'').trim();
+  syncStudentNamePill();
+  if(!trimmed){
+    if(LIB_BOOT) LIB_BOOT.onSignOut();
+    return;
+  }
+  localStorage.setItem(STUDENT_KEY, trimmed);
+  syncStudentNamePill();
+  if(LIB_BOOT && LIB_BOOT.onAuthReady(true)) openLibraryAfterAuth();
+}
+window.addEventListener('mrj-auth-ready', function(ev){
+  const id=(ev.detail && ev.detail.id) || studentName();
+  onAuthSessionReady(id);
+});
+if(window.MRJ_AUTH && MRJ_AUTH.student()){
+  onAuthSessionReady(String(MRJ_AUTH.student()).trim());
+}
+
+function blankProg(){ return {passed:false,listen:false,song:false,read:false,dictation:false,speak:false,readPages:{},difficulty:null,dictScore:null,speakPages:{},speakFails:[],reported:[]}; }
+function toNum(n){ const x=+n; return isFinite(x)?x:0; }
+function higherNum(x, y){
+  const ax=(x==null||x===''||!isFinite(+x))?null:+x;
+  const ay=(y==null||y===''||!isFinite(+y))?null:+y;
+  if(ax==null) return ay;
+  if(ay==null) return ax;
+  return Math.max(ax, ay);
+}
+function mergeSpeakPages(a, b){
+  const out={};
+  [a,b].forEach(m=>{
+    if(!m || typeof m!=='object') return;
+    Object.keys(m).forEach(k=>{
+      const n=+m[k];
+      if(!isFinite(n)) return;
+      if(out[k]==null || n>out[k]) out[k]=n;
+    });
+  });
+  return out;
+}
+function unionList(a, b){
+  const out=[], seen={};
+  [a,b].forEach(list=>{
+    if(!Array.isArray(list)) return;
+    list.forEach(x=>{
+      const s=String(x);
+      if(!s || seen[s]) return;
+      seen[s]=1; out.push(s);
+    });
+  });
+  return out;
+}
+function startsWithList(full, prefix){
+  if(!Array.isArray(prefix) || !prefix.length) return true;
+  if(!Array.isArray(full) || prefix.length>full.length) return false;
+  for(let i=0;i<prefix.length;i++) if(JSON.stringify(full[i])!==JSON.stringify(prefix[i])) return false;
+  return true;
+}
+function concatLast(a, b, n){
+  const aa=Array.isArray(a)?a:[];
+  const bb=Array.isArray(b)?b:[];
+  let merged;
+  if(startsWithList(bb, aa)) merged=bb;
+  else if(startsWithList(aa, bb)) merged=aa;
+  else merged=aa.concat(bb);
+  return merged.slice(-n);
+}
+function unionTrueMap(a, b){
+  const out={};
+  [a,b].forEach(m=>{
+    if(!m || typeof m!=='object') return;
+    Object.keys(m).forEach(k=>{ if(m[k]) out[k]=true; });
+  });
+  return out;
+}
+function mergeBookFlags(stored, incoming){
+  const a=(stored && typeof stored==='object')?stored:{};
+  const b=(incoming && typeof incoming==='object')?incoming:{};
+  const out={};
+  ['passed','listen','song','read','dictation','speak'].forEach(k=>{ out[k]=!!(a[k]||b[k]); });
+  out.dictScore=higherNum(a.dictScore, b.dictScore);
+  out.speakPages=mergeSpeakPages(a.speakPages, b.speakPages);
+  out.reported=unionList(a.reported, b.reported);
+  out.speakFails=concatLast(a.speakFails, b.speakFails, 40);
+  out.readPages=unionTrueMap(a.readPages, b.readPages);
+  out.difficulty=(b.difficulty!=null && b.difficulty!=='')?b.difficulty:((a.difficulty!=null && a.difficulty!=='')?a.difficulty:null);
+  out._rev=Math.max(toNum(a._rev), toNum(b._rev));
+  return out;
+}
+function mergeBookBag(stored, incoming){
+  const a=(stored && typeof stored==='object')?stored:{};
+  const b=(incoming && typeof incoming==='object')?incoming:{};
+  const out={}, seen={};
+  Object.keys(a).concat(Object.keys(b)).forEach(id=>{
+    if(seen[id]) return;
+    seen[id]=1;
+    out[id]=mergeBookFlags(a[id], b[id]);
+  });
+  return out;
+}
 function loadAll(){ try{return JSON.parse(localStorage.getItem(SAVE)||'{}');}catch(e){return{};} }
 function saveAll(p){ localStorage.setItem(SAVE, JSON.stringify(p)); }
-function bookProg(id){ return Object.assign(blankProg(), (loadAll()[id]||{})); }
-function setBookProg(id, patch){ const all=loadAll(); all[id]=Object.assign(blankProg(), bookProg(id), patch); saveAll(all); }
+function bookProg(id){
+  const all=loadAll();
+  const name=studentName();
+  const bag=(all.byStudent&&name&&all.byStudent[name])||{};
+  return Object.assign(blankProg(), bag[id]||{});
+}
+function setBookProg(id, patch){
+  const all=loadAll();
+  const name=studentName()||'_';
+  all.byStudent=all.byStudent||{};
+  all.byStudent[name]=all.byStudent[name]||{};
+  const prev=all.byStudent[name][id]||{};
+  const merged=mergeBookFlags(prev, patch||{});
+  merged._rev=(+merged._rev||0)+1;
+  all.byStudent[name][id]=merged;
+  all.packRev=all.packRev||{};
+  all.packRev[name]=(+all.packRev[name]||0)+1;
+  saveAll(all);
+  saveSheetProgress();
+}
 function settings(){ return Object.assign({parentLock:false,showLang:true,lang:'ko'}, loadAll()._settings||{}); }
 function setSettings(patch){ const all=loadAll(); all._settings=Object.assign(settings(), patch); saveAll(all); }
 function bookOrder(){ return (lib.books||[]).slice(0, MAX_BOOKS).map(b=>b.id); }
-function unlocked(id){ const o=bookOrder(); const i=o.indexOf(id); return i===0 || (i>0 && !!bookProg(o[i-1]).passed); }
+function unlocked(id){ if(skipLocks()) return true; const o=bookOrder(); const i=o.indexOf(id); return i===0 || (i>0 && !!bookProg(o[i-1]).passed); }
+function signedInStudent(){
+  try {
+    if (window.MRJ_AUTH && MRJ_AUTH.student()) return String(MRJ_AUTH.student()).trim();
+  } catch(e) {}
+  return '';
+}
+function studentName(){
+  const auth=signedInStudent();
+  if(auth) return auth;
+  try { return String(localStorage.getItem(STUDENT_KEY)||'').trim(); } catch(e) { return ''; }
+}
+function studentPin(){ try{ return String(localStorage.getItem(PIN_KEY)||'').replace(/\D/g,'').slice(0,4); }catch(e){ return ''; } }
+function progressBlob(){
+  const name=studentName();
+  const all=loadAll();
+  const books=(all.byStudent&&all.byStudent[name])||{};
+  const rev=(all.packRev&&+all.packRev[name])||0;
+  return JSON.stringify({v:2, rev:rev, books:books});
+}
+function applySheetProgress(raw){
+  const name=studentName();
+  if(!name) return;
+  let data={};
+  try{ data=JSON.parse(raw||'{}'); }catch(e){ return; }
+  if(!data.books || typeof data.books!=='object') return;
+  const all=loadAll();
+  all.byStudent=all.byStudent||{};
+  all.byStudent[name]=mergeBookBag(all.byStudent[name]||{}, data.books);
+  all.packRev=all.packRev||{};
+  all.packRev[name]=Math.max(+all.packRev[name]||0, +data.rev||0);
+  saveAll(all);
+}
+function sheetPost(url, body){
+  return fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(body)
+  }).then(function(r){ return r.json(); }).catch(function(){ return null; });
+}
+let sheetSaveFlight=null, sheetSaveQueued=false;
+function saveSheetProgress(){
+  const name=studentName();
+  const token=window.MRJ_AUTH && MRJ_AUTH.token();
+  if(!name || !token) return;
+  if(sheetSaveFlight){ sheetSaveQueued=true; return; }
+  const body={action:'save_pack', id:name, token:token, program:'decodable', progress_json:progressBlob()};
+  sheetSaveFlight=sheetPost(AUTH_URL, body).then(function(){
+    sheetSaveFlight=null;
+    if(sheetSaveQueued){ sheetSaveQueued=false; saveSheetProgress(); }
+  });
+}
+
+function postClassroomMetricsBody(body){
+  body=body||{};
+  const ev=(body.events&&body.events[0])||{};
+  let meta={};
+  try{ meta=JSON.parse(ev.metadata_json||'{}'); }catch(e){ meta={}; }
+  if(window.MRJ_SCORES && typeof MRJ_SCORES.post==='function'){
+    const opts={
+      student: body.student_name||'',
+      program: ev.curriculum_program||'decodable',
+      appName: ev.app_name||'MRJ Decodables',
+      source: ev.source||'decodable',
+      bookTitle: ev.book_title||'',
+      itemId: ev.item_id,
+      itemType: ev.item_type||'activity',
+      completed: ev.completed!==false,
+      metadata: meta
+    };
+    if(ev.event_id) opts.eventId=ev.event_id;
+    if(typeof ev.score_value==='number') opts.scoreValue=ev.score_value;
+    if(typeof ev.score_max==='number') opts.scoreMax=ev.score_max;
+    if(typeof ev.score_pct==='number') opts.scorePct=ev.score_pct;
+    return MRJ_SCORES.post(opts);
+  }
+  return sheetPost(SCORE_URL, body);
+}
+function reportIntroStep(section, extra){
+  if(!pack || !section) return;
+  const bookId=pack.book_id;
+  const bp=bookProg(bookId);
+  const itemId=section;
+  if(bp[section] || (bp.reported||[]).indexOf(itemId)>=0) return;
+  const patch={reported:[itemId]};
+  patch[section]=true;
+  setBookProg(bookId, patch);
+  const meta=Object.assign({sound: (typeof soundLine==='function'?soundLine(bookId):'')||(pack.sound||'')}, extra||{});
+  reportScore(bookId, section, 1, 1, meta, {completed:true, itemType:'completion'});
+}
+function reportScore(bookId, section, raw, max, extra, opts){
+  const env={
+    getStudent:signedInStudent,
+    noteScore:function(p){ if(window.MRJ_AUTH && MRJ_AUTH.noteScore) MRJ_AUTH.noteScore(p); },
+    postMetrics:function(body){ return postClassroomMetricsBody(body); },
+    afterReport:saveSheetProgress
+  };
+  if(MERGE && MERGE.reportDecodableScore){
+    return MERGE.reportDecodableScore(env, bookId, section, raw, max, extra, opts||{});
+  }
+  return {status:'skipped'};
+}
+function sectionAlready(bookId, flag, itemId){
+  const bp=bookProg(bookId);
+  return !!(bp[flag] || (bp.reported||[]).indexOf(itemId)>=0);
+}
+function markSection(bookId, flag, itemId){
+  if(sectionAlready(bookId, flag, itemId)) return;
+  const patch={reported:[itemId]};
+  patch[flag]=true;
+  setBookProg(bookId, patch);
+  if(flag==='speak' && pack && pack.pages && pack.pages.length){
+    const sp=bookProg(bookId).speakPages||{};
+    const sum=Object.keys(sp).map(k=>+sp[k]).filter(n=>isFinite(n)).reduce((a,b)=>a+b,0);
+    reportScore(bookId,'speak',Math.round(sum),100*pack.pages.length,{pages:pack.pages.length},{itemType:'section'});
+  } else {
+    reportScore(bookId, itemId, 1, 1, null, {itemType:'completion'});
+  }
+}
+function speakPageItem(pageIdx){
+  return 'speak-p'+String(pageIdx+1).padStart(2,'0');
+}
+function speakScorePct(){
+  const sp=bookProg(pack.book_id).speakPages||{};
+  const vals=Object.keys(sp).map(k=>+sp[k]).filter(n=>isFinite(n));
+  if(!vals.length) return null;
+  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+}
+function syncModeLocks(){
+  const bp=pack?bookProg(pack.book_id):null;
+  $('mListen').disabled=!(bp && introDone);   // Listen stays dead until the start is done
+  $('mRead').disabled=!(bp && bp.listen);
+  $('mSong').disabled=!(bp && bp.listen && bp.read);
+  $('mDict').disabled=!(bp && bp.listen && bp.read && bp.song);
+  $('mSay').disabled=!(bp && bp.listen && bp.read && bp.song && bp.dictation);
+}
+function showSign(){ return; }
 function gloss(lem){ return ((pack&&pack.glossary&&pack.glossary.entries)||[]).find(x=>x.lemma===lem); }
 function sayTarget(text){
-  const words=String(text||'').match(/[A-Za-z']+/g)||[];
+  const re=/[A-Za-z]+(?:'[A-Za-z]+)?/g;
+  const words=[];
+  let m;
+  while((m=re.exec(String(text||'')))!==null) words.push(m[0]);
   if(words.length===1){
     const w=words[0];
-    return w+', '+w+', '+w;
+    return w+' '+w+' '+w;
   }
   return text;
 }
-function tokens(s){ return String(s||'').toLowerCase().replace(/[^a-z'\\s]/g,' ').split(/\s+/).filter(Boolean); }
+function escText(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function readUnits(text){
+  const units=[];
+  const re=/[A-Za-z']+|[^A-Za-z']+/g;
+  let m; const src=String(text||'');
+  while((m=re.exec(src))){
+    const tok=m[0];
+    if(/[A-Za-z']/.test(tok)) units.push({kind:'word', show:tok, lemma:tok.toLowerCase()});
+    else units.push({kind:'mark', show:tok});
+  }
+  return units;
+}
+function tokens(s){ return readUnits(s).filter(u=>u.kind==='word').map(u=>u.lemma); }
 function page(){ return pack.pages[pageIndex]; }
 function pageTr(){
   const b=i18n.books[pack.book_id];
@@ -260,14 +770,21 @@ function syncWordHighlight(a, gen){
 }
 function stopA(){
   stopWordHighlight();
+  dictTalk(false);
   if(audio){ try{audio.pause();}catch(e){} audio.onended=null; audio.ontimeupdate=null; audio.onloadedmetadata=null; audio=null; }
 }
 function playPath(path, onend, rate){
-  stopA(); if(!path){ if(onend) onend(); return; }
+  stopA();
+  if(!path){
+    const st=$('status');
+    if(st) st.textContent='This page has no sound yet.';
+    return;
+  }
   const a=new Audio(asset(path)); audio=a;
   a.playbackRate = (rate==null?1:rate);
   a.onended=()=>{ if(audio===a && onend) onend(); };
   if(mode==='listen' || mode==='song') syncWordHighlight(a, listenGen);
+  if(mode==='dictation') wireDictAudio(a);
   a.play().catch(()=>{});
 }
 function playTimes(path, n, rate){
@@ -288,13 +805,20 @@ async function boot(){
   $('langPick').onchange=e=>{
     lang=e.target.value;
     setSettings({lang});
+    if(!studentName() || mode==='sign'){ return; }
     if(mode==='library' || !pack) showLib();
     else if(mode==='intro') showIntro();
     else if(mode==='listen'||mode==='song'||mode==='read') renderPage();
     else if(mode==='dictation') startDictation();
     else if(mode==='speak') renderSay();
   };
-  $('btnLibrary').onclick=()=>showLib();
+  $('btnLibrary').onclick=()=>{ if(studentName()) showLib(); };
+  $('btnSwitch').onclick=()=>{
+    localStorage.removeItem(STUDENT_KEY);
+    if(LIB_BOOT) LIB_BOOT.onSignOut();
+    syncStudentNamePill();
+    if (window.MRJ_AUTH && MRJ_AUTH.signOut) MRJ_AUTH.signOut();
+  };
   $('mListen').onclick=()=>setMode('listen');
   $('mSong').onclick=()=>setMode('song');
   $('mRead').onclick=()=>setMode('read');
@@ -302,86 +826,63 @@ async function boot(){
   $('mSay').onclick=()=>setMode('speak');
   try{
     if(window.MRJPronounce){
-      MRJPronounce.setBase(BASE+'pronounce/');
+      MRJPronounce.setBase('https://mrjkorea.github.io/pronounce/');
       MRJPronounce.load().then(()=>{pronounceLoaded=true;}).catch(()=>{});
     }
   }catch(e){}
   $('prev').onclick=()=>go(-1);
   $('next').onclick=()=>go(1);
+  if(window.MRJTeacherUnlock) MRJTeacherUnlock.installRefresh(()=>{ if(mode==='library'||!pack) showLib(); else if(mode==='intro') showIntro(); else if(mode==='listen'||mode==='song'||mode==='read') renderPage(); else if(mode==='dictation') startDictation(); else if(mode==='speak') renderSay(); });
   $('play').onclick=()=>playPage(true);
   $('introGo').onclick=()=>introAdvance();
-  $('testBack').onclick=()=>testGo(-1);
-  $('testLib').onclick=()=>showLib();
-  $('testNext').onclick=()=>testGo(1);
-  syncTeacherNav();
-  if(window.MRJTeacherUnlock) MRJTeacherUnlock.installRefresh(()=>onTeacherSession());
-  const want=QS.get('book');
-  if(want && bookOrder().includes(want) && (skipLocks() || unlocked(want))) openBook(want);
-  else showLib();
+  window.addEventListener('resize', syncStudentNamePill);
+  syncStudentNamePill();
+  if(LIB_BOOT && LIB_BOOT.markAssetsReady()) openLibraryAfterAuth();
 }
-function onTeacherSession(){
-  syncTeacherNav();
-  if(mode==='library' || !pack) showLib();
-  else if(mode==='intro') showIntro();
-  else if(mode==='listen'||mode==='song'||mode==='read') renderPage();
-  else if(mode==='dictation') startDictation();
-  else if(mode==='speak') renderSay();
-  else if(mode==='listen-end') renderListenEnd();
-  else if(mode==='pass') renderPass();
-}
-function syncTeacherNav(){
-  const on=skipLocks();
-  document.body.classList.toggle('test-on', on);
-  $('testNav').classList.toggle('hidden', !on);
-}
-function hideAll(){ ['libStage','introStage','bookStage','workStage'].forEach(id=>$(id).classList.add('hidden')); }
+function hideAll(){ ['signStage','libStage','introStage','bookStage','workStage'].forEach(id=>$(id).classList.add('hidden')); }
 function showLib(){
+  if(!studentName()) return;
   if(pack && pack.book_id) lastTestBook=pack.book_id;
   mode='library'; pack=null; stopA(); hideAll();
   $('libStage').classList.remove('hidden');
   $('bookTitle').textContent='MRJ Decodables';
-  $('modeBadge').textContent='Books 1–20';
+  if(!$('band41')){
+    const a=document.createElement('a');
+    a.id='band41';
+    a.href='https://mrjkorea.github.io/mrj-decodable-try-21/';
+    a.target='_blank';
+    a.rel='noopener';
+    a.textContent='Books 21-40';
+    a.style.cssText='display:block;text-align:center;font-weight:900;margin:0 0 8px;color:#ffd84a';
+    $('libList').before(a);
+  }
+  $('modeBadge').textContent='Books 1-20';
+  const nextId=bookOrder().find(id=>unlocked(id) && !bookProg(id).passed)||'';
   $('libList').innerHTML=bookOrder().map(id=>{
     const b=lib.books.find(x=>x.id===id);
-    const open=skipLocks() || unlocked(b.id), done=bookProg(b.id).passed;
-    return `<button class="card${open?'':' lock'}" data-id="${b.id}" ${open?'':'disabled'}>
+    const open=unlocked(b.id), done=!!bookProg(b.id).passed;
+    const flag=done?'<span class="passed-mark">✓</span>':(b.id===nextId?'Next':'🔒 Pass the book before this');
+    return `<button class="card${open?'':' lock'}${done?' is-passed':''}" data-id="${b.id}" ${open?'':'disabled'}>
       <img src="${asset(b.cover)}" alt="">
       <div><b>${b.title}</b>
       <div style="color:#a9b7d6;font-size:.85rem">${b.level} · ${soundLine(b.id)}</div>
-      <div style="font-size:.8rem;margin-top:4px">${done?'✅ Passed':(open?'Ready':'🔒 Pass the book before this')}</div></div></button>`;
-  }).join('')+(TEST?`<button id="tryDict" style="width:100%">Try dictation (skip to test)</button><button id="resetProg" style="width:100%">Reset progress</button>`:'');
+      <div class="card-flag" style="font-size:.95rem;margin-top:4px;font-weight:900">${flag}</div></div></button>`;
+  }).join('');
   document.querySelectorAll('.card').forEach(el=>{ if(!el.disabled) el.onclick=()=>openBook(el.dataset.id); });
-  const rst=$('resetProg'); if(rst) rst.onclick=()=>{ localStorage.removeItem(SAVE); showLib(); };
-  const td=$('tryDict'); if(td) td.onclick=()=>{ location.search='?test=1&mode=dictation&book='+(bookOrder()[0]||'mlr_dec_001'); };
+  syncModeLocks();
 }
 async function openBook(id){
-  if(!skipLocks() && !unlocked(id)) return;
+  if(!studentName()) return;
+  if(!unlocked(id)) return;
   pack=await (await fetch(BASE+'assets/align_'+id+'.json?v='+ASSET_V)).json();
-  pageIndex=0; tapped=new Set(); heardListen=new Set(); heardSong=new Set(); clipDone=false;
+  pageIndex=0; tapped=new Set(); heardListen=new Set(); heardSong=new Set(); clipDone=false; sheriffOk=false;
   const bp=bookProg(pack.book_id);
   if(bp.readPages){ Object.keys(bp.readPages).forEach(k=>{ if(bp.readPages[k]){ const n=tokens((pack.pages[+k]||{}).text).length; for(let i=0;i<n;i++) tapped.add((+k)+':'+i); } }); }
   $('bookTitle').textContent=pack.title;
-  if(skipLocks()){
-    const qm=QS.get('mode');
-    if(qm==='dictation' || qm==='speak'){
-      const diff=QS.get('diff')==='hard'?'hard':'easy';
-      const patch={difficulty:diff,listen:true,song:true,read:true};
-      if(qm==='speak') patch.dictation=true;
-      setBookProg(pack.book_id,patch);
-      setMode(qm);
-      return;
-    }
-    if(qm && ['listen','song','read'].includes(qm)){
-      const pi=parseInt(QS.get('page')||'0',10);
-      pageIndex=Number.isFinite(pi) ? Math.max(0, Math.min(pack.pages.length-1, pi)) : 0;
-      setMode(qm);
-      return;
-    }
-    setMode('listen');
-    return;
-  }
   introStep = 'cousin';
   cousinIdx=0;
+  introDone=false;
+  preVideoDone=false;
   showIntro();
 }
 
@@ -394,14 +895,46 @@ function cousinGlyph(letter){
   return alpha.includes(L)?L:'';
 }
 
+function syncFamousGate(){
+  const go=$('introGo');
+  if(!go || introStep!=='famous') return;
+  go.disabled=!(famousVidEnded && famousAudEnded);
+}
+function markFamousVid(){ famousVidEnded=true; syncFamousGate(); }
+function markFamousAud(){ famousAudEnded=true; syncFamousGate(); }
+function stopFamousMedia(){
+  const v=$('carpetVid');
+  if(v){ try{v.pause();}catch(e){} v.ontimeupdate=null; v.onended=null; v.onclick=null; }
+  const scene=$('famousScene');
+  if(scene) scene.onclick=null;
+  stopA();
+}
+
 function showIntro(){
   mode='intro'; stopA(); hideAll();
   $('introStage').classList.remove('hidden');
   $('introGo').classList.remove('hidden');
+  $('introGo').disabled=false;
+  syncModeLocks();
   const famous=(pack.famous||[])[0]||'';
   if(introStep==='cousin'){
     const letters=cousinLetters();
-    if(!letters.length){ introStep='famous-card'; showIntro(); return; }
+    const card=SOUND_CARD[pack.book_id];
+    if(card){
+      $('modeBadge').textContent=card.show;
+      const sub=card.sub?`<div class="hint">${card.sub}</div>`:'';
+      $('introBody').innerHTML=`<div class="onelet">
+        <div class="g-lbl">Main sound</div>
+        <div class="en" style="font-size:clamp(2.4rem,10vw,4.2rem)">${card.show}</div>
+        <img src="${asset('decodable/mouth/'+card.mouth+'.svg')}" alt="Mouth diagram for ${card.show}" style="max-height:160px;width:auto;object-fit:contain;margin:10px auto;display:block">
+        ${sub}
+        <div class="hint">${card.hint||''}</div>
+      </div>`;
+      playPath('decodable/letter_names/'+card.say+'.mp3', null, 1);
+      $('introGo').textContent='Next';
+      return;
+    }
+    if(!letters.length){ reportIntroStep('sound'); introStep='famous-card'; showIntro(); return; }
     const L=letters[cousinIdx];
     const cu=cousinGlyph(L);
     $('modeBadge').textContent=letterTitle(L);
@@ -436,7 +969,11 @@ function showIntro(){
     $('modeBadge').textContent='Famous word';
     const word=String(famous||'a').toLowerCase();
     const clips={a:'decodable/famous_carpet/famous_a_steps_out.mp4',is:'decodable/famous_carpet/famous_is_steps_out.mp4',go:'decodable/famous_carpet/famous_go_steps_out.mp4',no:'decodable/famous_carpet/famous_no_steps_out.mp4',see:'decodable/famous_carpet/famous_see_steps_out.mp4',he:'decodable/famous_carpet/famous_he_steps_out.mp4',me:'decodable/famous_carpet/famous_me_steps_out.mp4',we:'decodable/famous_carpet/famous_we_steps_out.mp4',be:'decodable/famous_carpet/famous_be_steps_out.mp4',my:'decodable/famous_carpet/famous_my_steps_out.mp4'};
+    Object.assign(clips,{she:'decodable/famous_carpet/famous_she_steps_out.mp4',all:'decodable/famous_carpet/famous_all_steps_out.mp4',look:'decodable/famous_carpet/famous_look_steps_out.mp4',this:'decodable/famous_carpet/famous_this_steps_out.mp4',that:'decodable/famous_carpet/famous_that_steps_out.mp4',with:'decodable/famous_carpet/famous_with_steps_out.mp4',will:'decodable/famous_carpet/famous_will_steps_out.mp4',when:'decodable/famous_carpet/famous_when_steps_out.mp4',make:'decodable/famous_carpet/famous_make_steps_out.mp4',like:'decodable/famous_carpet/famous_like_steps_out.mp4'});
+    Object.assign(clips,{day:'decodable/famous_carpet/famous_day_steps_out.mp4',way:'decodable/famous_carpet/famous_way_steps_out.mp4',out:'decodable/famous_carpet/famous_out_steps_out.mp4',down:'decodable/famous_carpet/famous_down_steps_out.mp4',now:'decodable/famous_carpet/famous_now_steps_out.mp4',how:'decodable/famous_carpet/famous_how_steps_out.mp4',play:'decodable/famous_carpet/famous_play_steps_out.mp4',take:'decodable/famous_carpet/famous_take_steps_out.mp4',came:'decodable/famous_carpet/famous_came_steps_out.mp4',time:'decodable/famous_carpet/famous_time_steps_out.mp4',here:'decodable/famous_carpet/famous_here_steps_out.mp4',more:'decodable/famous_carpet/famous_more_steps_out.mp4',three:'decodable/famous_carpet/famous_three_steps_out.mp4',right:'decodable/famous_carpet/famous_right_steps_out.mp4',night:'decodable/famous_carpet/famous_night_steps_out.mp4',too:'decodable/famous_carpet/famous_too_steps_out.mp4',soon:'decodable/famous_carpet/famous_soon_steps_out.mp4',good:'decodable/famous_carpet/famous_good_steps_out.mp4',book:'decodable/famous_carpet/famous_book_steps_out.mp4',rain:'decodable/famous_carpet/famous_rain_steps_out.mp4'});
     const crowds={a:'decodable/famous_carpet/famous_a_crowd10.mp3',is:'decodable/famous_carpet/famous_is_crowd10.mp3',go:'decodable/famous_carpet/famous_go_crowd10.mp3',no:'decodable/famous_carpet/famous_no_crowd10.mp3',see:'decodable/famous_carpet/famous_see_crowd10.mp3',he:'decodable/famous_carpet/famous_he_crowd10.mp3',me:'decodable/famous_carpet/famous_me_crowd10.mp3',we:'decodable/famous_carpet/famous_we_crowd10.mp3',be:'decodable/famous_carpet/famous_be_crowd10.mp3',my:'decodable/famous_carpet/famous_my_crowd10.mp3'};
+    Object.assign(crowds,{she:'decodable/famous_carpet/famous_she_crowd10.mp3',all:'decodable/famous_carpet/famous_all_crowd10.mp3',look:'decodable/famous_carpet/famous_look_crowd10.mp3',this:'decodable/famous_carpet/famous_this_crowd10.mp3',that:'decodable/famous_carpet/famous_that_crowd10.mp3',with:'decodable/famous_carpet/famous_with_crowd10.mp3',will:'decodable/famous_carpet/famous_will_crowd10.mp3',when:'decodable/famous_carpet/famous_when_crowd10.mp3',make:'decodable/famous_carpet/famous_make_crowd10.mp3',like:'decodable/famous_carpet/famous_like_crowd10.mp3'});
+    Object.assign(crowds,{day:'decodable/famous_carpet/famous_day_crowd10.mp3',way:'decodable/famous_carpet/famous_way_crowd10.mp3',out:'decodable/famous_carpet/famous_out_crowd10.mp3',down:'decodable/famous_carpet/famous_down_crowd10.mp3',now:'decodable/famous_carpet/famous_now_crowd10.mp3',how:'decodable/famous_carpet/famous_how_crowd10.mp3',play:'decodable/famous_carpet/famous_play_crowd10.mp3',take:'decodable/famous_carpet/famous_take_crowd10.mp3',came:'decodable/famous_carpet/famous_came_crowd10.mp3',time:'decodable/famous_carpet/famous_time_crowd10.mp3',here:'decodable/famous_carpet/famous_here_crowd10.mp3',more:'decodable/famous_carpet/famous_more_crowd10.mp3',three:'decodable/famous_carpet/famous_three_crowd10.mp3',right:'decodable/famous_carpet/famous_right_crowd10.mp3',night:'decodable/famous_carpet/famous_night_crowd10.mp3',too:'decodable/famous_carpet/famous_too_crowd10.mp3',soon:'decodable/famous_carpet/famous_soon_crowd10.mp3',good:'decodable/famous_carpet/famous_good_crowd10.mp3',book:'decodable/famous_carpet/famous_book_crowd10.mp3',rain:'decodable/famous_carpet/famous_rain_crowd10.mp3'});
     const label=word==='a'?'uh':word;
     const vid=asset(clips[word]||'decodable/famous_carpet/base_limo_door.mp4');
     $('introBody').innerHTML=`<div class="scene" id="famousScene">
@@ -444,7 +981,14 @@ function showIntro(){
     </div>
     <div class="g-lbl">Famous word</div>
     <div style="color:var(--muted);font-weight:800">The crowd shouts <b>${label}</b>. Tap to hear it again.</div>`;
-    const scream=()=>{ if(crowds[word]) playPath(crowds[word], null, 1); };
+    famousVidEnded=false;
+    famousAudEnded=false;
+    const scream=()=>{
+      famousAudEnded=false;
+      syncFamousGate();
+      if(crowds[word]) playPath(crowds[word], markFamousAud, 1);
+      else { famousAudEnded=true; syncFamousGate(); }
+    };
     const v=$('carpetVid');
     if(v){
       v.muted=true;
@@ -453,75 +997,123 @@ function showIntro(){
       v.onloadedmetadata=kick;
       kick();
       v.ontimeupdate=()=>{ if(v.currentTime>=6.2 && !v._yelled){ v._yelled=true; scream(); } };
+      v.onended=()=>{ if(v.currentTime>0.5) markFamousVid(); };
       v.onclick=()=>{ v.currentTime=6.3; kick(); scream(); };
-    }
+    } else { famousVidEnded=true; }
     const scene=$('famousScene');
     if(scene) scene.onclick=()=>{ if(v){ v.currentTime=6.3; v.play().catch(()=>{}); } scream(); };
     $('introGo').textContent='Next';
+    $('introGo').disabled=true;
+    if($('status')) $('status').textContent='Listen to the famous word first.';
     return;
   }
-  const n=(pack.law_breaker||[]).length;
-  if(!n){ setMode('listen'); return; }
-  $('modeBadge').textContent=n+' law breakers';
-  $('introBody').innerHTML=`<div class="cops">
-    <div class="faces">👮 👮</div>
-    <div class="g-lbl">One lawbreaker</div>
-    <div class="zero">${n}</div>
-    <div style="font-size:1.4rem;font-weight:900">to catch</div>
-  </div>`;
-  $('introGo').textContent='Start Listen';
+  if(introStep==='chase'){
+    $('modeBadge').textContent='Chase';
+    const vid=asset('decodable/lawbreaker/chase.mp4');
+    $('introBody').innerHTML=`<div class="scene" id="chaseScene">
+      <video class="carpetVid" id="chaseVid" src="${vid}" autoplay playsinline webkit-playsinline></video>
+      <div class="catchLine">Can you catch the lawbreaker<span class="bigq">?</span></div>
+    </div>
+    <div class="g-lbl">Police chase</div>`;
+    $('introGo').textContent='Start Listen';
+    const v=$('chaseVid');
+    if(v){
+      v.volume=1;
+      const kick=()=>v.play().catch(()=>{});
+      v.onloadedmetadata=kick;
+      kick();
+      v.onended=()=>{ if(v.currentTime>0.5) preVideoDone=true; if(introStep==='chase'){ introDone=true; setMode('listen'); } };
+    }
+    return;
+  }
+  setMode('listen');
 }
 function chooseDiff(d){ setBookProg(pack.book_id,{difficulty:d}); startDictation(); }
 function introAdvance(){
   if(introStep==='cousin'){
     if(cousinIdx<cousinLetters().length-1){ cousinIdx++; showIntro(); return; }
+    reportIntroStep('sound');
     introStep='famous-card'; showIntro(); return;
   }
-  if(introStep==='famous-card'){ introStep='famous'; showIntro(); return; }
+  if(introStep==='famous-card'){
+    const fw=String((pack.famous||[])[0]||'').toLowerCase();
+    if(fw){ introStep='famous'; showIntro(); return; }
+    introStep='chase'; showIntro(); return;   // no famous word in this book -> go on, never skip to Listen
+  }
   if(introStep==='famous'){
-    const n=(pack.law_breaker||[]).length;
-    if(!n){ setMode('listen'); return; }
-    introStep='jail'; showIntro(); return;
+    if(!famousVidEnded || !famousAudEnded){
+      syncFamousGate();
+      if($('status')) $('status').textContent='Listen to the famous word first.';
+      return;
+    }
+    stopFamousMedia();
+    reportIntroStep('famous');
+    if((pack.law_breaker||[]).length){ introStep='chase'; showIntro(); return; }
+    introDone=true;
+    setMode('listen');
+    return;
+  }
+  if(introStep==='chase'){
+    const v=$('chaseVid');
+    if(v){
+      const law=(pack.law_breaker||[]).length>0;
+      if(law && !preVideoDone) return;   // the start video must play through first
+      if(v.paused && !v.ended && !preVideoDone && v.currentTime<0.4){
+        v.muted=false; v.volume=1; v.play().catch(()=>{});
+        return;
+      }
+    }
+    introDone=true;
+    setMode('listen'); return;
   }
   setMode('listen');
 }
 
 function canEnter(m){
   if(!pack) return false;
-  const bp=bookProg(pack.book_id);
   if(skipLocks()) return true;
-  if(m==='listen') return true;
-  if(m==='song') return bp.listen || mode==='song' || mode==='listen-end';
-  if(m==='read') return bp.song || mode==='read';
-  if(m==='dictation') return bp.read;
-  if(m==='speak') return bp.dictation;
-  if(m==='pass') return bp.speak;
+  const bp=bookProg(pack.book_id);
+  if(m==='listen') return introDone;
+  if(m==='read') return !!bp.listen;
+  if(m==='song') return !!(bp.listen && bp.read);
+  if(m==='dictation') return !!(bp.listen && bp.read && bp.song);
+  if(m==='speak') return !!(bp.listen && bp.read && bp.song && bp.dictation);
+  if(m==='pass') return !!(bp.listen && bp.read && bp.song && bp.dictation && bp.speak);
   return false;
 }
 function setMode(m){
   if(!pack) return;
-  const want=m;
-  if(!canEnter(m)){
-    const bp=bookProg(pack.book_id);
-    if(want==='speak'){
-      m = bp.dictation ? 'speak' : (bp.read ? 'dictation' : (bp.song ? 'read' : (bp.listen ? 'song' : 'listen')));
-    } else if(m==='read' && bp.listen && !bp.song) m='song';
-    else if(!bp.listen) m='listen';
-    else if(!bp.song) m='song';
-    else if(!bp.read) m='read';
-    else if(!bp.dictation) m='dictation';
-    else if(!bp.speak) m='speak';
-    else m='pass';
+  if(m!=='intro' && m!=='mode'){
+    // Listen (and everything after it) stays shut until the start is finished.
+    if(!introDone){
+      $('status').textContent='Finish the sound and the famous word first.';
+      showIntro();
+      return;
+    }
+    // The start is finished: never bounce back into the intro (that would relock Listen).
+    if(!canEnter(m)){
+      const bp=bookProg(pack.book_id);
+      if(!bp.listen) m='listen';
+      else if(!bp.read) m='read';
+      else if(!bp.song) m='song';
+      else if(!bp.dictation) m='dictation';
+      else if(!bp.speak) m='speak';
+      else m='pass';
+    }
+  } else if(!canEnter(m)){
+    m = introDone ? 'listen' : 'intro';
   }
   mode=m; stopA(); listenGen++; hideAll(); clipDone=false;
+  $('workStage').classList.remove('dict-fit');
   $('modeBadge').textContent=m+' · '+(soundLine(pack.book_id)||pack.sound||'');
   $('mListen').classList.toggle('active', m==='listen');
   $('mSong').classList.toggle('active', m==='song');
   $('mRead').classList.toggle('active', m==='read');
   $('mDict').classList.toggle('active', m==='dictation');
   $('mSay').classList.toggle('active', m==='speak');
+  syncModeLocks();
   if(m==='listen-end'){ $('workStage').classList.remove('hidden'); renderListenEnd(); }
-  else if(m==='dictation'){ $('workStage').classList.remove('hidden'); startDictation(); }
+  else if(m==='dictation'){ if(needsSheriff()){ showSheriff(); return; } $('workStage').classList.remove('hidden'); startDictation(); }
   else if(m==='speak'){ $('workStage').classList.remove('hidden'); startSpeak(); }
   else if(m==='pass'){ $('workStage').classList.remove('hidden'); renderPass(); }
   else { $('bookStage').classList.remove('hidden'); renderPage(); }
@@ -533,17 +1125,34 @@ function allTapped(){
   for(let i=0;i<n;i++){ if(!tapped.has(pageIndex+':'+i)) return false; }
   return n>0;
 }
+function arrowsFree(){
+  if(!pack) return false;
+  if(mode!=='listen' && mode!=='song' && mode!=='read') return false;
+  const bp=bookProg(pack.book_id);
+  return !!(bp.listen && bp.song && bp.read);
+}
+function syncArrows(){
+  const prev=$('prev'), next=$('next');
+  prev.classList.remove('hidden');
+  next.classList.remove('hidden');
+  prev.textContent='◀';
+  next.textContent='▶';
+  prev.disabled=pageIndex<=0;
+  next.disabled=nextLocked();
+}
 function nextLocked(){
   if(skipLocks()) return false;
+  if(arrowsFree()) return false;
   if(mode==='read') return !allTapped();
-  if(mode==='listen' || mode==='song'){
-    return !(clipDone || (mode==='listen'?heardListen:heardSong).has(pageIndex));
-  }
+  if(mode==='listen') return !(clipDone || heardListen.has(pageIndex));
+  if(mode==='song') return !(clipDone || heardSong.has(pageIndex));
   return false;
 }
 function go(d){
-  if(d>0 && nextLocked()){
-    $('status').textContent = mode==='read' ? 'Tap every word first.' : 'Listen to the end of this page first.';
+  if(d<0){
+    if(pageIndex<=0) return;
+  } else if(nextLocked()){
+    $('status').textContent = mode==='read' ? 'Tap every word first.' : (mode==='listen' ? 'Listen to this page 3 times first.' : 'Listen to the end of this page first.');
     return;
   }
   const nxt=pageIndex+d;
@@ -551,9 +1160,9 @@ function go(d){
   listenGen++;
   stopA();
   if(nxt>=pack.pages.length){
-    if(mode==='listen'){ setBookProg(pack.book_id,{listen:true}); setMode('listen-end'); return; }
-    if(mode==='song'){ setBookProg(pack.book_id,{song:true}); pageIndex=0; setMode('read'); return; }
-    if(mode==='read'){ setBookProg(pack.book_id,{read:true}); setMode('dictation'); return; }
+    if(mode==='listen'){ markSection(pack.book_id,'listen','listen'); pageIndex=0; setMode('read'); return; }
+    if(mode==='read'){ markSection(pack.book_id,'read','read'); pageIndex=0; setMode('song'); return; }
+    if(mode==='song'){ markSection(pack.book_id,'song','song'); setMode('dictation'); return; }
     return;
   }
   pageIndex=nxt; clipDone=false; renderPage();
@@ -570,15 +1179,16 @@ function renderPage(){
   $('art').innerHTML=vid
     ? `<video src="${asset(p.video)}" poster="${asset(p.image)}" autoplay muted loop playsinline></video>`
     : `<img src="${asset(p.image)}" alt="">`;
-  const parts=p.text.split(/(\s+)/);
+  const units=readUnits(p.text);
   let wi=0;
-  $('sentence').innerHTML=parts.map(w=>{
-    if(!w.trim()) return w;
-    const lemma=w.replace(/[^A-Za-z']/g,'').toLowerCase();
+  $('sentence').innerHTML=units.map(u=>{
+    if(u.kind!=='word') return escText(u.show);
+    const lemma=u.lemma;
     const done=mode==='read' && (tapped.has(pageIndex+':'+wi) || (bookProg(pack.book_id).readPages||{})[pageIndex]);
-    const html=`<span class="w${done?' done':''}" data-lem="${lemma}" data-i="${wi}">${w}</span>`;
+    const html=`<span class="w${done?' done':''}" data-lem="${lemma}" data-i="${wi}">${escText(u.show)}</span>`;
     wi++; return html;
   }).join('');
+
   $('sentence').querySelectorAll('.w').forEach(el=>el.onclick=()=>onWordTap(el));
   $('langLine').textContent = showLang ? pageTr() : '';
   $('langLine').classList.toggle('hidden', !showLang || !pageTr());
@@ -586,13 +1196,9 @@ function renderPage(){
   if(mode==='read') need=allTapped()?'All words tapped.':'Tap every word.';
   if(mode==='listen'||mode==='song') need=(clipDone|| (mode==='listen'?heardListen:heardSong).has(pageIndex))?'Page heard.':'Play to the end.';
   $('status').textContent=`${pageIndex+1} / ${pack.pages.length}`+(need?' · '+need:'');
-  if(mode==='read' && !skipLocks()){ $('play').classList.add('hidden'); $('next').classList.add('hidden'); }
-  else {
-    $('play').classList.remove('hidden'); $('next').classList.remove('hidden');
-    $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen';
-    $('next').textContent = skipLocks() ? 'Next' : '▶';
-  }
-  $('next').disabled = nextLocked();
+  $('play').classList.remove('hidden');
+  $('play').textContent = mode==='song' ? '▶ Song' : '▶ Listen';
+  syncArrows();
   if(mode==='listen' || mode==='song') playPage(false);
 }
 function playPage(manual){
@@ -617,7 +1223,7 @@ function playPage(manual){
         document.querySelectorAll('.w').forEach(e=>e.classList.remove('on'));
         $('next').disabled=nextLocked();
         $('status').textContent=`${pageIndex+1} / ${pack.pages.length} · Page heard.`;
-        if(manual || skipLocks()) return;
+        if(manual) return;
         go(1);
       }, rate);
     };
@@ -631,7 +1237,7 @@ function playPage(manual){
     document.querySelectorAll('.w').forEach(e=>e.classList.remove('on'));
     $('next').disabled=nextLocked();
     $('status').textContent=`${pageIndex+1} / ${pack.pages.length} · Page heard.`;
-    if(manual || skipLocks()) return;
+    if(manual) return;
     go(1);
   }, rate);
 }
@@ -645,7 +1251,7 @@ function onWordTap(el){
     if(allTapped()){
       const rp=Object.assign({}, bookProg(pack.book_id).readPages||{});
       rp[pageIndex]=true; setBookProg(pack.book_id,{readPages:rp});
-      playWord(lem, ()=>{ if(mode==='read' && !wasDone && !skipLocks()) go(1); });
+      playWord(lem, ()=>{ if(mode==='read' && !wasDone) go(1); });
       return;
     }
   }
@@ -697,10 +1303,15 @@ function dictSpeaker(){
   const raw=((pack.voices||{}).dictation_label)||'Harper';
   const names={Harper:'Miss Harper',Coach:'Coach Ray',Grandma:'Grandma June',Grandpa:'Grandpa Walt',Maya:'Maya',Leo:'Leo',Cowboy:'Cowboy',Nia:'Nia',Pirate:'Pirate',Car:'the Car'};
   const name=names[raw]||raw;
-  const face=raw==='Harper'
-    ? `<img src="${asset('decodable/harper.png')}" alt="Miss Harper">`
-    : `<div class="label" style="font-size:2rem;margin-bottom:6px">${name}</div>`;
-  return `<div class="speaker">${face}<div class="label">${name} · says the sentence</div></div>`;
+  const rel=DICT_SPEAKER_IMG[raw];
+  if(!rel) return `<div class="speaker speaker-fallback"><div class="label" style="font-size:2rem">${name}</div></div>`;
+  const mouth=DICT_MOUTH[raw]||{x:43,y:36.5,w:14,h:7};
+  const url=asset(rel);
+  const style=`--mx:${mouth.x};--my:${mouth.y};--mw:${mouth.w};--mh:${mouth.h}`;
+  return `<div class="speaker dict-face" data-speaker="${raw}" style="${style}">
+    <img class="speaker-base" src="${url}" alt="${name}">
+    <div class="speaker-jaw" aria-hidden="true"><img src="${url}" alt=""></div>
+  </div>`;
 }
 function dictItems(){
   const locked=(pack.dictation&&pack.dictation.items)||[];
@@ -714,7 +1325,101 @@ function fillerWords(targetTokens){
   const bank=unique(pack.pages.flatMap(p=>dictDisplayWords(p.text))).filter(w=>!have.has(w.toLowerCase()));
   return shuffle(bank).slice(0,3);
 }
+function lawWord(){
+  const w=(pack&&pack.law_breaker&&pack.law_breaker[0])||'';
+  return String(w).trim().toLowerCase();
+}
+function needsSheriff(){ return !!lawWord() && !sheriffOk; }
+function showSheriff(){
+  mode='sheriff'; stopA(); hideAll();
+  $('workStage').classList.remove('hidden');
+  $('modeBadge').textContent='Sheriff';
+  $('mListen').classList.remove('active');
+  $('mSong').classList.remove('active');
+  $('mRead').classList.remove('active');
+  $('mDict').classList.add('active');
+  $('mSay').classList.remove('active');
+  const vid=asset('decodable/lawbreaker/sheriff.mp4');
+  $('workBody').innerHTML=`<div class="sheriffBan">
+      <div class="hey">Hey</div>
+      <div class="lb">Lawbreaker!</div>
+      <div class="ask">Hey Lawbreaker, what's your name?</div>
+    </div>
+    <div class="scene" style="min-height:46vh">
+      <video class="carpetVid" id="sheriffVid" src="${vid}" playsinline webkit-playsinline></video>
+    </div>
+    <div class="g-lbl">Sheriff</div>
+    <input id="sheriffName" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go" style="width:100%;padding:14px;border-radius:14px;border:0;font-size:1.5rem;font-weight:900;text-align:center;background:#1b2740;color:#fff">
+    <button id="sheriffGo" style="width:100%;margin-top:10px">That's my name</button>
+    <div id="sheriffMsg" class="status"></div>`;
+  const v=$('sheriffVid');
+  if(v){ v.volume=1; v.play().catch(()=>playPath('decodable/lawbreaker/ask.mp3', null, 1)); }
+  const go=()=>checkSheriff();
+  $('sheriffGo').onclick=go;
+  $('sheriffName').onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } };
+  setTimeout(()=>{ const i=$('sheriffName'); if(i) i.focus(); }, 300);
+}
+function checkSheriff(){
+  const typed=String(($('sheriffName')||{}).value||'').trim().toLowerCase().replace(/[^a-z]/g,'');
+  const want=lawWord().replace(/[^a-z]/g,'');
+  if(!typed) return;
+  if(typed===want){ sheriffOk=true; playNervousThenJail(); return; }
+  const msg=$('sheriffMsg'); if(msg) msg.innerHTML="Don't lie to <span class=\"me\">me</span>.";
+  const inp=$('sheriffName'); if(inp){ inp.value=''; inp.focus(); }
+  const v=$('sheriffVid'); if(v){ try{v.pause();}catch(e){} }
+  playPath('decodable/lawbreaker/dont_lie.mp3', ()=>{
+    const vv=$('sheriffVid');
+    if(vv){ vv.currentTime=0; vv.play().catch(()=>{}); }
+  }, 1);
+}
+function playNervousThenJail(){
+  mode='nervous'; stopA(); hideAll();
+  $('workStage').classList.remove('hidden');
+  $('modeBadge').textContent='Lawbreaker';
+  const word=lawWord();
+  const safe=String(word).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const vid=asset('decodable/lawbreaker/end_'+word+'.mp4');
+  $('workBody').innerHTML=`<div class="scene" style="min-height:52vh">
+      <video class="carpetVid" id="nervVid" src="${vid}" autoplay playsinline webkit-playsinline></video>
+    </div>
+    <div class="nervousWord">${safe}</div>
+    <div class="nervousLine">I am ${safe}.</div>`;
+  const v=$('nervVid');
+  const done=()=>{ if(mode==='nervous') setMode('dictation'); };
+  if(!v){ done(); return; }
+  v.onended=done;
+  v.onerror=()=>{
+    if(mode!=='nervous') return;
+    playPath('decodable/lawbreaker/nervous_'+word+'.mp3', ()=>{ if(mode==='nervous') playJailVideo(); }, 1);
+  };
+  v.play().catch(()=>{
+    if($('nervSkip')) return;
+    $('workBody').insertAdjacentHTML('beforeend','<button id="nervSkip" style="width:100%;margin-top:10px">Next</button>');
+    $('nervSkip').onclick=done;
+  });
+}
+function playJailVideo(){
+  mode='jail'; stopA(); hideAll();
+  $('workStage').classList.remove('hidden');
+  $('modeBadge').textContent='Jail';
+  const word=lawWord();
+  const vid=asset('decodable/lawbreaker/jail_'+word+'.mp4');
+  $('workBody').innerHTML=`<div class="scene" style="min-height:52vh">
+      <video class="carpetVid" id="jailVid" src="${vid}" playsinline webkit-playsinline></video>
+    </div>`;
+  const v=$('jailVid');
+  const done=()=>{ if(mode==='jail') setMode('dictation'); };
+  if(!v){ done(); return; }
+  v.onended=done;
+  const kick=()=>v.play().catch(()=>{
+    if($('jailSkip')) return;
+    $('workBody').insertAdjacentHTML('beforeend','<button id="jailSkip" style="width:100%;margin-top:10px">Next</button>');
+    $('jailSkip').onclick=done;
+  });
+  kick();
+}
 function startDictation(){
+  $('workStage').classList.add('dict-fit');
   if(!bookProg(pack.book_id).difficulty){
     $('workBody').innerHTML=`<div class="g-lbl">Dictation</div>
       <div style="font-weight:800;margin:10px 0 16px">Easy = put the words in order. Hard = type the letters. Punctuation is already there.</div>
@@ -723,10 +1428,12 @@ function startDictation(){
     $('pickHard').onclick=()=>chooseDiff('hard');
     return;
   }
+  dictMisses=[];
   dictQueue=dictItems(); dictIdx=0; dictRight=0; nextDict();
 }
 function markDict(ok){
   if(ok) dictRight++;
+  else if(dictQueue[dictIdx]) dictMisses.push(dictQueue[dictIdx].text);
   dictIdx++;
   setTimeout(nextDict, 380);
 }
@@ -753,10 +1460,17 @@ function paintSpeedBtns(){
 function nextDict(){
   if(dictIdx>=dictQueue.length){
     const pct=Math.round(100*dictRight/dictQueue.length);
-    if(pct>=DICT_PASS){ setBookProg(pack.book_id,{dictation:true,dictScore:pct}); setMode('speak'); }
+    const missed=dictMisses.slice();
+    const meta={missed:missed};
+    if(pct>=DICT_PASS){ setBookProg(pack.book_id,{dictation:true,dictScore:pct}); reportScore(pack.book_id,'dictation',dictRight,dictQueue.length,meta,{completed:true}); setMode('speak'); }
     else {
+      reportScore(pack.book_id,'dictation',dictRight,dictQueue.length,meta,{completed:false});
+      $('workStage').classList.remove('dict-fit');
+      const missedHtml=missed.map(s=>`<div class="g-en">${String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`).join('');
       $('workBody').innerHTML=`<div class="pass">${pct}%</div>
         <div style="text-align:center">Need 80% on 5 sentences. Try again.</div>
+        <div class="g-lbl">Missed sentences</div>
+        ${missedHtml}
         <button id="retryD" style="width:100%;margin-top:14px">Try dictation again</button>`;
       $('retryD').onclick=()=>startDictation();
     }
@@ -778,24 +1492,27 @@ function nextDict(){
     tilesHtml=`<div class="tiles">${tiles.map(t=>`<button class="tile" data-id="${t.id}" data-word="${encodeURIComponent(t.word)}">${t.word.replace(/</g,'&lt;')}</button>`).join('')}</div>`;
   }
   $('workBody').innerHTML=`
-    <div class="choice" style="margin-bottom:10px"><button id="pickEasy" class="${hard?'':'active'}">Easy</button><button id="pickHard" class="${hard?'active':''}">Hard</button></div>
-    ${dictSpeaker()}
-    <div class="g-lbl">Dictation ${dictIdx+1} / ${dictQueue.length} · ${hard?'Hard · letters only. Punctuation already there.':'Easy · words. Punctuation already there.'}</div>
-    <div class="${hard?'tpl':'tpl'}" id="built">${hard?renderDictTpl(item.text,[]):renderEasyTpl(item.text,[])}</div>
-    ${tilesHtml}
-    <div class="g-lbl">Speed</div>
-    <div class="repeat spd">
-      <button id="spd100" type="button">100%</button>
-      <button id="spd80" type="button">80%</button>
-      <button id="spd50" type="button">50%</button>
-    </div>
-    <div class="repeat">
-      <button id="hear1x" type="button">1x</button>
-      <button id="hear3x" type="button">3x</button>
-      <button id="hear5x" type="button">5x</button>
-    </div>
-    <button id="clearWord" style="width:100%">Clear</button>
-    <div class="status" id="dictStatus">Need 4 of 5. Right so far: ${dictRight}</div>`;
+    <div class="dict-layout">
+      <div class="dict-side">
+        ${dictSpeaker()}
+        <div class="choice"><button id="pickEasy" class="${hard?'':'active'}">Easy</button><button id="pickHard" class="${hard?'active':''}">Hard</button></div>
+      </div>
+      <div class="dict-main">
+        <div class="g-lbl">Dictation ${dictIdx+1} / ${dictQueue.length} · ${hard?'Hard · letters':'Easy · words'}</div>
+        <div class="tpl" id="built">${hard?renderDictTpl(item.text,[]):renderEasyTpl(item.text,[])}</div>
+        ${tilesHtml}
+        <div class="repeat spd">
+          <button id="spd100" type="button">100%</button>
+          <button id="spd80" type="button">80%</button>
+          <button id="spd50" type="button">50%</button>
+          <button id="hear1x" type="button">1x</button>
+          <button id="hear3x" type="button">3x</button>
+          <button id="hear5x" type="button">5x</button>
+        </div>
+        <button id="clearWord">Clear</button>
+        <div class="status" id="dictStatus">Need 4 of 5. Right so far: ${dictRight}</div>
+      </div>
+    </div>`;
   const hearN=n=>playTimes(item.audio, n, dictRate);
   paintSpeedBtns();
   const pe=$('pickEasy'), ph=$('pickHard');
@@ -904,21 +1621,66 @@ function paintSayChips(text, words){
     }
     const ws=Math.round(100*(w.score||0));
     const b=ws>=75?'good':(ws>=50?'ok':'needs_work');
-    return `<span class="word-chip ${b}">${tok.replace(/</g,'&lt;')}<span class="wsub">${ws}%</span></span>`;
+    const hint=(b==='needs_work' && typeof w.hint==='string' && w.hint.trim())
+      ? `<span class="wsub">${w.hint.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>` : '';
+    return `<span class="word-chip ${b}">${tok.replace(/</g,'&lt;')}<span class="wsub">${ws}%</span>${hint}</span>`;
   }).join('');
 }
+function sayWho(){
+  try{ if(typeof studentName==='function') return studentName()||'_'; }catch(e){}
+  return '_';
+}
+function saySlot(){
+  return 'mrj_say5_'+sayWho()+'_'+((pack&&pack.book_id)||'')+'_'+sayPage;
+}
+function sayTriesLoad(){
+  sayBest=0;
+  try{
+    const raw=JSON.parse(localStorage.getItem(saySlot())||'null');
+    if(!raw) return 0;
+    sayBest=+raw.best||0;
+    return +raw.tries||0;
+  }catch(e){ return 0; }
+}
+function sayTriesSave(){
+  try{ localStorage.setItem(saySlot(), JSON.stringify({tries:sayTries, best:sayBest})); }catch(e){}
+}
+function sayTriesClear(){
+  try{ localStorage.removeItem(saySlot()); }catch(e){}
+}
+function sayTryStatusSuffix(){
+  return sayTries>=SAY_MAX_TRIES ? '' : (' — try '+sayTries+' of '+SAY_MAX_TRIES);
+}
+function unlockSayNext(best, statusMsg){
+  const nextBtn=$('sayNext');
+  if(!nextBtn) return;
+  nextBtn.classList.remove('hidden');
+  nextBtn.onclick=()=>finishSayPage(best||0, false);
+  const mic=$('sayLine'); if(mic) mic.disabled=true;
+  if(statusMsg && $('speakStatus')) $('speakStatus').textContent=statusMsg;
+}
+function countSayMicPress(){
+  sayTries++;
+  sayTriesSave();
+  if(sayTries>=SAY_MAX_TRIES){
+    const sc=sayBest? (sayBest+'% — 5 tries. Tap Next.') : '5 tries. Tap Next to continue.';
+    unlockSayNext(sayBest, sc);
+    return true;
+  }
+  return false;
+}
 function startSpeak(){
-  if(skipLocks()){
-    if(sayPage<0) sayPage=0;
-    if(sayPage>=pack.pages.length) sayPage=Math.max(0, pack.pages.length-1);
-    renderSay();
+  const bp=bookProg(pack.book_id);
+  sayPage = Object.keys(bp.speakPages||{}).length;
+  if(sayPage>=pack.pages.length){
+    markSection(pack.book_id,'speak','speak');
+    setMode('pass');
     return;
   }
-  sayPage = Object.keys(bookProg(pack.book_id).speakPages||{}).length;
-  if(sayPage>=pack.pages.length){ setBookProg(pack.book_id,{speak:true}); setMode('pass'); return; }
   renderSay();
 }
 function renderSay(){
+  sayTries=sayTriesLoad();
   const p=pack.pages[sayPage];
   const sayText=sayTarget(p.text);
   const triple=sayText!==p.text;
@@ -929,7 +1691,7 @@ function renderSay(){
     <div class="g-en" id="sayLineText"></div>
     <div class="langline">${showLang? sayTr : ''}</div>
     <div class="loadbar hidden" id="loadbar"><div class="loadbar-track"><div id="loadbarFill"></div></div><div id="loadbarLbl"></div></div>
-    <div class="status" id="speakStatus">${triple? 'One word. Say it 3 times, with a little pause. Pass is '+SPEAK_DEFAULT+'%.' : 'Listen, then tap the mic and say it. Pass is '+SPEAK_DEFAULT+'%.'}</div>
+    <div class="status" id="speakStatus">${triple? 'One word. Say it 3 times, with a little pause. You get '+SAY_MAX_TRIES+' tries. Pass is '+SPEAK_DEFAULT+'%.' : 'Listen, then tap the mic and say it. You get '+SAY_MAX_TRIES+' tries. Pass is '+SPEAK_DEFAULT+'%.'}</div>
     <div class="say-controls">
       <button id="hearLine" type="button" title="Listen" aria-label="Listen">🔊</button>
       <button id="sayLine" class="btn-rec" type="button" title="Speak" aria-label="Speak">🎙️</button>
@@ -943,6 +1705,9 @@ function renderSay(){
   $('hearLine').onclick=()=> triple ? playTimes(p.audio, 3, LISTEN_RATE) : playPath(p.audio, null, LISTEN_RATE);
   wireRecorder(sayText);
   kickPronouncePreload();
+  if(sayTries>=SAY_MAX_TRIES){
+    unlockSayNext(sayBest, (sayBest? sayBest+'% — ':'')+'5 tries. Tap Next to continue.');
+  }
 }
 function wireRecorder(line){
   const btn=$('sayLine');
@@ -959,7 +1724,7 @@ function wireRecorder(line){
   };
   const start=async ()=>{
     unlockMic();
-    const nx=$('sayNext'); if(nx) nx.classList.add('hidden');
+    const nx=$('sayNext'); if(nx && sayTries<SAY_MAX_TRIES) nx.classList.add('hidden');
     $('speakStatus').textContent='Listening… speak now';
     $('speakHeard').textContent='';
     $('wordScores').innerHTML='';
@@ -1000,13 +1765,18 @@ function wireRecorder(line){
   btn.onclick=async ev=>{
     ev.preventDefault();
     if(rec && rec.state==='recording') return;
+    const maxed=countSayMicPress();
+    if(!maxed){
+      const nx=$('sayNext'); if(nx) nx.classList.add('hidden');
+      const mic=$('sayLine'); if(mic) mic.disabled=false;
+    }
     try{ await start(); }
-    catch(e){ $('speakStatus').textContent='Mic blocked. Allow the microphone, then tap 🎙️ again.'; }
+    catch(e){ $('speakStatus').textContent='Mic blocked. Allow the microphone, then tap 🎙️ again.'+sayTryStatusSuffix(); }
   };
   stopBtn.onclick=ev=>{ ev.preventDefault(); stop(); };
 }
 async function gradeBlob(line, blob){
-  const nx=$('sayNext'); if(nx) nx.classList.add('hidden');
+  const nx=$('sayNext'); if(nx && sayTries<SAY_MAX_TRIES) nx.classList.add('hidden');
   $('speakStatus').textContent='Checking your speaking…';
   if(!window.MRJPronounce){
     hideLoadbar();
@@ -1022,12 +1792,24 @@ async function gradeBlob(line, blob){
     j=await MRJPronounce.grade(blob, line);
   }catch(e){
     hideLoadbar();
-    $('speakStatus').textContent='Scoring failed. Tap 🎙️ again. '+(e && e.message ? e.message : '');
+    $('speakStatus').textContent='Scoring failed. Tap 🎙️ again. '+(e && e.message ? e.message : '')+sayTryStatusSuffix();
+    if(sayTries>=SAY_MAX_TRIES) unlockSayNext(sayBest, '5 tries. Tap Next to continue.');
     return;
   }
   hideLoadbar();
   if(j.meta && String(j.meta.scoring_mode||'').startsWith('stub')){
-    $('speakStatus').textContent='Grader came back stub. Real model did not load.';
+    $('speakStatus').textContent='Grader came back stub. Real model did not load.'+sayTryStatusSuffix();
+    if(sayTries>=SAY_MAX_TRIES) unlockSayNext(sayBest, '5 tries. Tap Next to continue.');
+    return;
+  }
+  if(j.doorFail){
+    $('speakHeard').textContent='';
+    paintSayChips(line, null);
+    const doorMsg=(j.reason||'Say the sentence again, please. Say each word clearly.')+sayTryStatusSuffix();
+    $('speakStatus').textContent=doorMsg;
+    setBookProg(pack.book_id,{speakFails:[{page:sayPage+1, score:0, door:true}]});
+    reportScore(pack.book_id, speakPageItem(sayPage), 0, 100, null, {completed:false, noteScore:false, itemType:'attempt'});
+    if(sayTries>=SAY_MAX_TRIES) unlockSayNext(sayBest, '5 tries. Tap Next to continue.');
     return;
   }
   const sc=Math.round(100*(j.overall&&j.overall.score||0));
@@ -1042,18 +1824,37 @@ async function gradeBlob(line, blob){
       nextBtn.classList.remove('hidden');
       nextBtn.onclick=()=>finishSayPage(sc);
     }
-  }else $('speakStatus').textContent=sc+'% — need '+SPEAK_DEFAULT+'%. Listen, then tap 🎙️ and say it again.';
+  }else{
+    if(sc>sayBest) sayBest=sc;
+    sayTriesSave();
+    setBookProg(pack.book_id,{speakFails:[{page:sayPage+1, score:sc}]});
+    reportScore(pack.book_id, speakPageItem(sayPage), sc, 100, null, {completed:false, noteScore:false, itemType:'attempt'});
+    if(sayTries>=SAY_MAX_TRIES){
+      unlockSayNext(sayBest, sc+'% — 5 tries. Tap Next.');
+    }else $('speakStatus').textContent=sc+'% — try '+sayTries+' of '+SAY_MAX_TRIES+'. Say it again.';
+  }
 }
-function finishSayPage(score){
+function finishSayPage(score, passed){
+  sayTriesClear();
+  const pageItem=speakPageItem(sayPage);
   const sp=Object.assign({}, bookProg(pack.book_id).speakPages||{});
   sp[sayPage]=score; setBookProg(pack.book_id,{speakPages:sp});
+  if(passed!==false) reportScore(pack.book_id, pageItem, score, 100, null, {completed:true});
   sayPage++;
-  if(sayPage>=pack.pages.length){ setBookProg(pack.book_id,{speak:true}); setMode('pass'); }
+  if(sayPage>=pack.pages.length){
+    markSection(pack.book_id,'speak','speak');
+    setMode('pass');
+  }
   else renderSay();
 }
 function renderPass(){
   const bp=bookProg(pack.book_id);
+  const already=sectionAlready(pack.book_id,'passed','passed');
   setBookProg(pack.book_id,{passed:true,listen:true,song:true,read:true,dictation:true,speak:true});
+  if(!already){
+    setBookProg(pack.book_id,{reported:['passed']});
+    reportScore(pack.book_id,'passed',1,1,null,{itemType:'completion'});
+  }
   const order=bookOrder(); const i=order.indexOf(pack.book_id); const nxt=order[i+1];
   $('workBody').innerHTML=`<div class="pass">✅ ${pack.title} passed</div>
     <div style="text-align:center;color:var(--muted)">Listen → button → Song → tap every word → 5 sentences (80%) → say every page.</div>
@@ -1062,9 +1863,17 @@ function renderPass(){
     ${nxt?`<button id="nextBook" style="width:100%;margin-top:8px;background:linear-gradient(135deg,#4d7dff,#7a5cff)">Next book</button>`:''}`;
   $('backLib').onclick=()=>showLib();
   if(nxt) $('nextBook').onclick=()=>openBook(nxt);
+  if(!nxt && pack.book_id==='mlr_dec_040'){
+    const b=document.createElement('button');
+    b.id='nextBand';
+    b.textContent='Books 21-40';
+    b.style.cssText='width:100%;margin-top:8px;background:linear-gradient(135deg,#4d7dff,#7a5cff)';
+    b.onclick=()=>{ location.href='https://mrjkorea.github.io/mrj-decodable-try-21/'; };
+    $('workBody').appendChild(b);
+  }
 }
 function testGo(d){
-  if(!skipLocks()) return;
+  if(!TEST) return;
   if(mode==='library' || !pack){
     if(d>0){
       const id=(lastTestBook && bookOrder().includes(lastTestBook)) ? lastTestBook : bookOrder()[0];
@@ -1081,7 +1890,7 @@ function testGo(d){
     const nxt=pageIndex+d;
     if(nxt<0){
       if(mode==='listen'){
-        introStep=(pack.law_breaker||[]).length ? 'jail' : 'famous';
+        introStep=(pack.law_breaker||[]).length ? 'chase' : 'famous';
         showIntro();
         return;
       }
@@ -1091,10 +1900,23 @@ function testGo(d){
     if(nxt>=pack.pages.length){
       if(mode==='listen'){ setMode('listen-end'); return; }
       if(mode==='song'){ pageIndex=0; setMode('read'); return; }
+      if(needsSheriff()){ showSheriff(); return; }
       jumpDict(0); return;
     }
     pageIndex=nxt; clipDone=true; renderPage();
     return;
+  }
+  if(mode==='sheriff'){
+    if(d<0){ pageIndex=pack.pages.length-1; setMode('read'); return; }
+    return;
+  }
+  if(mode==='nervous'){
+    if(d<0){ sheriffOk=false; showSheriff(); return; }
+    playJailVideo(); return;
+  }
+  if(mode==='jail'){
+    if(d<0){ sheriffOk=false; showSheriff(); return; }
+    setMode('dictation'); return;
   }
   if(mode==='listen-end'){
     if(d<0){ pageIndex=pack.pages.length-1; setMode('listen'); return; }
@@ -1140,7 +1962,7 @@ function testBackIntro(){
     showLib(); return;
   }
   if(introStep==='famous'){ introStep='famous-card'; showIntro(); return; }
-  if(introStep==='jail'){ introStep='famous'; showIntro(); return; }
+  if(introStep==='chase' || introStep==='jail'){ introStep='famous'; showIntro(); return; }
   showLib();
 }
 function jumpDict(idx){
