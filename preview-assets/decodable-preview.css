@@ -56,7 +56,15 @@ html[data-book] body { color: var(--ink); font-family: var(--font-ui); }
 .tile.punct { background: #fff3d6 !important; }
 .tpl .given { color: var(--accent-dark) !important; }
 .tpl .blank { border-bottom-color: var(--ink) !important; }
-.word-chip, .wscore { color: var(--ink); border: 2px solid transparent; }
+/* Pending Say chips: light fill matches dictation tiles; scored states below override background. */
+.word-chip, .wscore {
+  color: var(--ink);
+  background: #fff !important;
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 0 var(--border);
+  font-family: var(--font-en);
+}
+.word-chip .wsub { color: var(--muted) !important; }
 .word-chip.good, .wscore.good { background: #dcf8e7 !important; color: #0e7a43; border-color: #7fdca8; }
 .word-chip.ok, .wscore.ok { background: #fff3c4 !important; color: #8a5a00; border-color: #ffd45c; }
 .word-chip.needs_work, .word-chip.invalid, .wscore.needs_work, .wscore.invalid { background: #ffe3e0 !important; color: #b42318; border-color: #ff9b90; }
