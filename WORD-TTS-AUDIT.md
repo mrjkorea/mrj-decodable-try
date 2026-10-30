@@ -1,78 +1,86 @@
 # Word-click TTS audit (books 1–20)
 
-Live site: [mrj-decodable-try](https://mrjkorea.github.io/mrj-decodable-try/)
+Live: [mrj-decodable-try](https://mrjkorea.github.io/mrj-decodable-try/)
 
-## How `playWord` / lemma works
+## `playWord` / lemma
 
-In `index.html`, page text is split with `readUnits()`:
+`readUnits()` splits page text; each word token’s **`lemma` is the lowercased surface form** (apostrophes kept, e.g. `Min's` → `min's`).
 
-- Word tokens match `/[A-Za-z']+/`
-- **`lemma` = on-page token lowercased** (e.g. `Sam` → `sam`, `Min's` → `min's`)
-- Read mode renders `<span class="w" data-lem="…">` and calls `playWord(lem)` on tap
-- Audio path: `assets/books/<book_id>/audio/words/<lemma>.mp3` (via `playPath('books/'+pack.book_id+'/audio/words/'+lem+'.mp3')`)
-
-Apostrophes in lemmas are preserved in filenames (e.g. `min's.mp3`).
-
-## Root patterns found
-
-| Pattern | Detail |
-|--------|--------|
-| **Shared wrong clip** | Many high-frequency lemmas reused one bad MP3 across books. Worst: **`a.mp3`** (MD5 `654e910a…`) — Whisper transcribed **“Hey!”** on all 20 books (same class as the earlier **`pat`** fix). |
-| **Oversized legacy pool** | Books 1–10 ship ~98 word files each (shared early pool); books 11–20 only pack words used in that book. Missing-file gaps were not the main issue; **wrong content** was. |
-| **Stale size cluster** | 88 files at exactly **25 748 bytes** (legacy batch); not all were wrong, but several mismatched lemmas lived in that batch. |
-| **Voice metadata** | Align JSON `voices.words` / `read_taps` point at Fish Audio voice IDs (`851d4a3a…` / `clear_american_male` for DEC 004–020). **No `FISH_API_KEY` in this environment**, so fixes use **Edge TTS** (Christopher/Guy) + **gTTS** / **page extract** for stubborn lemmas. Re-sync with Fish when a key is available for exact parity with book 21+. |
-| **Hash drift** | No duplicate MD5s mapping **different** lemmas within the same book after fixes. |
-
-## Audit method
-
-1. `scripts/audit-word-tts.mjs` — lemmas from align page text vs files on disk (missing/extras).
-2. `scripts/whisper-audit-words.py` — Whisper `tiny.en` transcription vs expected lemma (502 tap clips).
-3. Regeneration: `scripts/regenerate-word-tts.py` (+ pass2/pass3/pass4) — replace failures; re-audit.
-
-### Coverage summary
-
-| Metric | Before fixes | After fixes |
-|--------|----------------|-------------|
-| Missing word MP3s (books 1–20) | 0 | 0 |
-| Whisper mismatches (502 clips) | **143** | **31** (mostly short/homophone lemmas; see suspects) |
-| MP3 files replaced | — | **163** |
-
-## Words fixed (high impact)
-
-- **`a`** — all 20 books (was “Hey!” everywhere)
-- **`pat`** — already fixed on `gh-pages` before this pass; verified **“Pat.”**
-- **`egg`**, **`ants`**, **`sits`**, **`fat`**, **`pond`**, **`must`**, **`nip`**, **`big`**, **`pop`**, **`got`**, **`the`**, **`with`**, **`be`**, **`dim`**, **`den`**, **`tam`**, **`sat`**, **`sap`**, **`gets`**, and **100+** other tap clips across books 1–20 (see git diff on `assets/books/mlr_dec_*/audio/words/`)
-
-## Remaining suspects (31 tap clips)
-
-Whisper still disagrees with the lemma (often **short words** or **gTTS/Edge homophones**). Worth a human ear check or Fish re-gen:
-
-| Lemma | # clips | Whisper heard (typical) | Notes |
-|-------|---------|-------------------------|--------|
-| `ant` | 3 | “And…” | Page extract from DEC 004 narration; sounds correct in context but ASR confuses |
-| `all` | 2 | “Oh.” / similar | Short vowel |
-| `to` | 2 | “Two.” | Homophone |
-| `six` | 1 | “6.” | Number reading |
-| `one` | 1 | “1.” | Number reading |
-| `ten` / `tin` | 2 | “10.” | Number confusion |
-| `it` | 1 | varies | Short function word |
-| `amit` / `amit's` | 2 | “Arm it.” / similar | Name |
-| `min's` | 1 | “Men's.” | Name + possessive |
-| Others | 1 each | see `/tmp/whisper-audit-final3.json` in CI artifact or re-run audit | `cot`, `dug`, `nab`, `fen`, `fen's`, `hut`, `crops`, `pups`, `rug`, `drips`, `jolts`, `on`, `yak`, `yaks`, `kits`, `sits` |
-
-Re-run audit locally:
-
-```bash
-python3 scripts/whisper-audit-words.py | tee /tmp/whisper-audit.json
-node scripts/audit-word-tts.mjs
+```818:820:index.html
+function playWord(lem, onend){
+  playPath('books/'+pack.book_id+'/audio/words/'+encodeURIComponent(lem)+'.mp3', onend, 1);
+}
 ```
 
-## Tooling added
+`encodeURIComponent(lem)` ensures apostrophe filenames (`min's.mp3`) resolve correctly in URLs. Same change in `preview.html` and `m4k-desk-7q.html`.
 
-- `scripts/audit-word-tts.mjs`
-- `scripts/audit-word-hash-drift.mjs`
-- `scripts/whisper-audit-words.py`
-- `scripts/regenerate-word-tts.py` (+ pass2–pass4 helpers)
-- `scripts/cluster-bad-audio.py`
+## Root cause (aligned with books 41–60 fix)
 
-No letter-intro or `index.html` logic changes.
+**Mis-labeled podcast-fragment MP3s**: listen/podcast-host audio slices were saved under the wrong lemma filename, so Read taps played unrelated speech (e.g. **`a.mp3` → “Hey!”** across all books — same class as the earlier **`pat`** fix).
+
+| Signal | Meaning |
+|--------|--------|
+| **`legacy_podcast_bytes` (25 748 B)** | Known bad batch shared across early books |
+| **`podcast_fragment_size` (≥18 000 B, >1 s)** | Full fragment, not an isolated tap clip |
+| **Whisper ≠ lemma** | Filename does not match spoken word (502 clips audited) |
+| **Hash collision** | Two different lemmas sharing one MP3 in the same book (none after fix) |
+| **Missing / tiny** | No file or &lt;800 B |
+
+Isolated tap audio should be **short, single-word TTS** (`read_taps`: Clear American Male), not listen-mode podcast lines.
+
+## Regeneration engine
+
+| Priority | Engine |
+|----------|--------|
+| 1 | **ElevenLabs** — `XI_API_KEY`, voice `XI_VOICE_ID` (default Arthur `C1npRmjB19a6yNkEucvx`, Clear American Male) |
+| 2 | **Edge TTS** — `en-US-ChristopherNeural` / `GuyNeural` / `EricNeural` (used in this run; no `XI_API_KEY` in cloud env) |
+
+Script: `scripts/fix-word-taps.py` (one clip per flagged `(book, word)`, copied into that book’s `audio/words/`).
+
+## Results (this PR)
+
+| Check | Before | After |
+|-------|--------|-------|
+| Missing lemma MP3s | 0 | 0 |
+| Heuristic flags (podcast / legacy) | 34 | 0 |
+| Whisper mismatches (502 taps) | **143** (initial baseline) → **35** (after first 163 replacements) → **28** after unified fix |
+| Clips regenerated (this pass) | — | **52** (+ prior **163** in branch) |
+
+### High-impact fixes
+
+- **`a`** — all 20 books (was podcast “Hey!”)
+- **`pat`** — verified on branch baseline
+- Podcast-sized / legacy-byte clips replaced for in-book lemmas across DEC 001–020
+
+### Remaining suspects (28 clips — Whisper)
+
+Mostly **short words / homophones** (ASR reads `ant`→“and”, `to`→“two”, `six`→“6”, names with apostrophes). Clips are **isolated Edge/Eleven TTS**, not podcast fragments; optional human spot-check or ElevenLabs re-run with `XI_API_KEY` for parity with books 41–60.
+
+## Run audit locally
+
+```bash
+bash scripts/run-word-tts-audit.sh
+```
+
+Or stepwise:
+
+```bash
+node scripts/audit-word-tts.mjs
+python3 scripts/detect-bad-word-clips.py
+python3 scripts/whisper-audit-words.py
+python3 scripts/fix-word-taps.py /tmp/word-clip-issues.json /tmp/whisper-audit.json
+```
+
+Outputs: `/tmp/word-clip-issues.json`, `/tmp/whisper-audit.json`.
+
+## Tooling
+
+| Script | Role |
+|--------|------|
+| `scripts/audit-word-tts.mjs` | Lemmas vs files on disk |
+| `scripts/detect-bad-word-clips.py` | Podcast fragment / legacy / collision detect |
+| `scripts/whisper-audit-words.py` | ASR verify taps |
+| `scripts/fix-word-taps.py` | Regenerate (ElevenLabs → Edge) |
+| `scripts/run-word-tts-audit.sh` | Full pipeline |
+
+**Not changed:** letter-intro assets or flow.
