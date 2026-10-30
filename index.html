@@ -4,7 +4,7 @@
 <!-- READ-TAP-GATE-20261012 -->
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="mrj-build" content="dec20-20261027-say-chip-theme" />
+<meta name="mrj-build" content="dec20-20261030-letter-intro" />
 <title>MRJ Decodables — Books 1–20</title>
 <style>
 :root{--bg:#070d18;--card:#101a2e;--text:#f4f7ff;--muted:#a9b7d6;--hl:#ffd84a;--ok:#3ecf8e}
@@ -293,11 +293,11 @@ body.student-desk #bookStage #play{
 <script src="https://mrjkorea.github.io/mrj-signin/mrj-auth-boot.js?v=20261027-teacher" data-mrj-app="mrj-decodable-try"></script>
 <script src="js/mrj-teacher-unlock.js?v=20261027-teacher"></script>
 <script src="mrj-scores.js?v=dec20-20261016-cm510-hubert"></script>
-<script src="dec-progress-merge.js?v=dec20-20261016-cm510-hubert"></script>
+<script src="dec-progress-merge.js?v=dec20-20261030-letter-intro"></script>
 <script>
-const MRJ_BUILD='dec20261027-teacher';
+const MRJ_BUILD='dec20-20261030-letter-intro';
 const TEST=false;
-const ASSET_V='dec20261022dict2';
+const ASSET_V='dec20261030-letter-intro';
 function skipLocks(){
   try{
     return !!(window.MRJTeacherUnlock && MRJTeacherUnlock.isMrjTeacher());
@@ -376,6 +376,28 @@ function soundLine(id){
   return (b&&b.sound)||'';
 }
 const NEW_LETTERS={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['p'],mlr_dec_003:['i'],mlr_dec_004:['n'],mlr_dec_005:['f'],mlr_dec_006:['o'],mlr_dec_007:['d'],mlr_dec_008:['c'],mlr_dec_009:['u'],mlr_dec_010:['g'],mlr_dec_011:['b'],mlr_dec_012:['e'],mlr_dec_013:['k'],mlr_dec_014:['h'],mlr_dec_015:['r'],mlr_dec_016:['l'],mlr_dec_017:['w'],mlr_dec_018:['j'],mlr_dec_019:['y'],mlr_dec_020:['x']};
+const LETTER_INTROS={
+  mlr_dec_001:['a_letter_intro.mp4','m_letter_intro.mp4','s_letter_intro.mp4','t_letter_intro.mp4'],
+  mlr_dec_002:['p_letter_intro.mp4'],
+  mlr_dec_003:['i_letter_intro.mp4'],
+  mlr_dec_004:['n_letter_intro.mp4'],
+  mlr_dec_005:['f_letter_intro.mp4'],
+  mlr_dec_006:['o_letter_intro.mp4'],
+  mlr_dec_007:['d_letter_intro.mp4'],
+  mlr_dec_008:['c_letter_intro.mp4'],
+  mlr_dec_009:['u_letter_intro.mp4'],
+  mlr_dec_010:['g_letter_intro.mp4'],
+  mlr_dec_011:['b_letter_intro.mp4'],
+  mlr_dec_012:['e_letter_intro.mp4'],
+  mlr_dec_013:['k_letter_intro.mp4'],
+  mlr_dec_014:['h_letter_intro.mp4'],
+  mlr_dec_015:['r_letter_intro.mp4'],
+  mlr_dec_016:['l_letter_intro.mp4'],
+  mlr_dec_017:['w_letter_intro.mp4'],
+  mlr_dec_018:['j_letter_intro.mp4'],
+  mlr_dec_019:['y_letter_intro.mp4'],
+  mlr_dec_020:['x_letter_intro.mp4']
+};
 const SOUND_CARD={
   mlr_dec_021:{show:'QU', sub:'', hint:'/kw/ · squid', mouth:'qu', say:'qu'},
   mlr_dec_022:{show:'V', sub:'', hint:'/v/ · van', mouth:'v', say:'v'},
@@ -401,6 +423,7 @@ const SOUND_CARD={
 const TAUGHT={mlr_dec_001:['a','m','s','t'],mlr_dec_002:['a','m','s','t','p'],mlr_dec_003:['a','m','s','t','p','i'],mlr_dec_004:['a','m','s','t','p','i','n'],mlr_dec_005:['a','m','s','t','p','i','n','f'],mlr_dec_006:['a','m','s','t','p','i','n','f','o'],mlr_dec_007:['a','m','s','t','p','i','n','f','o','d'],mlr_dec_008:['a','m','s','t','p','i','n','f','o','d','c'],mlr_dec_009:['a','m','s','t','p','i','n','f','o','d','c','u'],mlr_dec_010:['a','m','s','t','p','i','n','f','o','d','c','u','g']};
 let lib=null, i18n=null, pack=null, pageIndex=0, mode='library', audio=null, listenGen=0, hlRaf=0;
 let introStep='mode', cousinIdx=0;
+let letterIntroIdx=0, letterIntroSeen=0;   // video on screen / how many this visit played to the end
 let introDone=false;      // sound + famous + any pre-video finished -> Listen opens
 let preVideoDone=false;   // this book's start video (lawbreaker chase) played through
 let famousVidEnded=false;
@@ -844,6 +867,7 @@ function showLib(){
   if(!studentName()) return;
   if(pack && pack.book_id) lastTestBook=pack.book_id;
   mode='library'; pack=null; stopA(); hideAll();
+  $('introBody').innerHTML='';   // a hidden intro video would keep playing
   $('libStage').classList.remove('hidden');
   $('bookTitle').textContent='MRJ Decodables';
   if(!$('band41')){
@@ -881,12 +905,17 @@ async function openBook(id){
   $('bookTitle').textContent=pack.title;
   introStep = 'cousin';
   cousinIdx=0;
+  letterIntroIdx=0; letterIntroSeen=0;
   introDone=false;
   preVideoDone=false;
   showIntro();
 }
 
 function cousinLetters(){ return NEW_LETTERS[pack.book_id]||[]; }
+function letterIntros(){
+  const own=Array.isArray(pack.letter_intros) ? pack.letter_intros.filter(Boolean) : [];
+  return own.length ? own : (LETTER_INTROS[pack.book_id]||[]);
+}
 function cousinGlyph(letter){
   const L=String(letter||'').toLowerCase();
   if(!L) return '';
@@ -899,6 +928,19 @@ function syncFamousGate(){
   const go=$('introGo');
   if(!go || introStep!=='famous') return;
   go.disabled=!(famousVidEnded && famousAudEnded);
+}
+function syncLetterIntroGate(){
+  const go=$('introGo');
+  if(!go || introStep!=='letter-intro') return;
+  go.disabled=letterIntroIdx>=letterIntroSeen;
+}
+// An end only counts when most of the clip really played, not after a jump to the end.
+function playedToEnd(v){
+  const d=v.duration;
+  if(!(d>0) || !isFinite(d)) return v.currentTime>0.5;
+  let t=0;
+  for(let k=0;k<v.played.length;k++) t+=v.played.end(k)-v.played.start(k);
+  return t>=d*0.9;
 }
 function markFamousVid(){ famousVidEnded=true; syncFamousGate(); }
 function markFamousAud(){ famousAudEnded=true; syncFamousGate(); }
@@ -934,7 +976,7 @@ function showIntro(){
       $('introGo').textContent='Next';
       return;
     }
-    if(!letters.length){ reportIntroStep('sound'); introStep='famous-card'; showIntro(); return; }
+    if(!letters.length){ reportIntroStep('sound'); introStep='letter-intro'; letterIntroIdx=0; showIntro(); return; }
     const L=letters[cousinIdx];
     const cu=cousinGlyph(L);
     $('modeBadge').textContent=letterTitle(L);
@@ -951,6 +993,35 @@ function showIntro(){
     </div>`;
     playPath('decodable/letter_names/'+L+'.mp3', null, 1);
     $('introGo').textContent = cousinIdx<letters.length-1 ? 'Next letter' : 'Next';
+    return;
+  }
+  if(introStep==='letter-intro'){
+    const clips=letterIntros();
+    if(!clips.length){ introStep='famous-card'; showIntro(); return; }
+    const at=letterIntroIdx, n=clips.length;
+    $('modeBadge').textContent='New sound';
+    $('introBody').innerHTML=`<div class="scene" id="letterIntroScene">
+      <video class="carpetVid" id="letterIntroVid" src="${asset('decodable/letter_intro/'+clips[at])}" autoplay playsinline webkit-playsinline></video>
+    </div>
+    <div class="g-lbl">Letter intro${n>1?` · ${at+1} / ${n}`:''}</div>
+    <div id="letterIntroMsg" style="color:var(--muted);font-weight:800">Watch to the end.</div>`;
+    const v=$('letterIntroVid');
+    const say=t=>{ if(v===$('letterIntroVid')) $('letterIntroMsg').textContent=t; };
+    const seen=t=>{
+      if(v!==$('letterIntroVid')) return;
+      letterIntroSeen=Math.max(letterIntroSeen, at+1);
+      syncLetterIntroGate();
+      say(t);
+    };
+    const kick=()=>v.play().catch(()=>{ if(!v.error) say('Tap the video to start.'); });
+    v.volume=1;
+    v.onloadedmetadata=kick;
+    v.onended=()=>{ if(playedToEnd(v)) seen('Tap Next.'); else say('Watch the whole video. Tap it to play again.'); };
+    v.onerror=()=>seen('This video did not load. Tap Next.');
+    $('letterIntroScene').onclick=()=>{ if(v.paused) kick(); };
+    kick();
+    $('introGo').textContent='Next';
+    syncLetterIntroGate();
     return;
   }
   if(introStep==='famous-card'){
@@ -1033,6 +1104,12 @@ function introAdvance(){
   if(introStep==='cousin'){
     if(cousinIdx<cousinLetters().length-1){ cousinIdx++; showIntro(); return; }
     reportIntroStep('sound');
+    introStep='letter-intro'; letterIntroIdx=0; showIntro(); return;
+  }
+  if(introStep==='letter-intro'){
+    if(letterIntroIdx>=letterIntroSeen){ syncLetterIntroGate(); return; }
+    if(letterIntroIdx<letterIntros().length-1){ letterIntroIdx++; showIntro(); return; }
+    reportIntroStep('letter-intro');
     introStep='famous-card'; showIntro(); return;
   }
   if(introStep==='famous-card'){
@@ -1957,7 +2034,14 @@ function testBackIntro(){
     if(cousinIdx>0){ cousinIdx--; showIntro(); return; }
     showLib(); return;
   }
+  if(introStep==='letter-intro'){
+    if(letterIntroIdx>0){ letterIntroIdx--; showIntro(); return; }
+    if(letters.length){ introStep='cousin'; cousinIdx=letters.length-1; showIntro(); return; }
+    showLib(); return;
+  }
   if(introStep==='famous-card'){
+    const intros=letterIntros().length;
+    if(intros){ introStep='letter-intro'; letterIntroIdx=intros-1; showIntro(); return; }
     if(letters.length){ introStep='cousin'; cousinIdx=letters.length-1; showIntro(); return; }
     showLib(); return;
   }

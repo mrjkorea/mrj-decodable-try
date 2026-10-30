@@ -21,5 +21,5 @@ assert.ok(html.includes('mrj-signin/mrj-auth.js'), 'shared MRJ sign-in');
 assert.ok(html.includes('data-mrj-app="mrj-decodable-try"'), 'decodable sign-in app id');
 assert.ok(html.includes('function skipLocks()'), 'teacher / test lock bypass');
 assert.ok(html.includes('mrj-teacher-unlock.js'), 'teacher unlock helper');
-assert.ok(html.includes("ASSET_V='dec20261027-teacher'"), 'asset build stamp');
+assert.ok(html.includes("ASSET_V='dec20261030-letter-intro'"), 'asset build stamp');
 console.log('hubert-shared: ok');
