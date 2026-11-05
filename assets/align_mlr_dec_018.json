@@ -61,14 +61,14 @@
     },
     {
       "page_id": "p05",
-      "text": "The jug jolts. Jam drips!",
+      "text": "The jug tips. Jam drips!",
       "image": "books/mlr_dec_018/pages/p05.webp",
       "audio": "books/mlr_dec_018/audio/pages/p05.mp3",
-      "duration_ms": 3343,
+      "duration_ms": 3291,
       "voice": "57785406027844b29b63a772a8477bc2",
       "has_video": true,
       "song_audio": "books/mlr_dec_018/audio/song/p05.mp3",
-      "song_duration_ms": 3213,
+      "song_duration_ms": 2926,
       "video": "books/mlr_dec_018/video/p05.mp4"
     },
     {
@@ -173,7 +173,7 @@
       },
       {
         "page_id": "p05",
-        "text": "The jug jolts. Jam drips!",
+        "text": "The jug tips. Jam drips!",
         "audio": "books/mlr_dec_018/audio/dictation/p05.mp3"
       },
       {
