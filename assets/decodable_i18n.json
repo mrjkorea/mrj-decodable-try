@@ -1726,7 +1726,7 @@
         "A dog can nip!",
         "A dog naps in a sun spot.",
         "My dog got a gift.",
-        "A dog can nag us. My dog is fun!"
+        "A dog can nag us. Dogs are fun!"
       ],
       "l1": {
         "ko": [
@@ -1739,7 +1739,7 @@
           "개는 깨물 수 있어요!",
           "개가 햇살 자리에서 낮잠 자요.",
           "내 개가 선물을 받았어요.",
-          "개는 우리를 조를 수 있어요. 내 개는 재미있어요!"
+          "개는 우리를 조를 수 있어요. 개들은 재미있어요!"
         ],
         "ja": [
           "犬を見て！",
@@ -1751,7 +1751,7 @@
           "犬はかめます！",
           "犬が日なたで昼寝します。",
           "わたしの犬がプレゼントをもらいました。",
-          "犬はわたしたちにせがめます。わたしの犬は楽しい！"
+          "犬はわたしたちにせがめます。いぬは たのしいよ!"
         ],
         "zh-Hans": [
           "看一只狗！",
@@ -1763,7 +1763,7 @@
           "狗会咬！",
           "狗在阳光地睡觉。",
           "我的狗得到了礼物。",
-          "狗会缠着我们。我的狗很好玩！"
+          "狗会缠着我们。狗很好玩!"
         ],
         "vi": [
           "Nhìn con chó!",
@@ -1775,7 +1775,7 @@
           "Chó cắn được!",
           "Chó ngủ chỗ nắng.",
           "Chó tôi được quà.",
-          "Chó làm phiền chúng ta. Chó tôi vui!"
+          "Chó làm phiền chúng ta. Chó rất vui!"
         ],
         "es": [
           "¡Mira un perro!",
@@ -1787,7 +1787,7 @@
           "¡Un perro puede morder!",
           "Un perro duerme en un sitio de sol.",
           "Mi perro recibió un regalo.",
-          "Un perro puede molestarnos. ¡Mi perro es divertido!"
+          "Un perro puede molestarnos. ¡Los perros son divertidos!"
         ],
         "pt-BR": [
           "Olha um cachorro!",
@@ -1799,7 +1799,7 @@
           "Um cachorro pode morder!",
           "Um cachorro dorme num lugar de sol.",
           "Meu cachorro ganhou um presente.",
-          "Um cachorro pode encher o saco. Meu cachorro é divertido!"
+          "Um cachorro pode encher o saco. Os cachorros são divertidos!"
         ],
         "fr": [
           "Regarde un chien !",
@@ -1811,7 +1811,7 @@
           "Un chien peut mordre !",
           "Un chien fait la sieste au soleil.",
           "Mon chien a eu un cadeau.",
-          "Un chien peut nous embêter. Mon chien est amusant !"
+          "Un chien peut nous embêter. Les chiens sont amusants !"
         ],
         "de": [
           "Sieh einen Hund!",
@@ -1823,7 +1823,7 @@
           "Ein Hund kann zwicken!",
           "Ein Hund schläft auf einem Sonnenplatz.",
           "Mein Hund bekam ein Geschenk.",
-          "Ein Hund kann uns nerven. Mein Hund macht Spaß!"
+          "Ein Hund kann uns nerven. Hunde machen Spaß!"
         ],
         "id": [
           "Lihat anjing!",
@@ -1835,7 +1835,7 @@
           "Anjing bisa gigit!",
           "Anjing tidur di tempat matahari.",
           "Anjing saya dapat hadiah.",
-          "Anjing bisa merepotkan. Anjing saya seru!"
+          "Anjing bisa merepotkan. Anjing itu menyenangkan!"
         ],
         "hi": [
           "कुत्ता देखो!",
@@ -1847,7 +1847,7 @@
           "कुत्ता काट सकता है!",
           "कुत्ता धूप में सोता है।",
           "मेरे कुत्ते को तोहफा मिला।",
-          "कुत्ता हमें तंग कर सकता है। मेरा कुत्ता मज़ेदार है!"
+          "कुत्ता हमें तंग कर सकता है। कुत्ते मज़ेदार होते हैं!"
         ],
         "ar": [
           "انظروا كلبًا!",
@@ -1859,7 +1859,7 @@
           "الكلب يعض!",
           "الكلب ينام في مكان شمس.",
           "كلبي أخذ هدية.",
-          "الكلب يزعجنا. كلبي ممتع!"
+          "الكلب يزعجنا. الكلاب ممتعة!"
         ],
         "tr": [
           "Bir köpek gör!",
@@ -1871,7 +1871,7 @@
           "Köpek ısırabilir!",
           "Köpek güneş yerinde uyur.",
           "Köpeğim hediye aldı.",
-          "Köpek bizi rahatsız edebilir. Köpeğim eğlenceli!"
+          "Köpek bizi rahatsız edebilir. Köpekler eğlencelidir!"
         ],
         "it": [
           "Guarda un cane!",
@@ -1883,7 +1883,7 @@
           "Un cane può mordere!",
           "Un cane dorme in un posto di sole.",
           "Il mio cane ha avuto un regalo.",
-          "Un cane può seccarci. Il mio cane è divertente!"
+          "Un cane può seccarci. I cani sono divertenti!"
         ],
         "pl": [
           "Zobacz psa!",
@@ -1895,7 +1895,7 @@
           "Pies umie gryźć!",
           "Pies śpi w słonecznym miejscu.",
           "Mój pies dostał prezent.",
-          "Pies umie nas męczyć. Mój pies jest fajny!"
+          "Pies umie nas męczyć. Psy są fajne!"
         ]
       }
     },
